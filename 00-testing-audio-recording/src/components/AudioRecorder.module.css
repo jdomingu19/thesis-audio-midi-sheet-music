@@ -1,0 +1,296 @@
+/* AudioRecorder.module.css */
+
+/* ── Card ── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-md);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 0%,
+    var(--accent-glow),
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+
+.card:has(.dotRecording)::before {
+  opacity: 1;
+}
+
+.card:has(.dotRecording) {
+  border-color: var(--border-accent);
+}
+
+/* ── Card Header ── */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.cardLabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dotIdle {
+  background: var(--text-muted);
+}
+.dotPaused {
+  background: var(--warning);
+}
+.dotError {
+  background: var(--danger);
+}
+.dotRecording {
+  background: var(--accent-primary);
+  box-shadow: 0 0 0 0 var(--accent-primary);
+  animation: ripple 1.2s ease-out infinite;
+}
+
+@keyframes ripple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 229, 160, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(0, 229, 160, 0);
+  }
+}
+
+.statusText {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+}
+
+/* ── Waveform ── */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 80px;
+  padding: var(--space-3) 0;
+}
+
+.bar {
+  flex: 1;
+  max-width: 6px;
+  min-width: 2px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-full);
+  height: var(--h, 3%);
+  transition:
+    height 80ms ease,
+    background var(--transition-md);
+  will-change: height;
+}
+
+.barActive {
+  background: var(--accent-primary);
+  box-shadow: 0 0 6px rgba(0, 229, 160, 0.4);
+}
+
+/* ── Timer ── */
+.timer {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.timerValue {
+  font-size: 2.8rem;
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.timerUnit {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  align-self: flex-end;
+  padding-bottom: 6px;
+}
+
+/* ── Controls ── */
+.controls {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Record */
+.btnRecord {
+  background: var(--accent-primary);
+  color: #080b0f;
+  border-color: var(--accent-primary);
+  font-weight: 700;
+  min-width: 140px;
+  justify-content: center;
+}
+.btnRecord:hover:not(:disabled) {
+  box-shadow: var(--shadow-accent);
+  filter: brightness(1.1);
+}
+
+/* Pause */
+.btnPause {
+  background: transparent;
+  color: var(--warning);
+  border-color: var(--warning);
+}
+.btnPause:hover {
+  background: rgba(245, 158, 11, 0.08);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.15);
+}
+
+/* Stop */
+.btnStop {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+.btnStop:hover {
+  background: rgba(255, 77, 109, 0.08);
+  box-shadow: var(--shadow-danger);
+}
+
+.btnIcon {
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* ── Error ── */
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(255, 77, 109, 0.07);
+  border: 1px solid rgba(255, 77, 109, 0.2);
+  border-radius: var(--radius-md);
+  font-size: 0.78rem;
+  color: var(--danger);
+  line-height: 1.5;
+}
+
+.errorIcon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Hint ── */
+.hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.hint strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-6);
+    gap: var(--space-5);
+  }
+
+  .waveform {
+    height: 60px;
+    gap: 2px;
+  }
+
+  .timerValue {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    justify-content: center;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .timerValue {
+    font-size: 2rem;
+  }
+}

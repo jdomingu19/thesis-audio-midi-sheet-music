@@ -1,0 +1,170 @@
+/* ============================================
+   index.css — Global Styles & Design System
+   Audio Recorder App
+   ============================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;600;700;800&display=swap");
+
+/* ── Design Tokens ── */
+:root {
+  /* Colors */
+  --bg-base: #080b0f;
+  --bg-surface: #0d1117;
+  --bg-elevated: #161b22;
+  --bg-hover: #1c2333;
+
+  --accent-primary: #00e5a0;
+  --accent-glow: rgba(0, 229, 160, 0.15);
+  --accent-glow-md: rgba(0, 229, 160, 0.25);
+
+  --danger: #ff4d6d;
+  --danger-glow: rgba(255, 77, 109, 0.2);
+
+  --warning: #f59e0b;
+
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --text-accent: #00e5a0;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(0, 229, 160, 0.3);
+
+  /* Grid */
+  --grid-color: rgba(255, 255, 255, 0.03);
+  --grid-size: 28px;
+
+  /* Typography */
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-display: "Syne", sans-serif;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-accent: 0 0 24px rgba(0, 229, 160, 0.2);
+  --shadow-danger: 0 0 24px rgba(255, 77, 109, 0.2);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-md: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-mono);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+
+  /* Grid background */
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: center center;
+}
+
+/* Radial vignette on top of grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(0, 229, 160, 0.04) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--accent-glow-md);
+  color: var(--accent-primary);
+}
+
+/* ── Focus ── */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Utility classes ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+.display {
+  font-family: var(--font-display);
+}

@@ -1,0 +1,345 @@
+/* AudioList.module.css */
+
+/* ── Empty state ── */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-16) var(--space-6);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.emptyIcon {
+  opacity: 0.3;
+  margin-bottom: var(--space-2);
+}
+
+.emptyTitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.emptyDesc {
+  font-size: 0.75rem;
+  max-width: 260px;
+  line-height: 1.6;
+}
+
+/* ── List ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── List Header ── */
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-1);
+}
+
+.listCount {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+.clearBtn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--danger);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  opacity: 0.7;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+  letter-spacing: 0.04em;
+}
+
+.clearBtn:hover {
+  opacity: 1;
+  background: rgba(255, 77, 109, 0.08);
+}
+
+/* ── Items ── */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ── Item ── */
+.item {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: var(--space-4);
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  transition:
+    border-color var(--transition-md),
+    background var(--transition-md),
+    box-shadow var(--transition-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+  transition: background var(--transition-md), box-shadow var(--transition-md);
+}
+
+.item:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--bg-elevated);
+}
+
+.itemPlaying {
+  border-color: var(--border-accent);
+  background: rgba(0, 229, 160, 0.03);
+}
+
+.itemPlaying::before {
+  background: var(--accent-primary);
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+/* ── Index Badge ── */
+.indexBadge {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Item Content ── */
+.itemContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+/* ── Top row ── */
+.itemTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.filename {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.meta {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.metaChip {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+
+/* ── Progress bar ── */
+.progressBar {
+  position: relative;
+  height: 4px;
+  background: var(--bg-hover);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  overflow: visible;
+}
+
+.progressBar:hover .progressThumb {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: var(--radius-full);
+  transition: width 80ms linear;
+}
+
+.progressThumb {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: var(--accent-primary);
+  border-radius: 50%;
+  transform: translateX(-50%) translateY(-50%) scale(0.6);
+  opacity: 0;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+  pointer-events: none;
+  box-shadow: 0 0 8px var(--accent-primary);
+}
+
+/* ── Time row ── */
+.timeRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.timeValue {
+  font-size: 0.72rem;
+  color: var(--accent-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeSep {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.timeTotal {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+  line-height: 1;
+}
+
+.actionBtn:active {
+  transform: scale(0.92);
+}
+
+/* Play */
+.playBtn:hover {
+  color: var(--accent-primary);
+  border-color: var(--border-accent);
+  background: var(--accent-glow);
+}
+
+.playBtnActive {
+  color: var(--accent-primary);
+  border-color: var(--border-accent);
+  background: var(--accent-glow);
+  box-shadow: 0 0 12px rgba(0, 229, 160, 0.15);
+}
+
+/* Download */
+.downloadBtn {
+  font-size: 1rem;
+}
+.downloadBtn:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--bg-hover);
+}
+
+/* Delete */
+.deleteBtn:hover {
+  color: var(--danger);
+  border-color: rgba(255, 77, 109, 0.3);
+  background: rgba(255, 77, 109, 0.07);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .item {
+    grid-template-columns: 28px 1fr auto;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .meta {
+    display: none;
+  }
+
+  .filename {
+    font-size: 0.72rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .item {
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+  }
+
+  .indexBadge {
+    display: none;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .actionBtn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.65rem;
+  }
+}
