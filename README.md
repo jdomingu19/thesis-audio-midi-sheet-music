@@ -1,14 +1,29 @@
 # Thesis Audio Midi Sheet Music
 
+![Static Badge](https://img.shields.io/badge/react-18+-1C2024?style=for-the-badge&logo=react&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/javascript-ES6+-1C2024?style=for-the-badge&logo=javascript&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/node.js-20+-1C2024?style=for-the-badge&logo=node.js&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/HTML-HTML5+-1C2024?style=for-the-badge&logo=html5&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/css-css3+-1C2024?style=for-the-badge&logo=css&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/vite-7+-1C2024?style=for-the-badge&logo=vite&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/babel-7.27+-1C2024?style=for-the-badge&logo=babel&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/claude-sonnet-1C2024?style=for-the-badge&logo=claude&logoColor=white&labelColor=101010)
+
 Lorem elit officia excepteur sint occaecat qui cupidatat ipsum. Eu irure incididunt irure nulla voluptate aute. Velit aliquip in aliqua mollit nostrud. Aliqua commodo laboris enim eu occaecat adipisicing minim adipisicing sint cillum voluptate laboris ipsum exercitation. Lorem ad minim minim elit ipsum. Enim consectetur laboris cillum duis est ex adipisicing incididunt irure.
 
 > Dolor voluptate veniam in amet tempor mollit incididunt. Aliqua id anim sunt reprehenderit pariatur. Ut duis adipisicing ut eiusmod qui sit ipsum Lorem adipisicing nostrud velit in consectetur.
 
-## Some subtitle
+## 🎼 Functional Testing Modules
 
-- [Testing Thesis Audio Recording](https://thesis-audio-recording.netlify.app/)
+This repository contains isolated test environments for each core functionality of the thesis project.
 
-- ?
+Every module is deployed independently to validate specific workflows before integration into the final MVP.
+
+- [Testing Thesis Audio Recording](https://thesis-audio-recording.netlify.app/)  
+  Mini React + Vite app that captures microphone input using the MediaRecorder API, visualizes real‑time waveforms, and manages recording states with playback and download options.
+
+- [Testing Thesis Audio Upload](https://thesis-audio-upload.netlify.app/)  
+  Upload interface with drag‑and‑drop zone, dynamic audio list, and format‑specific badges (MP3, WAV, OGG, FLAC, AAC, WebM, M4A). Designed with responsive UI and animated feedback.
 
 - ?
 
