@@ -1,0 +1,111 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────── */
+.header {
+  border-bottom: 1px solid var(--clr-border-subtle);
+  padding: var(--sp-6) var(--sp-6);
+  background: rgba(33, 53, 85, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerInner {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.brandIcon {
+  color: var(--clr-accent);
+  display: flex;
+  align-items: center;
+}
+
+.brandName {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--clr-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.brandTag {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--clr-accent);
+  background: var(--clr-accent-dim);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.headerSub {
+  font-size: 0.8rem;
+  color: var(--clr-text-muted);
+  line-height: 1.4;
+}
+
+/* ─── Main ────────────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--sp-10) var(--sp-6) var(--sp-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--clr-border-subtle);
+  padding: var(--sp-4) var(--sp-6);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--clr-text-muted);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .headerInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
+
+  .main {
+    padding: var(--sp-6) var(--sp-4) var(--sp-10);
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: var(--sp-4);
+  }
+
+  .main {
+    padding: var(--sp-5) var(--sp-3) var(--sp-8);
+    gap: var(--sp-5);
+  }
+}

@@ -1,0 +1,261 @@
+.card {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--clr-bg-muted);
+  border: 1px solid var(--clr-border-subtle);
+  border-radius: var(--radius-lg);
+  transition:
+    border-color var(--dur-mid) var(--ease-out),
+    background var(--dur-mid) var(--ease-out),
+    box-shadow var(--dur-mid) var(--ease-out);
+}
+
+.card:hover {
+  border-color: var(--clr-border);
+  background: rgba(33, 53, 85, 0.35);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── Play button ─────────────────────────────────────────────────── */
+.playBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.playBtn:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--clr-bg-base);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.playBtn:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+.playBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  border-color: var(--clr-border);
+  color: var(--clr-text-muted);
+}
+
+.spinner {
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Content ─────────────────────────────────────────────────────── */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+/* Top row */
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.filename {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--clr-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.metaBadges {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.formatBadge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+}
+
+.sizeBadge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--clr-text-muted);
+}
+
+/* ─── Progress bar ────────────────────────────────────────────────── */
+.progressTrack {
+  position: relative;
+  height: 4px;
+  background: rgba(62, 88, 121, 0.4);
+  border-radius: 99px;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.progressTrack:hover {
+  height: 5px;
+}
+
+.progressFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 80ms linear;
+}
+
+.progressThumb {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border: 2px solid var(--clr-bg-base);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+  pointer-events: none;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.progressTrack:hover .progressThumb {
+  opacity: 1;
+}
+
+/* ─── Time ────────────────────────────────────────────────────────── */
+.timeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.time {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--clr-text-muted);
+}
+
+.errorText {
+  font-size: 0.68rem;
+  color: var(--clr-error);
+  opacity: 0.8;
+}
+
+/* ─── Action buttons ──────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--clr-border-subtle);
+  color: var(--clr-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast),
+    border-color var(--dur-fast),
+    background var(--dur-fast);
+}
+
+.downloadBtn:hover {
+  color: var(--clr-accent);
+  border-color: rgba(201, 168, 76, 0.4);
+  background: var(--clr-accent-dim);
+}
+
+.deleteBtn:hover {
+  color: var(--clr-error);
+  border-color: rgba(224, 91, 91, 0.4);
+  background: rgba(224, 91, 91, 0.08);
+}
+
+.actionBtn:active {
+  transform: scale(0.92);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .card {
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+  }
+
+  .metaBadges {
+    gap: var(--sp-1);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    grid-template-columns: 40px 1fr auto;
+    gap: var(--sp-2);
+    padding: var(--sp-3);
+  }
+
+  .playBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .filename {
+    font-size: 0.78rem;
+  }
+
+  .sizeBadge {
+    display: none;
+  }
+
+  .actions {
+    flex-direction: row;
+    gap: var(--sp-1);
+  }
+
+  .actionBtn {
+    width: 28px;
+    height: 28px;
+  }
+}

@@ -1,0 +1,131 @@
+/* ─── Design Tokens ───────────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --clr-bg-base:       #0c1520;
+  --clr-bg-surface:    #213555;
+  --clr-bg-elevated:   #2b4470;
+  --clr-bg-muted:      #1a2d45;
+  --clr-border:        #3E5879;
+  --clr-border-subtle: #2a3f5c;
+
+  /* Accent — warm gold, the signature contrast against the steel-blue palette */
+  --clr-accent:        #c9a84c;
+  --clr-accent-dim:    rgba(201, 168, 76, 0.15);
+  --clr-accent-glow:   rgba(201, 168, 76, 0.25);
+
+  /* Text */
+  --clr-text-primary:  #dce9f5;
+  --clr-text-secondary:#8faec8;
+  --clr-text-muted:    #5a7a9a;
+
+  /* State */
+  --clr-success:       #4caf82;
+  --clr-error:         #e05b5b;
+  --clr-warning:       #e0a04a;
+
+  /* Format badges */
+  --badge-mp3:  #c9a84c;
+  --badge-wav:  #4a90d9;
+  --badge-ogg:  #9b6fd4;
+  --badge-flac: #4caf82;
+  --badge-aac:  #e07b4a;
+  --badge-webm: #4ab8c9;
+  --badge-m4a:  #d44a7a;
+  --badge-other:#8faec8;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur-mid:  250ms;
+}
+
+/* ─── Reset ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--clr-bg-base);
+  color: var(--clr-text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+
+  /* Subtle grid texture */
+  background-image:
+    linear-gradient(rgba(62, 88, 121, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 88, 121, 0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: var(--clr-bg-base); }
+::-webkit-scrollbar-thumb  { background: var(--clr-border); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--clr-bg-elevated); }
+
+/* ─── Selection ───────────────────────────────────────────────────── */
+::selection {
+  background: var(--clr-accent-dim);
+  color: var(--clr-accent);
+}
+
+/* ─── Focus ring ──────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

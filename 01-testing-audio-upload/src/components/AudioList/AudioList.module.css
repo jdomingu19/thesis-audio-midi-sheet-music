@@ -1,0 +1,128 @@
+.emptySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-12) var(--sp-6);
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--clr-border);
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--clr-text-secondary);
+}
+
+.emptyText {
+  font-size: 0.82rem;
+  color: var(--clr-text-muted);
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+/* ─── List section ────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.listMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.listTitle {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--clr-text-muted);
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+  background: var(--clr-accent-dim);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 99px;
+  padding: 1px 8px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.clearBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  background: none;
+  border: 1px solid var(--clr-border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast),
+    border-color var(--dur-fast),
+    background var(--dur-fast);
+}
+
+.clearBtn:hover {
+  color: var(--clr-error);
+  border-color: rgba(224, 91, 91, 0.4);
+  background: rgba(224, 91, 91, 0.06);
+}
+
+/* ─── List ────────────────────────────────────────────────────────── */
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.listItem {
+  animation: fadeSlideIn 280ms var(--ease-out) both;
+  animation-delay: calc(var(--index, 0) * 30ms);
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .listTitle {
+    font-size: 0.72rem;
+  }
+
+  .clearBtn {
+    font-size: 0.7rem;
+    padding: 4px 8px;
+  }
+}
