@@ -1,0 +1,300 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-modal-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--space-4);
+  animation: fadeIn 0.18s ease;
+}
+
+.modal {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), 0 0 60px rgba(0, 0, 0, 0.5);
+  animation: fadeInScale 0.22s cubic-bezier(0.34, 1.36, 0.64, 1);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+}
+
+.headerIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: rgba(106, 156, 137, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.closeBtn:hover {
+  background: rgba(224, 92, 92, 0.1);
+  color: var(--color-danger);
+  border-color: rgba(224, 92, 92, 0.2);
+}
+
+/* ── Divider ─────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 0 var(--space-6);
+}
+
+/* ── Body ────────────────────────────── */
+.body {
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.prompt {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ── Option list ─────────────────────── */
+.optionList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: rgba(11, 31, 28, 0.5);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.option:hover {
+  border-color: var(--border-default);
+  background: rgba(106, 156, 137, 0.06);
+}
+
+.optionActive {
+  border-color: rgba(106, 156, 137, 0.55);
+  background: rgba(106, 156, 137, 0.1);
+  box-shadow: 0 0 0 1px rgba(106, 156, 137, 0.2) inset;
+}
+
+.optionActive:hover {
+  border-color: var(--color-sage);
+  background: rgba(106, 156, 137, 0.14);
+}
+
+.optionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(106, 156, 137, 0.1);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.optionActive .optionIcon {
+  color: var(--color-sage);
+  background: rgba(106, 156, 137, 0.18);
+}
+
+.optionText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.optionLabel {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.optionActive .optionLabel {
+  color: var(--text-primary);
+}
+
+.optionDesc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.optionCheck {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+  color: var(--text-on-accent);
+}
+
+.optionActive .optionCheck {
+  background: var(--color-sage);
+  border-color: var(--color-sage);
+}
+
+/* ── Notice ──────────────────────────── */
+.notice {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-3);
+  background: rgba(11, 31, 28, 0.4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  line-height: 1.5;
+}
+
+/* ── Footer ──────────────────────────── */
+.footer {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6) var(--space-5);
+}
+
+.btnCancel {
+  flex: 1;
+  height: 42px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.btnCancel:hover {
+  background: rgba(106, 156, 137, 0.06);
+  color: var(--text-primary);
+}
+
+.btnConfirm {
+  flex: 2;
+  height: 42px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--color-sage);
+  color: var(--text-on-accent);
+  font-size: var(--text-sm);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.btnConfirm:hover:not(:disabled) {
+  background: #5a8c79;
+}
+
+.btnConfirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── Responsive ──────────────────────── */
+@media (max-width: 480px) {
+  .modal {
+    max-width: 100%;
+  }
+  .header, .body {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+  .divider {
+    margin: 0 var(--space-4);
+  }
+  .footer {
+    padding: var(--space-4);
+    flex-direction: column-reverse;
+  }
+  .btnCancel, .btnConfirm {
+    flex: none;
+  }
+}
