@@ -25,7 +25,8 @@ Every module is deployed independently to validate specific workflows before int
 - [Testing Thesis Audio Upload](https://thesis-audio-upload.netlify.app/)  
   Upload interface with drag‑and‑drop zone, dynamic audio list, and format‑specific badges (MP3, WAV, OGG, FLAC, AAC, WebM, M4A). Designed with responsive UI and animated feedback.
 
-- ?
+- [Testing Thesis Audio Cleaning](https://thesis-audio-cleaning.netlify.app/)  
+  Proof‑of‑concept app for browser‑based noise reduction. Uses the Web Audio API and `OfflineAudioContext` to apply filters for white noise removal, background noise suppression, and distortion repair. Provides in‑browser playback, non‑destructive processing, and one‑click download of cleaned WAV files.
 
 ## ⚖️ License
 
