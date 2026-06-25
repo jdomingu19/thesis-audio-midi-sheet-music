@@ -1,0 +1,107 @@
+.editor { display: flex; flex-direction: column; gap: 0.75rem; }
+
+/* Meta bar */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.2rem;
+}
+
+.chip { display: flex; flex-direction: column; gap: 0.1rem; }
+.chip span { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.chip code { font-family: var(--mono); font-size: 0.85rem; color: var(--accent2); }
+
+.field { display: flex; flex-direction: column; gap: 0.1rem; }
+.field span { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Track */
+.track {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.trackHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: none;
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+.trackHead:hover { background: var(--surface2); }
+
+.trackNum {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.trackName {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: text;
+  outline: none;
+  padding: 1px 2px;
+}
+.trackName:focus { border-bottom-color: var(--accent); }
+
+.trackInfo { font-size: 0.72rem; color: var(--accent); white-space: nowrap; }
+.caret { font-size: 0.65rem; color: var(--muted); }
+
+/* Notes table */
+.notes { background: var(--bg); padding: 0.75rem 1rem; overflow-x: auto; }
+
+.noteHeader, .noteRow {
+  display: grid;
+  grid-template-columns: 40px 70px 100px 100px 70px;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.78rem;
+}
+
+.noteHeader {
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0.3rem;
+}
+
+.noteRow { padding: 0.2rem 0; }
+
+.noteName {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--accent2);
+  pointer-events: none;
+}
+
+.empty { color: var(--muted); font-size: 0.8rem; padding: 0.5rem 0; }
+
+@media (max-width: 600px) {
+  .noteHeader, .noteRow {
+    grid-template-columns: 36px 60px 80px 80px 60px;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+  }
+}

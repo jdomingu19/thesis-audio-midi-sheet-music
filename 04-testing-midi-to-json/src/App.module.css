@@ -1,0 +1,79 @@
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.header h1 {
+  font-family: var(--mono);
+  font-size: 1.8rem;
+  color: var(--accent2);
+  letter-spacing: -0.02em;
+}
+
+.sub {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.file {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  background: var(--surface);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius);
+  flex: 1;
+}
+
+.reset,
+.dl {
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: var(--sans);
+  transition: opacity 0.15s;
+}
+
+.reset {
+  background: var(--surface2);
+  color: var(--muted);
+}
+.dl {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+.reset:hover,
+.dl:hover {
+  opacity: 0.8;
+}
+
+.json {
+  background: var(--surface2);
+  color: var(--accent2);
+  font-weight: 600;
+  border: 1px solid var(--border);
+}

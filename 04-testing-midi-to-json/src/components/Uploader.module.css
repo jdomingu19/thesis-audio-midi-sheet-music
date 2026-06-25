@@ -1,0 +1,20 @@
+.zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 4rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.zone:hover, .drag {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.7; }
+
+.label { font-size: 1rem; color: var(--text); }
+.label strong { color: var(--accent2); }
+
+.hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.5rem; }
