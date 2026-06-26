@@ -28,6 +28,17 @@ Every module is deployed independently to validate specific workflows before int
 - [Testing Thesis Audio Cleaning](https://thesis-audio-cleaning.netlify.app/)  
   Proof‑of‑concept app for browser‑based noise reduction. Uses the Web Audio API and `OfflineAudioContext` to apply filters for white noise removal, background noise suppression, and distortion repair. Provides in‑browser playback, non‑destructive processing, and one‑click download of cleaned WAV files.
 
+- [Testing Thesis MIDI to JSON](https://thesis-midi-to-json.netlify.app/)  
+  Minimal browser‑based MIDI parser and editor built with React + Vite. Uses `@tonejs/midi` to convert `.mid` files into live JavaScript objects, enabling in‑memory editing of BPM, time signature, track names, and note properties (pitch, duration, velocity). Supports drag‑and‑drop upload and exports the modified file back to `.mid` format — all client‑side with zero network requests.
+
+- [Testing Thesis JSON to MusicXML](https://thesis-json-to-musicxml.netlify.app/)  
+  Eu mollit incididunt commodo exercitation cupidatat aliqua labore exercitation consectetur elit magna. Ea laboris ex cillum labore minim enim nostrud voluptate dolore amet qui. Commodo ut reprehenderit velit nulla quis commodo veniam fugiat eu anim et nostrud laborum.
+
+### Free Online MIDI Tools
+
+- [MIDI Toolbox](https://miditoolbox.com/player)  
+  A free browser‑based platform to visualize and interact with MIDI files on a virtual piano. It allows you to upload `.mid` tracks and see them rendered in real time as keys are played, making it useful for practice, analysis, or demonstration. Beyond playback, MIDI Toolbox also provides utilities for editing, transposing, and manipulating MIDI data directly in the browser, offering a lightweight alternative to desktop DAWs for quick experimentation.
+
 ## ⚖️ License
 
 This repository is licensed under the terms of the [Apache License 2.0](LICENSE). The license grants permission to use, modify, and distribute the code with proper attribution, while ensuring that improvements and extensions remain open and accessible to the community.
