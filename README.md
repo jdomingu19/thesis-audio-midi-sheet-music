@@ -7,6 +7,7 @@
 ![Static Badge](https://img.shields.io/badge/css-css3+-1C2024?style=for-the-badge&logo=css&logoColor=white&labelColor=101010)
 ![Static Badge](https://img.shields.io/badge/vite-7+-1C2024?style=for-the-badge&logo=vite&logoColor=white&labelColor=101010)
 ![Static Badge](https://img.shields.io/badge/babel-7.27+-1C2024?style=for-the-badge&logo=babel&logoColor=white&labelColor=101010)
+![Static Badge](https://img.shields.io/badge/gemini-pro-1C2024?style=for-the-badge&logo=googlegemini&logoColor=white&labelColor=101010)
 ![Static Badge](https://img.shields.io/badge/claude-sonnet-1C2024?style=for-the-badge&logo=claude&logoColor=white&labelColor=101010)
 
 Lorem elit officia excepteur sint occaecat qui cupidatat ipsum. Eu irure incididunt irure nulla voluptate aute. Velit aliquip in aliqua mollit nostrud. Aliqua commodo laboris enim eu occaecat adipisicing minim adipisicing sint cillum voluptate laboris ipsum exercitation. Lorem ad minim minim elit ipsum. Enim consectetur laboris cillum duis est ex adipisicing incididunt irure.
@@ -30,9 +31,6 @@ Every module is deployed independently to validate specific workflows before int
 
 - [Testing Thesis MIDI to JSON](https://thesis-midi-to-json.netlify.app/)  
   Minimal browser‑based MIDI parser and editor built with React + Vite. Uses `@tonejs/midi` to convert `.mid` files into live JavaScript objects, enabling in‑memory editing of BPM, time signature, track names, and note properties (pitch, duration, velocity). Supports drag‑and‑drop upload and exports the modified file back to `.mid` format — all client‑side with zero network requests.
-
-- [Testing Thesis JSON to MusicXML](https://thesis-json-to-musicxml.netlify.app/)  
-  Eu mollit incididunt commodo exercitation cupidatat aliqua labore exercitation consectetur elit magna. Ea laboris ex cillum labore minim enim nostrud voluptate dolore amet qui. Commodo ut reprehenderit velit nulla quis commodo veniam fugiat eu anim et nostrud laborum.
 
 ### Free Online MIDI Tools
 
