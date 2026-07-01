@@ -109,3 +109,7 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.vexflow-container {
+  background-color: #f9f9f9;
+}

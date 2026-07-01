@@ -18,12 +18,8 @@ export function Notes() {
     const renderer = new Renderer(outputRef.current, Renderer.Backends.SVG);
 
     // Configure the rendering context
-    renderer.resize(400, 190);
+    renderer.resize(720, 130);
     const context = renderer.getContext();
-
-    // Set color theme to white
-    context.setFillStyle("white");
-    context.setStrokeStyle("white");
 
     // Create a stave of width 400 at position 10, 10 on the canvas
     const stave = new Stave(10, 10, 400);
@@ -84,7 +80,7 @@ export function Notes() {
   return (
     <>
       <h2>Step 2: The Notes</h2>
-      <div id="outputNotes" ref={outputRef}></div>
+      <div id="outputNotes" className="vexflow-container" ref={outputRef}></div>
     </>
   );
 }

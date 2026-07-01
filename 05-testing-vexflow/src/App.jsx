@@ -6,6 +6,12 @@ import "./App.css";
 import { Basics } from "./pages/Basics.jsx";
 import { Notes } from "./pages/Notes.jsx";
 import { Modifiers } from "./pages/Modifiers.jsx";
+import { Positions } from "./pages/Positions.jsx";
+import { Beams } from "./pages/Beams.jsx";
+import { AutomaticBeams } from "./pages/AutomaticBeams.jsx";
+import { Ties } from "./pages/Ties.jsx";
+import { GuitarTablature } from "./pages/GuitarTablature.jsx";
+import { Barlines } from "./pages/Barlines.jsx";
 
 function App() {
   return (
@@ -24,6 +30,12 @@ function App() {
       <Basics />
       <Notes />
       <Modifiers />
+      <Positions />
+      <Beams />
+      <AutomaticBeams />
+      <Ties />
+      <GuitarTablature />
+      <Barlines />
     </section>
   );
 }
