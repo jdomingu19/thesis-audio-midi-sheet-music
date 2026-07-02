@@ -1,6 +1,6 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/pages/AutomaticBeams.jsx
+// src/components/AutomaticBeams.jsx
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";

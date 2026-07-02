@@ -1,15 +1,15 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/pages/Positions.jsx
+// src/components/Basics.jsx
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";
 
-export function Positions() {
+export function Basics() {
   const outputRef = useRef(null);
 
   useEffect(() => {
-    const { Renderer, Stave, StaveNote, Formatter, Accidental } = VexFlow;
+    const { Renderer, Stave } = VexFlow;
 
     // Clean the container to avoid duplicates
     outputRef.current.innerHTML = "";
@@ -27,32 +27,15 @@ export function Positions() {
     // Add a clef and time signature
     stave.addClef("treble").addTimeSignature("4/4");
 
-    const notes = [
-      new StaveNote({
-        keys: ["g/4", "b/4", "cb/5", "e/5", "g#/5", "b/5"],
-        duration: "h",
-      })
-        .addModifier(new Accidental("bb"), 0)
-        .addModifier(new Accidental("b"), 1)
-        .addModifier(new Accidental("#"), 2)
-        .addModifier(new Accidental("n"), 3)
-        .addModifier(new Accidental("b"), 4)
-        .addModifier(new Accidental("##"), 5),
-      new StaveNote({ keys: ["c/4"], duration: "h" }),
-    ];
-
-    // Helper function to justify and draw a 4/4 voice.
-    Formatter.FormatAndDraw(context, stave, notes);
-
     // Connect it to the rendering context and draw
     stave.setContext(context).draw();
   }, []);
 
   return (
     <>
-      <h2>Step 4: Positions</h2>
+      <h2>Step 1: The Basics</h2>
       <div
-        id="outputPositions"
+        id="outputBasics"
         className="vexflow-container"
         ref={outputRef}
       ></div>

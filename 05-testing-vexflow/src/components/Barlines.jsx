@@ -1,6 +1,6 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/pages/Barlines.jsx
+// src/components/Barlines.jsx
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";

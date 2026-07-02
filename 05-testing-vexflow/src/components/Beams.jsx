@@ -1,24 +1,16 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/pages/Ties.jsx
+// src/components/Beams.jsx
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";
 
-export function Ties() {
+export function Beams() {
   const outputRef = useRef(null);
 
   useEffect(() => {
-    const {
-      Renderer,
-      Stave,
-      StaveNote,
-      Formatter,
-      Accidental,
-      Beam,
-      Dot,
-      StaveTie,
-    } = VexFlow;
+    const { Renderer, Stave, StaveNote, Formatter, Accidental, Beam, Dot } =
+      VexFlow;
 
     // Clean the container to avoid duplicates
     outputRef.current.innerHTML = "";
@@ -36,7 +28,7 @@ export function Ties() {
     // Add a clef and time signature
     stave.addClef("treble").addTimeSignature("4/4");
 
-    const notes = [
+    const notes1 = [
       dotted(
         new StaveNote({
           keys: ["e##/5"],
@@ -47,6 +39,9 @@ export function Ties() {
         keys: ["b/4"],
         duration: "16",
       }).addModifier(new Accidental("b")),
+    ];
+
+    const notes2 = [
       new StaveNote({
         keys: ["c/4"],
         duration: "8",
@@ -56,48 +51,58 @@ export function Ties() {
         duration: "16",
       }),
       new StaveNote({
+        keys: ["e/4"],
+        duration: "16",
+      }).addModifier(new Accidental("b")),
+    ];
+
+    const notes3 = [
+      new StaveNote({
         keys: ["d/4"],
         duration: "16",
       }),
       new StaveNote({
-        keys: ["d/4"],
-        duration: "q",
+        keys: ["e/4"],
+        duration: "16",
+      }).addModifier(new Accidental("#")),
+      new StaveNote({
+        keys: ["g/4"],
+        duration: "32",
       }),
+      new StaveNote({
+        keys: ["a/4"],
+        duration: "32",
+      }),
+      new StaveNote({
+        keys: ["g/4"],
+        duration: "16",
+      }),
+    ];
+
+    const notes4 = [
       new StaveNote({
         keys: ["d/4"],
         duration: "q",
       }),
     ];
 
-    const beams = Beam.generateBeams(notes);
-    Formatter.FormatAndDraw(context, stave, notes);
-    beams.forEach(function (b) {
+    const allNotes = notes1.concat(notes2).concat(notes3).concat(notes4);
+
+    // Create the beams for the first three groups.
+    // This hides the normal stems and flags.
+    const beams = [new Beam(notes1), new Beam(notes2), new Beam(notes3)];
+
+    Formatter.FormatAndDraw(context, stave, allNotes);
+
+    // Draw the beams and stems.
+    beams.forEach((b) => {
       b.setContext(context).draw();
     });
 
-    const ties = [
-      new StaveTie({
-        firstNote: notes[4],
-        lastNote: notes[5],
-        firstIndices: [0],
-        lastIndices: [0],
-      }),
-      new StaveTie({
-        firstNote: notes[5],
-        lastNote: notes[6],
-        firstIndices: [0],
-        lastIndices: [0],
-      }),
-    ];
-
-    ties.forEach((t) => {
-      t.setContext(context).draw();
-    });
-
-    // A helper function to add a dot to a note.
-    function dotted(note) {
-      Dot.buildAndAttach([note]);
-      return note;
+    // Helper function.
+    function dotted(staveNote) {
+      Dot.buildAndAttach([staveNote]);
+      return staveNote;
     }
 
     // Connect it to the rendering context and draw
@@ -106,8 +111,8 @@ export function Ties() {
 
   return (
     <>
-      <h2>Step 7: Ties</h2>
-      <div id="outputTies" className="vexflow-container" ref={outputRef}></div>
+      <h2>Step 5: Beams</h2>
+      <div id="outputBeams" className="vexflow-container" ref={outputRef}></div>
     </>
   );
 }
