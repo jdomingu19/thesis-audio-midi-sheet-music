@@ -3,30 +3,21 @@
 // src/App.jsx
 
 import "./App.css";
-import { Basics } from "./pages/Basics.jsx";
-import { Notes } from "./pages/Notes.jsx";
-import { Modifiers } from "./pages/Modifiers.jsx";
-import { Positions } from "./pages/Positions.jsx";
-import { Beams } from "./pages/Beams.jsx";
-import { AutomaticBeams } from "./pages/AutomaticBeams.jsx";
-import { Ties } from "./pages/Ties.jsx";
-import { GuitarTablature } from "./pages/GuitarTablature.jsx";
-import { Barlines } from "./pages/Barlines.jsx";
+import { Intro } from "./components/Intro.jsx";
+import { Basics } from "./components/Basics.jsx";
+import { Notes } from "./components/Notes.jsx";
+import { Modifiers } from "./components/Modifiers.jsx";
+import { Positions } from "./components/Positions.jsx";
+import { Beams } from "./components/Beams.jsx";
+import { AutomaticBeams } from "./components/AutomaticBeams.jsx";
+import { Ties } from "./components/Ties.jsx";
+import { GuitarTablature } from "./components/GuitarTablature.jsx";
+import { Barlines } from "./components/Barlines.jsx";
 
 function App() {
   return (
     <section id="center">
-      <h1>Testing VexFlow</h1>
-      <p>
-        VexFlow is an engraving engine for music notation and can be used as a
-        rendering backend to various kinds of web-based music tools, libraries,
-        and applications. It's written in TypeScript/JavaScript and works with
-        both HTML5 Canvas and SVG.
-      </p>
-      <p>
-        This tutorial expects you to have JavaScript programming experience and
-        a basic understanding of music notation terminology.
-      </p>
+      <Intro />
       <Basics />
       <Notes />
       <Modifiers />
