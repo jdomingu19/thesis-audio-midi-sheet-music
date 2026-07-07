@@ -4,6 +4,7 @@
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";
+import { DownloadPdfButton } from "./DownloadPdfButton.jsx";
 
 export function Ties() {
   const outputRef = useRef(null);
@@ -108,6 +109,7 @@ export function Ties() {
     <>
       <h2>Step 7: Ties</h2>
       <div id="outputTies" className="vexflow-container" ref={outputRef}></div>
+      <DownloadPdfButton containerRef={outputRef} filename="ties.pdf" />
     </>
   );
 }

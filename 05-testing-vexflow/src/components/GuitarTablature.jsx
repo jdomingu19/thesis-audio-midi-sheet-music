@@ -4,6 +4,7 @@
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";
+import { DownloadPdfButton } from "./DownloadPdfButton.jsx";
 
 export function GuitarTablature() {
   const outputRef = useRef(null);
@@ -61,6 +62,10 @@ export function GuitarTablature() {
         className="vexflow-container"
         ref={outputRef}
       ></div>
+      <DownloadPdfButton
+        containerRef={outputRef}
+        filename="guitar_tablature.pdf"
+      />
     </>
   );
 }

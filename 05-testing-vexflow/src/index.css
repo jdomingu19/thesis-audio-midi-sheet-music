@@ -30,6 +30,17 @@
   }
 }
 
+@font-face {
+  font-family: "Bravura";
+  src: url(https://cdn.jsdelivr.net/npm/@vexflow-fonts/bravura/bravura.woff2)
+    format(woff2);
+}
+@font-face {
+  font-family: "Academico";
+  src: url(https://cdn.jsdelivr.net/npm/@vexflow-fonts/academico/academico.woff2)
+    format(woff2);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
@@ -111,5 +122,5 @@ code {
 }
 
 .vexflow-container {
-  background-color: #f9f9f9;
+  background-color: #ffffff;
 }

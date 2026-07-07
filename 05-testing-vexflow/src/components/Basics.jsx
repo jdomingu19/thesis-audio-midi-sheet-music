@@ -4,6 +4,7 @@
 
 import { useEffect, useRef } from "react";
 import VexFlow from "vexflow";
+import { DownloadPdfButton } from "./DownloadPdfButton.jsx";
 
 export function Basics() {
   const outputRef = useRef(null);
@@ -39,6 +40,7 @@ export function Basics() {
         className="vexflow-container"
         ref={outputRef}
       ></div>
+      <DownloadPdfButton containerRef={outputRef} filename="basics.pdf" />
     </>
   );
 }
