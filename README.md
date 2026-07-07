@@ -14,7 +14,7 @@ Lorem elit officia excepteur sint occaecat qui cupidatat ipsum. Eu irure incidid
 
 > Dolor voluptate veniam in amet tempor mollit incididunt. Aliqua id anim sunt reprehenderit pariatur. Ut duis adipisicing ut eiusmod qui sit ipsum Lorem adipisicing nostrud velit in consectetur.
 
-## 🎼 Functional Testing Modules
+## Functional Testing Modules
 
 This repository contains isolated test environments for each core functionality of the thesis project.
 
@@ -31,6 +31,9 @@ Every module is deployed independently to validate specific workflows before int
 
 - [Testing Thesis MIDI to JSON](https://thesis-midi-to-json.netlify.app/)  
   Minimal browser‑based MIDI parser and editor built with React + Vite. Uses `@tonejs/midi` to convert `.mid` files into live JavaScript objects, enabling in‑memory editing of BPM, time signature, track names, and note properties (pitch, duration, velocity). Supports drag‑and‑drop upload and exports the modified file back to `.mid` format — all client‑side with zero network requests.
+
+- [Testing Thesis VexFlow](https://thesis-vexflow.netlify.app/)  
+  Interactive React + Vite app showcasing VexFlow’s engraving engine for music notation and tablature. Includes modular examples (staves, notes, beams, ties, modifiers, guitar tabs, barlines) with a unified white‑background theme. Features a reusable **Download PDF** button powered by native browser print APIs, ensuring correct rendering of Bravura and Academico fonts without external libraries.
 
 ### Free Online MIDI Tools
 
