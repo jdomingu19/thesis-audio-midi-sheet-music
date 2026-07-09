@@ -50,13 +50,13 @@ export const downloadPDF = (containerElement, title = "Sheet Music") => {
             margin: 0;
             padding: 20px;
             background: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            /* FIX: nada de flex/height que empuje el contenido a una 2ª página */
           }
           svg {
+            display: block;
             max-width: 100%;
             height: auto;
+            margin: 0 auto; /* centrado horizontal, sin afectar el flujo vertical */
           }
         </style>
       </head>

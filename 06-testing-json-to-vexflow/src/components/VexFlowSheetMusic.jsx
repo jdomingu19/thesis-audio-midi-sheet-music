@@ -19,7 +19,11 @@ import { downloadPDF } from "@/utils/handlers";
 const STAVE_WIDTH = 260;
 const STAVES_PER_LINE = 4;
 
-export function VexFlowSheetMusic({ measures, timeSignature = "4/4" }) {
+export function VexFlowSheetMusic({
+  measures,
+  timeSignature = "4/4",
+  keyInfo,
+}) {
   const outputRef = useRef(null);
 
   useEffect(() => {
@@ -40,21 +44,17 @@ export function VexFlowSheetMusic({ measures, timeSignature = "4/4" }) {
       const stave = new Stave(x, y, STAVE_WIDTH);
       if (i === 0) {
         stave.addClef("treble").addTimeSignature(timeSignature);
+        if (keyInfo?.vexKey) stave.addKeySignature(keyInfo.vexKey);
       }
       stave.setContext(context).draw();
 
       const staveNotes = measureEvents.map((ev) => {
-        const note = new StaveNote({
-          keys: ev.keys,
-          duration: ev.duration,
-        });
+        const note = new StaveNote({ keys: ev.keys, duration: ev.duration });
         if (!ev.isRest) {
-          ev.keys.forEach((k, idx) => {
-            if (k.includes("#") || k.includes("b")) {
-              note.addModifier(
-                new Accidental(k.includes("#") ? "#" : "b"),
-                idx,
-              );
+          // FIX: usamos el accidental explícito, no un .includes() ambiguo
+          ev.accidentals.forEach((acc, idx) => {
+            if (acc === "#" || acc === "b") {
+              note.addModifier(new Accidental(acc), idx);
             }
           });
         }
@@ -62,7 +62,7 @@ export function VexFlowSheetMusic({ measures, timeSignature = "4/4" }) {
       });
 
       const voice = new Voice({ numBeats: 4, beatValue: 4 });
-      voice.setStrict(false); // tolera redondeos de la cuantización
+      voice.setStrict(false);
       voice.addTickables(staveNotes);
 
       new Formatter().joinVoices([voice]).format([voice], STAVE_WIDTH - 40);
@@ -71,7 +71,7 @@ export function VexFlowSheetMusic({ measures, timeSignature = "4/4" }) {
       voice.draw(context, stave);
       beams.forEach((b) => b.setContext(context).draw());
     });
-  }, [measures, timeSignature]);
+  }, [measures, timeSignature, keyInfo]);
 
   return (
     <>

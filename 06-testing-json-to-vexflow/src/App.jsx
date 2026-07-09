@@ -34,6 +34,7 @@ function App() {
           <VexFlowSheetMusic
             measures={score.measures}
             timeSignature={score.timeSignature}
+            keyInfo={score.keyInfo}
           />
         )}
       </section>

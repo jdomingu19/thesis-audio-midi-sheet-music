@@ -1,29 +1,132 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
 // src/utils/jsonToVexflow.js
-//
-// Convierte un JSON exportado por @tonejs/midi (Tone.js) en una
-// estructura de compases lista para dibujar con VexFlow.
-// Simplificaciones para esta mini-app de prueba:
-//  - Se usa el primer track del archivo.
-//  - Se reduce la polifonía a UNA voz por golpe rítmico:
-//    si hay varias notas simultáneas se agrupan como acorde.
-//  - Cuantización a corchea (1/8) por defecto (RESOLUTION).
-//  - Solo se soportan duraciones simples: w, h, q, 8, 16 (+ puntillo simple).
 
-const RESOLUTION_DIVISIONS = 16; // 8 = cuantiza a corchea, 16 = semicorchea
+const RESOLUTION_DIVISIONS = 16;
 
-// Convierte nombre de nota Tone.js ("C#4") a formato VexFlow ("c#/4")
-function toVexKey(name) {
-  const match = name.match(/^([A-Ga-g])(#|b)?(-?\d+)$/);
-  if (!match) return "c/4";
-  const [, letter, accidental = "", octave] = match;
-  return `${letter.toLowerCase()}${accidental}/${octave}`;
+// --- Detección de tonalidad (Krumhansl-Kessler) ---
+const KK_MAJOR = [
+  6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88,
+];
+const KK_MINOR = [
+  6.33, 2.68, 3.52, 5.38, 2.6, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17,
+];
+
+const PITCH_NAMES_SHARP = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
+const PITCH_NAMES_FLAT = [
+  "C",
+  "Db",
+  "D",
+  "Eb",
+  "E",
+  "F",
+  "Gb",
+  "G",
+  "Ab",
+  "A",
+  "Bb",
+  "B",
+];
+
+// Nº de bemoles/sostenidos por tónica mayor (índice = pitch class de la tónica)
+// positivo = sostenidos, negativo = bemoles
+const MAJOR_KEY_ACCIDENTALS = {
+  0: 0,
+  7: 1,
+  2: 2,
+  9: 3,
+  4: 4,
+  11: 5,
+  6: 6, // C G D A E B F#
+  5: -1,
+  10: -2,
+  3: -3,
+  8: -4,
+  1: -5, // F Bb Eb Ab Db
+};
+
+function correlate(hist, profile) {
+  const meanH = hist.reduce((a, b) => a + b) / 12;
+  const meanP = profile.reduce((a, b) => a + b) / 12;
+  let num = 0,
+    denH = 0,
+    denP = 0;
+  for (let i = 0; i < 12; i++) {
+    const dh = hist[i] - meanH;
+    const dp = profile[i] - meanP;
+    num += dh * dp;
+    denH += dh * dh;
+    denP += dp * dp;
+  }
+  return num / Math.sqrt(denH * denP || 1);
 }
 
-// Snap de duración en "unidades de resolución" a duraciones VexFlow válidas
+/** Devuelve { tonicPitchClass, mode, useFlats, sharpsOrFlats } */
+export function detectKey(notes) {
+  const histogram = new Array(12).fill(0);
+  for (const n of notes) {
+    histogram[n.midi % 12] += n.duration; // ponderado por duración
+  }
+
+  let best = { score: -Infinity, tonic: 0, mode: "major" };
+  for (let tonic = 0; tonic < 12; tonic++) {
+    const rotatedMajor = KK_MAJOR.map(
+      (_, i) => KK_MAJOR[(i - tonic + 12) % 12],
+    );
+    const rotatedMinor = KK_MINOR.map(
+      (_, i) => KK_MINOR[(i - tonic + 12) % 12],
+    );
+    const scoreMajor = correlate(histogram, rotatedMajor);
+    const scoreMinor = correlate(histogram, rotatedMinor);
+    if (scoreMajor > best.score)
+      best = { score: scoreMajor, tonic, mode: "major" };
+    if (scoreMinor > best.score)
+      best = { score: scoreMinor, tonic, mode: "minor" };
+  }
+
+  // Para la escritura de accidentales usamos la mayor relativa
+  const majorTonic = best.mode === "major" ? best.tonic : (best.tonic + 3) % 12;
+  const accidentalCount = MAJOR_KEY_ACCIDENTALS[majorTonic] ?? 0;
+
+  return {
+    tonicPitchClass: best.tonic,
+    mode: best.mode,
+    tonicName: (best.mode === "major" ? PITCH_NAMES_SHARP : PITCH_NAMES_SHARP)[
+      best.tonic
+    ],
+    useFlats: accidentalCount < 0,
+    accidentalCount,
+    // string usable directamente en stave.addKeySignature()
+    vexKey:
+      (accidentalCount < 0 ? PITCH_NAMES_FLAT : PITCH_NAMES_SHARP)[majorTonic] +
+      (best.mode === "minor" ? "m" : ""),
+  };
+}
+
+// Convierte midi -> "c#/4" respetando la tonalidad detectada
+function midiToVexKey(midi, useFlats) {
+  const pitchClass = midi % 12;
+  const octave = Math.floor(midi / 12) - 1;
+  const name = (useFlats ? PITCH_NAMES_FLAT : PITCH_NAMES_SHARP)[pitchClass];
+  const letter = name[0].toLowerCase();
+  const accidental = name.slice(1); // "", "#", o "b"
+  return { key: `${letter}${accidental}/${octave}`, accidental };
+}
+
 function unitsToDuration(units) {
-  // units está expresado en fracciones de negra * RESOLUTION_DIVISIONS/4
   const table = [
     { units: 32, duration: "w" },
     { units: 24, duration: "hd" },
@@ -46,11 +149,6 @@ function unitsToDuration(units) {
   return closest.duration;
 }
 
-/**
- * @param {object} toneJson - JSON completo exportado por @tonejs/midi
- * @param {number} trackIndex - índice del track a convertir
- * @returns {{ measures: Array, timeSignature: string, notesPerMeasure: number }}
- */
 export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   const { header, tracks } = toneJson;
   const ppq = header.ppq;
@@ -58,28 +156,22 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
 
   const track = tracks[trackIndex];
   if (!track || !track.notes?.length) {
-    return {
-      measures: [],
-      timeSignature: `${tsNum}/${tsDen}`,
-      notesPerMeasure: 0,
-    };
+    return { measures: [], timeSignature: `${tsNum}/${tsDen}`, keyInfo: null };
   }
 
-  // Unidad de cuantización en ticks (ej: 1/8 de negra = ppq / (RESOLUTION_DIVISIONS/4))
+  const keyInfo = detectKey(track.notes);
+
   const ticksPerUnit = ppq / (RESOLUTION_DIVISIONS / 4);
   const ticksPerMeasure = ppq * tsNum * (4 / tsDen);
   const unitsPerMeasure = Math.round(ticksPerMeasure / ticksPerUnit);
 
-  // 1. Cuantizar cada nota a la unidad más cercana y agrupar por "slot" (acordes)
-  const slots = new Map(); // unitIndex -> [{key, endUnit}]
+  const slots = new Map();
   for (const note of track.notes) {
     const startUnit = Math.round(note.ticks / ticksPerUnit);
     const durUnits = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
     if (!slots.has(startUnit)) slots.set(startUnit, []);
-    slots.get(startUnit).push({
-      key: toVexKey(note.name),
-      durUnits,
-    });
+    const { key, accidental } = midiToVexKey(note.midi, keyInfo.useFlats);
+    slots.get(startUnit).push({ key, accidental, durUnits });
   }
 
   const sortedStarts = Array.from(slots.keys()).sort((a, b) => a - b);
@@ -93,27 +185,23 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
     : 0;
   const totalMeasures = Math.max(1, Math.ceil(lastUnit / unitsPerMeasure));
 
-  // 2. Construir línea de tiempo completa (con silencios) en unidades
   const timeline = new Array(totalMeasures * unitsPerMeasure).fill(null);
   for (const start of sortedStarts) {
-    const chordNotes = slots.get(start);
-    // Si el slot ya está ocupado (choque de cuantización), lo saltamos
     if (timeline[start] !== undefined && timeline[start] !== null) continue;
+    const chordNotes = slots.get(start);
     const durUnits = Math.min(
       Math.max(...chordNotes.map((n) => n.durUnits)),
-      unitsPerMeasure, // evita que una nota cruce el compás (simplificación)
+      unitsPerMeasure,
     );
     timeline[start] = {
-      keys: chordNotes.map((n) => n.key),
+      notes: chordNotes.map(({ key, accidental }) => ({ key, accidental })),
       durUnits,
     };
-    // marcar unidades ocupadas para no insertar silencios encima
     for (let i = 1; i < durUnits; i++) {
       if (start + i < timeline.length) timeline[start + i] = "occupied";
     }
   }
 
-  // 3. Rellenar huecos con silencios y trocear en compases
   const measures = [];
   for (let m = 0; m < totalMeasures; m++) {
     const measureEvents = [];
@@ -129,15 +217,14 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
       if (cell && typeof cell === "object") {
         const durUnits = Math.min(cell.durUnits, unitsPerMeasure - unit);
         measureEvents.push({
-          keys: cell.keys,
-          duration: unitsToDuration(
-            durUnits * (32 / unitsPerMeasure) * (tsNum === 4 ? 8 : 8),
-          ),
+          keys: cell.notes.map((n) => n.key),
+          accidentals: cell.notes.map((n) => n.accidental),
+          // FIX: sin el *8 sobrante
+          duration: unitsToDuration(durUnits * (32 / unitsPerMeasure)),
           isRest: false,
         });
         unit += durUnits;
       } else {
-        // silencio: buscamos cuántas unidades vacías consecutivas hay
         let gap = 0;
         while (
           unit + gap < unitsPerMeasure &&
@@ -150,6 +237,7 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
         }
         measureEvents.push({
           keys: ["b/4"],
+          accidentals: [""],
           duration: unitsToDuration(gap * (32 / unitsPerMeasure)) + "r",
           isRest: true,
         });
@@ -159,9 +247,5 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
     measures.push(measureEvents);
   }
 
-  return {
-    measures,
-    timeSignature: `${tsNum}/${tsDen}`,
-    notesPerMeasure: unitsPerMeasure,
-  };
+  return { measures, timeSignature: `${tsNum}/${tsDen}`, keyInfo };
 }
