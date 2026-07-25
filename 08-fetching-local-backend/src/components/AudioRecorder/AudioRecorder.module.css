@@ -1,0 +1,150 @@
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+}
+
+.dotRecording {
+  background: var(--danger);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.dotPaused {
+  background: var(--warning);
+}
+
+.dotError {
+  background: var(--danger);
+}
+
+.dotIdle {
+  background: var(--text-secondary);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.statusText {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 56px;
+}
+
+.bar {
+  width: 3px;
+  height: var(--h, 3%);
+  min-height: 3px;
+  background: var(--border-color);
+  border-radius: 2px;
+  transition: height 0.1s ease;
+}
+
+.barActive {
+  background: var(--accent);
+}
+
+.timer {
+  text-align: center;
+}
+
+.timerValue {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+}
+
+.btnRecord {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface-0);
+  font-weight: 600;
+}
+
+.btnDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.btnStop {
+  color: var(--danger);
+  border-color: rgba(214, 88, 88, 0.4);
+}
+
+.error {
+  font-size: 0.8rem;
+  color: var(--danger);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1rem;
+  }
+}

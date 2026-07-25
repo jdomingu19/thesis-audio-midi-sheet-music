@@ -1,0 +1,97 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.listHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listMeta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.listTitle {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.35rem 0.65rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.clearBtn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.listItem {
+  animation: fadeIn 0.25s ease both;
+  animation-delay: calc(var(--index) * 0.03s);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.emptySection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 1rem;
+  color: var(--text-secondary);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+}
+
+.emptyIcon {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 0.8rem;
+  text-align: center;
+}
