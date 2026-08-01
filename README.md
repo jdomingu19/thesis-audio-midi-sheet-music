@@ -40,6 +40,9 @@ Every module is deployed independently to validate specific workflows before int
 - [MIDI Toolbox](https://miditoolbox.com/player)  
   A free browser‑based platform to visualize and interact with MIDI files on a virtual piano. It allows you to upload `.mid` tracks and see them rendered in real time as keys are played, making it useful for practice, analysis, or demonstration. Beyond playback, MIDI Toolbox also provides utilities for editing, transposing, and manipulating MIDI data directly in the browser, offering a lightweight alternative to desktop DAWs for quick experimentation.
 
+- [WaveRoll [ISMIR 2025 LBD]](https://github.com/crescent-stdio/wave-roll)  
+  WaveRoll is an interactive JavaScript library that enables comparative visualization and synchronized playback of multiple MIDI piano rolls on a browser.
+
 ## ⚖️ License
 
 This repository is licensed under the terms of the [Apache License 2.0](LICENSE). The license grants permission to use, modify, and distribute the code with proper attribution, while ensuring that improvements and extensions remain open and accessible to the community.
