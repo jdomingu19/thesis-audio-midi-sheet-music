@@ -1,0 +1,47 @@
+.dropzone {
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  padding: 28px 20px;
+  text-align: center;
+  background: var(--bg-panel);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone:hover {
+  border-color: var(--accent);
+}
+
+.dragging {
+  border-color: var(--accent-light);
+  background: #1c4d44;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.error {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--danger);
+}
+
+@media (max-width: 480px) {
+  .dropzone {
+    padding: 20px 14px;
+  }
+}
