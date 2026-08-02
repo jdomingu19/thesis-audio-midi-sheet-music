@@ -10,9 +10,16 @@
 ![Static Badge](https://img.shields.io/badge/gemini-pro-1C2024?style=for-the-badge&logo=googlegemini&logoColor=white&labelColor=101010)
 ![Static Badge](https://img.shields.io/badge/claude-sonnet-1C2024?style=for-the-badge&logo=claude&logoColor=white&labelColor=101010)
 
-Lorem elit officia excepteur sint occaecat qui cupidatat ipsum. Eu irure incididunt irure nulla voluptate aute. Velit aliquip in aliqua mollit nostrud. Aliqua commodo laboris enim eu occaecat adipisicing minim adipisicing sint cillum voluptate laboris ipsum exercitation. Lorem ad minim minim elit ipsum. Enim consectetur laboris cillum duis est ex adipisicing incididunt irure.
+This repository demonstrates a complete academic pipeline for transforming audio recordings into interactive musical representations. It combines modern web technologies with audio‑to‑MIDI inference and client‑side visualization, enabling reproducible experiments and modular testing environments. Each module validates a specific stage of the workflow, from capturing audio to rendering sheet music and piano rolls, ensuring clarity, accessibility, and technical rigor.
 
-> Dolor voluptate veniam in amet tempor mollit incididunt. Aliqua id anim sunt reprehenderit pariatur. Ut duis adipisicing ut eiusmod qui sit ipsum Lorem adipisicing nostrud velit in consectetur.
+> The project affirms the following goals:
+>
+> - Provide isolated test apps for each functionality to guarantee reproducibility.
+> - Integrate **Spotify’s Basic Pitch** model via a local FastAPI backend for audio‑to‑MIDI conversion.
+> - Use **Tone.js** to parse and transform MIDI into JSON for client‑side editing.
+> - Render professional sheet music with **VexFlow** and export to PDF.
+> - Visualize MIDI interactively with a **falling‑notes piano roll player**.
+> - Maintain a clean, modular architecture with responsive design and accessible documentation.
 
 ## Functional Testing Modules
 
@@ -34,6 +41,12 @@ Every module is deployed independently to validate specific workflows before int
 
 - [Testing Thesis VexFlow](https://thesis-vexflow.netlify.app/)  
   Interactive React + Vite app showcasing VexFlow’s engraving engine for music notation and tablature. Includes modular examples (staves, notes, beams, ties, modifiers, guitar tabs, barlines) with a unified white‑background theme. Features a reusable **Download PDF** button powered by native browser print APIs, ensuring correct rendering of Bravura and Academico fonts without external libraries.
+
+- [Testing Thesis Fetching Local Backend](https://thesis-fetching-local-backend.netlify.app/)  
+  React + Vite mini‑app designed to test integration with the local FastAPI backend powered by Spotify’s Basic Pitch model. Provides an **UploadZone** with drag‑and‑drop support, format validation, and error banners, as well as an **AudioRecorder** with waveform visualization and playback controls. Each audio item can be converted individually, with the resulting MIDI available for download. Includes a backend connection status indicator and a dark forest‑green themed UI for end‑to‑end pipeline validation.
+
+- [Testing Piano Roll JSON Player](https://thesis-piano-json-player.netlify.app/)  
+  Experimental React + Vite app implementing a canvas‑based falling‑notes piano roll synchronized with a rendered keyboard. Accepts `.json` files exported from Tone.js, validates track format, and visualizes notes with per‑track colors. Features playback via Tone.js PolySynth, transport controls (play, pause, stop, seek), and responsive design with custom typography and dark palette. Built to demonstrate interactive MIDI visualization and extend the thesis pipeline beyond static sheet music.
 
 ### Free Online MIDI Tools
 
