@@ -1,42 +1,53 @@
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* Keyboard.modules.css */
+
 .keyboard {
   position: relative;
-  display: flex;
   width: 100%;
-  height: 90px;
+  height: clamp(56px, 12vh, 96px);
   background: #0a1512;
   border-top: 2px solid var(--border);
+  box-shadow: inset 0 6px 10px -6px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
 }
 
 .whiteKey {
   position: absolute;
   top: 0;
   height: 100%;
-  background: #f2f2ea;
-  border-right: 1px solid #cfcfc4;
-  transition: background 0.06s ease;
+  background: linear-gradient(180deg, #fbfbf7 0%, #e9e9df 88%, #d8d8cb 100%);
+  border-right: 1px solid #c3c3b6;
+  border-radius: 0 0 4px 4px;
+  box-shadow: inset 0 -3px 3px rgba(0, 0, 0, 0.08);
+  transition: background 0.08s ease, box-shadow 0.08s ease;
 }
 
 .whiteKey.active {
-  background: var(--accent-light);
+  background: linear-gradient(180deg, var(--accent-light) 0%, var(--accent) 100%);
+  box-shadow: 0 0 10px var(--accent-glow), inset 0 -3px 5px rgba(0, 0, 0, 0.15);
 }
 
 .blackKey {
   position: absolute;
   top: 0;
-  height: 60%;
-  background: #12211d;
+  height: 62%;
+  background: linear-gradient(180deg, #2a3a35 0%, #0e1a17 90%);
   border: 1px solid #000;
-  border-radius: 0 0 3px 3px;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
   z-index: 2;
-  transition: background 0.06s ease;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.45);
+  transition: background 0.08s ease, box-shadow 0.08s ease;
 }
 
 .blackKey.active {
-  background: var(--accent);
+  background: linear-gradient(180deg, var(--accent) 0%, #16423c 100%);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .keyboard {
-    height: 64px;
+    box-shadow: inset 0 4px 6px -4px rgba(0, 0, 0, 0.6);
   }
 }

@@ -1,9 +1,15 @@
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* PianoRoll.modules.css */
+
 .rollContainer {
   position: relative;
   width: 100%;
   flex: 1;
-  min-height: 240px;
-  background: linear-gradient(180deg, #0e1a17 0%, #0b1512 100%);
+  min-height: clamp(180px, 42vh, 420px);
+  background:
+    radial-gradient(ellipse 700px 260px at 50% 100%, rgba(106, 156, 137, 0.10), transparent 70%),
+    linear-gradient(180deg, #0e1a17 0%, #0b1512 100%);
   overflow: hidden;
 }
 
@@ -20,5 +26,5 @@
   bottom: 0;
   height: 2px;
   background: var(--accent-light);
-  box-shadow: 0 0 8px var(--accent-light);
+  box-shadow: 0 0 10px 1px var(--accent-glow);
 }

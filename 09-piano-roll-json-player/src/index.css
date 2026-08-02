@@ -1,33 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* index.css */
+
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
   --bg-deep: #0e1a17;
-  --bg-panel: #16423C;
-  --accent: #6A9C89;
+  --bg-panel: #16423c;
+  --bg-panel-raised: #1b4c44;
+  --accent: #6a9c89;
   --accent-light: #a8c9bc;
+  --accent-glow: rgba(168, 201, 188, 0.45);
   --text-primary: #eaf3ef;
   --text-muted: #9db8ae;
   --border: #244a42;
+  --border-soft: rgba(106, 156, 137, 0.18);
   --danger: #c96a5a;
 
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'Inter', sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Inter", sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-panel: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-key-active: 0 0 12px var(--accent-glow);
+
+  --space-1: clamp(4px, 0.6vw, 6px);
+  --space-2: clamp(8px, 1vw, 12px);
+  --space-3: clamp(12px, 1.6vw, 20px);
+  --space-4: clamp(16px, 2.4vw, 28px);
 }
 
 * {
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
 }
 
 body {
-  background: var(--bg-deep);
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(106, 156, 137, 0.10), transparent),
+    var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
 }
 
 button {
@@ -35,6 +59,38 @@ button {
   cursor: pointer;
 }
 
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
+}
+
 input {
   font-family: inherit;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

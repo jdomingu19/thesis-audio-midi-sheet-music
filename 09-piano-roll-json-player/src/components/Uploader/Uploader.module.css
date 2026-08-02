@@ -1,14 +1,25 @@
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* Uploader.modules.css */
+
 .dropzone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   border: 1.5px dashed var(--border);
-  border-radius: 10px;
-  padding: 28px 20px;
-  text-align: center;
-  background: var(--bg-panel);
-  transition: border-color 0.15s ease, background 0.15s ease;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  background: rgba(10, 21, 18, 0.4);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
 }
 
 .dropzone:hover {
   border-color: var(--accent);
+  background: rgba(10, 21, 18, 0.6);
+}
+
+.dropzone:active {
+  transform: scale(0.995);
 }
 
 .dragging {
@@ -16,32 +27,47 @@
   background: #1c4d44;
 }
 
+.icon {
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.textCol {
+  min-width: 0;
+  flex: 1;
+}
+
 .hiddenInput {
   display: none;
 }
 
 .title {
-  margin: 0 0 4px;
+  margin: 0;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--text-primary);
-  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .subtitle {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
 }
 
 .error {
-  margin: 10px 0 0;
-  font-size: 0.8rem;
+  margin: 8px 0 0;
+  font-size: 0.75rem;
   color: var(--danger);
 }
 
 @media (max-width: 480px) {
   .dropzone {
-    padding: 20px 14px;
+    padding: 9px 12px;
+  }
+  .subtitle {
+    display: none;
   }
 }

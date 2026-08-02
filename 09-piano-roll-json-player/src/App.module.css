@@ -1,31 +1,70 @@
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* App.modules.css */
+
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  padding: 14px 20px;
-  background: var(--bg-panel);
-  border-bottom: 1px solid var(--border);
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(
+    180deg,
+    var(--bg-panel-raised) 0%,
+    var(--bg-panel) 100%
+  );
+  border-bottom: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-panel);
+  z-index: 5;
   flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.logoMark {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 6px var(--accent-glow));
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .logo {
   margin: 0;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
   font-family: var(--font-mono);
+  font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.tagline {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
 .uploaderSlot {
   flex: 1;
-  max-width: 420px;
+  min-width: 220px;
+  max-width: 440px;
 }
 
 .main {
@@ -33,6 +72,42 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;
+  position: relative;
+}
+
+.stageScroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 100%;
+  min-height: 0;
+  width: max(100%, calc(var(--white-count, 24) * 24px));
+}
+
+.meta {
+  display: flex;
+  gap: var(--space-3);
+  padding: 6px var(--space-4);
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-soft);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.metaItem span {
+  color: var(--accent-light);
 }
 
 .emptyState {
@@ -40,18 +115,60 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  padding: 20px;
+  padding: var(--space-4);
+}
+
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 360px;
   text-align: center;
+  padding: var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: radial-gradient(
+    circle at 50% 0%,
+    rgba(106, 156, 137, 0.08),
+    transparent 70%
+  );
+}
+
+.emptyIcon {
+  opacity: 0.85;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.emptyText {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--space-2);
   }
   .uploaderSlot {
     max-width: none;
+  }
+  .meta {
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tagline {
+    display: none;
   }
 }

@@ -1,36 +1,61 @@
+/* Thesis Audio to MIDI & Sheet Music */
+/* Piano Roll JSON Player @jdomingu19 */
+/* TransportControls.modules.css */
+
 .controls {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: var(--bg-panel);
-  border-top: 1px solid var(--border);
+  gap: clamp(8px, 1.6vw, 14px);
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(0deg, var(--bg-panel-raised) 0%, var(--bg-panel) 100%);
+  border-top: 1px solid var(--border-soft);
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
 }
 
 .iconButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: none;
-  background: var(--accent);
-  color: var(--bg-deep);
-  font-size: 0.95rem;
+  border: 1px solid var(--border-soft);
+  background: rgba(234, 243, 239, 0.05);
+  color: var(--text-primary);
   flex-shrink: 0;
+  transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
 }
 
 .iconButton:hover {
+  background: rgba(234, 243, 239, 0.1);
+}
+
+.iconButton:active {
+  transform: scale(0.94);
+}
+
+.primary {
+  width: 40px;
+  height: 40px;
+  background: var(--accent);
+  color: var(--bg-deep);
+  border-color: transparent;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.primary:hover {
   background: var(--accent-light);
+  box-shadow: 0 0 14px var(--accent-glow);
 }
 
 .time {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
-  min-width: 42px;
+  min-width: 40px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .seekBar {
@@ -38,31 +63,48 @@
   -webkit-appearance: none;
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--progress), var(--border) var(--progress), var(--border) 100%);
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%,
+    var(--accent) var(--progress),
+    var(--border) var(--progress),
+    var(--border) 100%
+  );
   outline: none;
 }
 
 .seekBar::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--accent-light);
+  box-shadow: 0 0 6px var(--accent-glow);
   cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.seekBar::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
 }
 
 .seekBar::-moz-range-thumb {
-  width: 13px;
-  height: 13px;
+  width: 14px;
+  height: 14px;
   border: none;
   border-radius: 50%;
   background: var(--accent-light);
+  box-shadow: 0 0 6px var(--accent-glow);
   cursor: pointer;
 }
 
 @media (max-width: 480px) {
   .controls {
     gap: 8px;
-    padding: 10px 12px;
+    padding: 8px 10px;
+  }
+  .time {
+    min-width: 34px;
+    font-size: 0.68rem;
   }
 }
