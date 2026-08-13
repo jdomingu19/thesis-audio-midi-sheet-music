@@ -1,0 +1,119 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Modal.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+  background-color: rgba(7, 15, 13, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: overlay-fade-in var(--transition-base) ease-out both;
+}
+
+.modal {
+  composes: glass from "../../../styles/effects.module.css";
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100vh - var(--space-6) * 2);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-elevated);
+  box-shadow: var(--shadow-elevated);
+  overflow: hidden;
+  animation: modal-rise-in var(--transition-base) ease-out both;
+}
+
+/* ============================================================
+   SIZES
+   ============================================================ */
+.size-sm {
+  max-width: 360px;
+}
+
+.size-md {
+  max-width: 520px;
+}
+
+.size-lg {
+  max-width: 720px;
+}
+
+/* ============================================================
+   HEADER / BODY / FOOTER
+   ============================================================ */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.closeButton {
+  flex-shrink: 0;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-5);
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .modal {
+    animation: none;
+  }
+}

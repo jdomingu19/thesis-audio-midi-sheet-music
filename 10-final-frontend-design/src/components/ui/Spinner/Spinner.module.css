@@ -1,0 +1,84 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Spinner.module.css */
+
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.circle {
+  display: block;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--color-border-strong);
+  border-top-color: var(--color-sage);
+  animation: spinner-rotate 700ms linear infinite;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   SIZES
+   ============================================================ */
+.size-sm .circle {
+  width: 14px;
+  height: 14px;
+  border-width: 2px;
+}
+
+.size-md .circle {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+.size-lg .circle {
+  width: 28px;
+  height: 28px;
+  border-width: 3px;
+}
+
+/* ============================================================
+   VARIANTS
+   ============================================================ */
+.variant-default .circle {
+  border-top-color: var(--color-ink);
+}
+
+.variant-sage .circle {
+  border-top-color: var(--color-sage);
+}
+
+.variant-amber .circle {
+  border-top-color: var(--color-amber);
+}
+
+/* ============================================================
+   ROTATION
+   ============================================================ */
+@keyframes spinner-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circle {
+    animation-duration: 1.4s;
+  }
+}

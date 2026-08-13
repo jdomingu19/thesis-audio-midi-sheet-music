@@ -1,0 +1,71 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Badge.module.css */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 22px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+.status-default {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-ink-muted);
+}
+
+.status-ready {
+  background-color: var(--color-success-muted);
+  border-color: rgba(111, 191, 139, 0.32);
+  color: var(--color-success);
+}
+
+.status-processing {
+  background-color: rgba(217, 161, 91, 0.16);
+  border-color: rgba(217, 161, 91, 0.32);
+  color: var(--color-amber);
+}
+
+.status-queued {
+  background-color: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-ink-muted);
+}
+
+.status-error {
+  background-color: var(--color-danger-muted);
+  border-color: rgba(224, 104, 92, 0.32);
+  color: var(--color-danger);
+}
