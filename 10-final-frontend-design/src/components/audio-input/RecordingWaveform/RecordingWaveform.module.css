@@ -1,0 +1,48 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* RecordingWaveform.module.css */
+
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 40px;
+  padding: 0 var(--space-2);
+}
+
+.bar {
+  flex: 1;
+  max-width: 4px;
+  min-height: 4px;
+  height: calc(var(--bar-amplitude, 0.4) * 100%);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-ink-faint);
+  transform-origin: center;
+  transition: background-color var(--transition-base);
+}
+
+/* ============================================================
+   ACTIVE STATE — animación waveform
+   ============================================================ */
+.active .bar {
+  background-color: var(--color-amber);
+  animation: waveform-bar 900ms ease-in-out infinite;
+  animation-delay: calc(var(--bar-index, 0) * 60ms);
+}
+
+@keyframes waveform-bar {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active .bar {
+    animation: none;
+  }
+}

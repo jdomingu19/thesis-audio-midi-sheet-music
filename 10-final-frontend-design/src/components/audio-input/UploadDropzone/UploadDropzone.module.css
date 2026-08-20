@@ -1,0 +1,132 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* UploadDropzone.module.css */
+
+.dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1.5px dashed var(--color-border-strong);
+  background-color: var(--color-surface);
+  text-align: center;
+  transition:
+    border-color var(--transition-base),
+    background-color var(--transition-base);
+}
+
+.hiddenInput {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-1);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-elevated);
+  color: var(--color-ink-faint);
+  transition:
+    color var(--transition-base),
+    background-color var(--transition-base);
+}
+
+.primaryText {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink);
+}
+
+.secondaryText {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+}
+
+.errorText {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+}
+
+.browseButton {
+  margin-top: var(--space-2);
+}
+
+/* ============================================================
+   STATES
+   ============================================================ */
+.dragover {
+  border-color: var(--color-sage);
+  background-color: rgba(106, 156, 137, 0.08);
+}
+
+.dragover .icon {
+  background-color: rgba(106, 156, 137, 0.16);
+  color: var(--color-sage);
+}
+
+.fileSelected {
+  border-style: solid;
+  border-color: var(--color-success);
+  background-color: var(--color-success-muted);
+}
+
+.fileSelected .icon {
+  background-color: rgba(111, 191, 139, 0.18);
+  color: var(--color-success);
+}
+
+.error {
+  border-style: solid;
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-muted);
+}
+
+.error .icon {
+  background-color: rgba(224, 104, 92, 0.18);
+  color: var(--color-danger);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile: versión compacta (ícono + texto en una línea).
+   ============================================================ */
+@media (max-width: 767px) {
+  .dropzone {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    text-align: left;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .browseButton {
+    margin-top: 0;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}

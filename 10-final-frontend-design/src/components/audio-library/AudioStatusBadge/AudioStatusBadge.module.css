@@ -1,0 +1,45 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* AudioStatusBadge.module.css */
+
+/**
+ * Estilos específicos de AudioStatusBadge — complementa a Badge (ui/)
+ * únicamente con el detalle de "scan" para el estado processing,
+ * ya que esa animación es propia del contexto de biblioteca de audios,
+ * no del primitivo genérico.
+ */
+
+.wrapper {
+  display: inline-flex;
+}
+
+/* ============================================================
+   SCAN — procesando/analizando (sección 3.3 de la guía)
+   ============================================================ */
+@keyframes status-badge-scan {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.scanning {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(217, 161, 91, 0.35) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: status-badge-scan 1.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanning {
+    animation: none;
+  }
+}

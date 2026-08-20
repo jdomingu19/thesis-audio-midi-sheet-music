@@ -1,0 +1,124 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* AudioListItem.module.css */
+
+.item {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.itemButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.itemButton:hover {
+  background-color: var(--color-elevated);
+  border-color: var(--color-border-strong);
+}
+
+.sourceIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-elevated);
+  color: var(--color-ink-muted);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+}
+
+.dotSeparator {
+  color: var(--color-ink-faint);
+}
+
+.statusArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.errorIconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-danger);
+  cursor: help;
+}
+
+/* ============================================================
+   SELECTED STATE
+   ============================================================ */
+.selected .itemButton {
+  background-color: rgba(106, 156, 137, 0.1);
+  border-color: var(--color-sage);
+}
+
+.selected .sourceIcon {
+  background-color: rgba(106, 156, 137, 0.18);
+  color: var(--color-sage);
+}
+
+/* ============================================================
+   RISE-IN ANIMATION — entrada de nuevos items
+   ============================================================ */
+@keyframes item-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.riseIn {
+  animation: item-rise-in var(--transition-base) ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .riseIn {
+    animation: none;
+  }
+}

@@ -3,6 +3,8 @@
 // AudioStatusBadge.jsx
 
 import { CheckCircle2, Loader2, Clock, AlertTriangle } from "lucide-react";
+import clsx from "clsx";
+import styles from "./AudioStatusBadge.module.css";
 import Badge from "@/components/ui/Badge/Badge";
 
 const STATUS_CONFIG = {
@@ -26,17 +28,21 @@ const STATUS_CONFIG = {
 
 /**
  * AudioStatusBadge — badge de estado de procesamiento de un audio.
- * Envoltura semántica sobre <Badge> con label e ícono predefinidos por estado.
+ * Envoltura semántica sobre <Badge> con label e ícono predefinidos por
+ * estado, más la animación `scan` propia del estado "processing".
  *
  * @param {'ready'|'processing'|'queued'|'error'} status
  */
 function AudioStatusBadge({ status = "queued", className, ...rest }) {
   const config = STATUS_CONFIG[status] ?? STATUS_CONFIG.queued;
+  const isProcessing = status === "processing";
 
   return (
-    <Badge status={status} icon={config.icon} className={className} {...rest}>
-      {config.label}
-    </Badge>
+    <span className={clsx(styles.wrapper, isProcessing && styles.scanning)}>
+      <Badge status={status} icon={config.icon} className={className} {...rest}>
+        {config.label}
+      </Badge>
+    </span>
   );
 }
 
