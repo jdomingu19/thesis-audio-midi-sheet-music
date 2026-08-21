@@ -9,7 +9,7 @@ import styles from "./Topbar.module.css";
  * Topbar — barra superior con logo/nombre del proyecto y acciones globales.
  *
  * @param {React.ReactNode} logo - ícono o marca (opcional)
- * @param {string} title - nombre del proyecto (ej. "Solfa")
+ * @param {string} title - nombre del proyecto (ej. "Armonía")
  * @param {string} subtitle - texto secundario opcional (ej. "Audio a Partitura")
  * @param {React.ReactNode} actions - slot derecho para botones/íconos globales
  */

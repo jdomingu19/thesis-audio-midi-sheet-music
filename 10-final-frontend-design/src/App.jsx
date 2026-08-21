@@ -32,7 +32,7 @@ import sheetMusicMock, { getMeasuresByPage } from "@/mock/sheetMusic.mock";
 import styles from "./App.module.css";
 
 /**
- * App — composición raíz del frontend final de Solfa.
+ * App — composición raíz del frontend final de Armonía.
  *
  * Esta fase conecta los componentes visuales entre sí usando estado local
  * de React y los datos mock ya definidos en src/mock/. No hay fetch,
@@ -185,7 +185,7 @@ function App() {
       topbar={
         <Topbar
           logo={<Music4 size={18} />}
-          title="Solfa"
+          title="Armonía"
           subtitle="Audio a Partitura"
         />
       }

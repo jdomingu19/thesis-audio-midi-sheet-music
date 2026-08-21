@@ -1,4 +1,4 @@
-# Guía de Arquitectura Frontend — Solfa (Interfaz Unificada)
+# Guía de Arquitectura Frontend — Armonía (Interfaz Unificada)
 
 > **Propósito de este documento:** servir como manual técnico de referencia para el diseño y estructuración del frontend final de la tesis. Este documento describe **únicamente** la capa visual/estructural (componentes, carpetas, estados de interfaz, responsividad). No contiene lógica de negocio, llamadas a backend, ni hooks funcionales — esas piezas se añadirán en commits futuros sobre esta base. Está pensado para ser reutilizado como contexto en futuros prompts a una IA.
 
@@ -48,7 +48,7 @@ No se incluyen librerías de estado global, routing, ni fetching en esta fase �
 
 ### 3.1 Paleta de color (tokens)
 
-Paleta verde-bosque oscura, ya validada en mini-apps previos y en el scaffold de Solfa:
+Paleta verde-bosque oscura, ya validada en mini-apps previos y en el scaffold de Armonía:
 
 | Token              | Uso                                                                                    |
 | ------------------ | -------------------------------------------------------------------------------------- |
@@ -151,7 +151,7 @@ src/
 │       └── SheetMusicPageControls/ # paginación si la partitura ocupa varias páginas
 │
 ├── mock/
-│   ├── audioLibrary.mock.js       # las 5 entradas mock ya usadas en Solfa (ready/processing/queued/error)
+│   ├── audioLibrary.mock.js       # las 5 entradas mock ya usadas en Armonía (ready/processing/queued/error)
 │   ├── pianoRoll.mock.js          # estructura mock de notas para placeholder visual
 │   └── sheetMusic.mock.js         # estructura mock de compases/tonalidad para placeholder visual
 │
@@ -309,7 +309,7 @@ Cada componente relevante debe diseñarse contemplando estos estados desde el in
 
 ## 10. Datos mock
 
-Reutilizar y extender el set de 5 entradas ya definido en Solfa (`audioLibrary.mock.js`), cubriendo los 4 estados (`ready`, `processing`, `queued`, `error`). Agregar:
+Reutilizar y extender el set de 5 entradas ya definido en Armonía (`audioLibrary.mock.js`), cubriendo los 4 estados (`ready`, `processing`, `queued`, `error`). Agregar:
 
 - `pianoRoll.mock.js`: arreglo de notas mock (pitch MIDI, tiempo inicio, duración) suficiente para poblar visualmente `PianoRollCanvas` sin lógica real.
 - `sheetMusic.mock.js`: estructura mock de compases/tonalidad suficiente para maquetar `SheetMusicView` sin VexFlow real conectado aún (puede ser un SVG estático de placeholder o notas de ejemplo).
