@@ -2,3 +2,10 @@
 **/audio-samples/
 **.mp3
 **.wav
+
+# JSON Samples
+**/json-samples/
+
+# MIDI Samples
+**/midi-samples/
+**.mid
