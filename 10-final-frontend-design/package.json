@@ -10,18 +10,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tonejs/midi": "^2.0.28",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.33.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "vexflow": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
+    "@vitejs/plugin-react": "^6.1.0",
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
-    "vite": "^8.2.0"
+    "vite": "^8.2.2"
   }
 }
