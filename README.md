@@ -51,6 +51,9 @@ Every module is deployed independently to validate specific workflows before int
 - [Testing Piano Roll JSON Player](https://thesis-piano-json-player.netlify.app/)  
   Experimental React + Vite app implementing a canvas‑based falling‑notes piano roll synchronized with a rendered keyboard. Accepts `.json` files exported from Tone.js, validates track format, and visualizes notes with per‑track colors. Features playback via Tone.js PolySynth, transport controls (play, pause, stop, seek), and responsive design with custom typography and dark palette. Built to demonstrate interactive MIDI visualization and extend the thesis pipeline beyond static sheet music.
 
+- [Testing Final Frontend Design](https://thesis-final-frontend.netlify.app/)  
+  React + Vite scaffold for the **final thesis frontend**, consolidating the design system established in earlier prototypes. Includes a progressive architecture guide (`frontend-architecture-guide.md`) detailing folder structure, responsive strategy, design tokens, and UI states. Provides the initial set of 10 reusable UI primitives (Button, Badge, Tabs, Modal, Tooltip, etc.), each implemented as pure `.jsx` components with predictable class naming patterns for future `.module.css` styling. This deployment validates the foundation of the frontend design system before integrating business logic, ensuring modularity, consistency, and scalability across the thesis project.
+
 ### Free Online MIDI Tools
 
 - [MIDI Toolbox](https://miditoolbox.com/player)  
