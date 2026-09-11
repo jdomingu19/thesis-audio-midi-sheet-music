@@ -8,7 +8,9 @@ Aquí se define todo lo que podrías necesitar ajustar sin tocar la lógica del 
 # publicado en Netlify, reemplaza por la URL exacta, ej:
 # ["http://localhost:5173", "https://tu-proyecto.netlify.app"]
 ALLOWED_ORIGINS = [
-    "http://localhost:5173",   # Vite dev server por defecto
+    "http://localhost:5173",   # Vite dev server primero
+    "http://localhost:5174",   # Vite dev server secundario
+    "http://localhost:5175",   # Vite dev server tercero
     "http://localhost:4173",   # Vite preview
     "http://127.0.0.1:5173",
 ]
