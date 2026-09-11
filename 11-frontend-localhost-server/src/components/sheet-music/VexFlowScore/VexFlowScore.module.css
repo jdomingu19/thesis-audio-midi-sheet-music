@@ -1,0 +1,15 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* VexFlowScore.module.css */
+
+.output {
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  width: 100%;
+}
+
+.output svg {
+  max-width: 100%;
+  height: auto;
+}

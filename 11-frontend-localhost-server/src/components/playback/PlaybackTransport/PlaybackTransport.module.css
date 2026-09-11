@@ -1,0 +1,86 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* PlaybackTransport.module.css */
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  min-width: 0;
+  transition: opacity var(--transition-base);
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.trackName {
+  flex-shrink: 0;
+  max-width: 160px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.playButton {
+  background-color: var(--color-sage);
+  color: var(--color-void);
+}
+
+.playButton:hover:not(:disabled) {
+  background-color: var(--color-sage-strong);
+}
+
+.seekArea {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.time {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 4ch;
+}
+
+.seekSlider {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile: oculta labels de texto, deja solo íconos donde aplique
+   (sección 8 de la guía).
+   ============================================================ */
+@media (max-width: 767px) {
+  .transport {
+    gap: var(--space-2);
+  }
+
+  .trackName {
+    display: none;
+  }
+
+  .time {
+    min-width: 3ch;
+    font-size: 0.6875rem;
+  }
+}

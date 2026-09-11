@@ -1,0 +1,67 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* PianoKeyboard.module.css */
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  width: var(--piano-keyboard-width, 56px);
+  flex-shrink: 0;
+  border-right: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.key {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 14px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(238, 243, 241, 0.04);
+  padding-right: var(--space-2);
+  transition: background-color var(--transition-fast);
+}
+
+.whiteKey {
+  background-color: var(--color-surface);
+}
+
+.blackKey {
+  background-color: var(--color-void);
+  width: 68%;
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+}
+
+.octaveLabel {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  color: var(--color-ink-faint);
+  pointer-events: none;
+}
+
+/* ============================================================
+   ACTIVE — teclas resaltadas sincronizadas con notas sonando
+   ============================================================ */
+.key.active {
+  background-color: var(--color-sage);
+}
+
+.whiteKey.active .octaveLabel,
+.blackKey.active .octaveLabel {
+  color: var(--color-void);
+}
+
+/* ============================================================
+   RESPONSIVE
+   Tablet/mobile: el teclado reduce su ancho (sección 7.6).
+   ============================================================ */
+@media (max-width: 1199px) {
+  .keyboard {
+    width: 36px;
+  }
+
+  .octaveLabel {
+    display: none;
+  }
+}

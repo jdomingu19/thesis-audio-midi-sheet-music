@@ -1,0 +1,44 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* PianoRollView.module.css */
+
+.view {
+  --piano-keyboard-width: 56px;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline {
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Tablet/mobile: sincroniza el ancho reservado del timeline con el
+   ancho reducido del teclado (sección 7.6).
+   ============================================================ */
+@media (max-width: 1199px) {
+  .view {
+    --piano-keyboard-width: 36px;
+  }
+}

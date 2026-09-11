@@ -1,0 +1,108 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* animations.css */
+
+/**
+ * Animaciones con nombre semántico, usadas para indicar estado
+ * (grabando, procesando, escaneo de análisis, entrada de items),
+ * nunca como adorno gratuito. Importar una sola vez en main.jsx.
+ *
+ * Clases utilitarias globales (no CSS Modules) para poder aplicarse
+ * directamente desde cualquier componente vía clsx.
+ */
+
+/* ============================================================
+   PULSE-REC — grabación activa (RecordControl)
+   ============================================================ */
+@keyframes pulse-rec {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 161, 91, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(217, 161, 91, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 161, 91, 0);
+  }
+}
+
+.animate-pulse-rec {
+  animation: pulse-rec 1.6s ease-out infinite;
+}
+
+/* ============================================================
+   WAVEFORM — visualización de onda en vivo (RecordingWaveform)
+   ============================================================ */
+@keyframes waveform {
+  0%,
+  100% {
+    transform: scaleY(var(--bar-amplitude, 0.4));
+  }
+  50% {
+    transform: scaleY(calc(var(--bar-amplitude, 0.4) * 0.35));
+  }
+}
+
+.animate-waveform {
+  animation: waveform 900ms ease-in-out infinite;
+  animation-delay: calc(var(--bar-index, 0) * 60ms);
+}
+
+/* ============================================================
+   SCAN — procesando/analizando (AudioStatusBadge "processing")
+   ============================================================ */
+@keyframes scan {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-scan {
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(217, 161, 91, 0.35) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: scan 1.8s linear infinite;
+}
+
+/* ============================================================
+   RISE-IN — entrada de elementos nuevos en listas (AudioListItem)
+   ============================================================ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise-in {
+  animation: rise-in var(--transition-base, 200ms) ease-out both;
+}
+
+/* ============================================================
+   ICON-SPIN — rotación continua para íconos de carga (Loader2, etc.)
+   Utilidad adicional no listada explícitamente en la guía, pero
+   necesaria para íconos de "processing" que no usan `scan`.
+   ============================================================ */
+@keyframes icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.icon-spin {
+  animation: icon-spin 900ms linear infinite;
+}

@@ -1,0 +1,20 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* SheetMusicPageControls.module.css */
+
+.pageControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  flex-shrink: 0;
+}
+
+.pageIndicator {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+  min-width: 12ch;
+  text-align: center;
+}

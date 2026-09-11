@@ -1,0 +1,61 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* SheetMusicView.module.css */
+
+.staffLines {
+  composes: staffLines from "../../../styles/effects.module.css";
+}
+
+.view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: 100%;
+  min-height: 0;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar {
+  flex-shrink: 0;
+}
+
+.scoreArea {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  overflow: auto;
+  padding: var(--space-5);
+}
+
+.scoreContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 100%;
+  transform: scale(var(--score-zoom, 1));
+  transform-origin: top center;
+  transition: transform var(--transition-base);
+}
+
+.pageControls {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile: permite zoom/pan táctil a nivel de contenedor (solo
+   contemplado a nivel de diseño, sin lógica aún — sección 7.7).
+   ============================================================ */
+@media (max-width: 767px) {
+  .scoreArea {
+    padding: var(--space-3);
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+}

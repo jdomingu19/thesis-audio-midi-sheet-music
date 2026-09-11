@@ -1,0 +1,16 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* DownloadBar.module.css */
+
+.glass {
+  composes: glass from "../../../styles/effects.module.css";
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}

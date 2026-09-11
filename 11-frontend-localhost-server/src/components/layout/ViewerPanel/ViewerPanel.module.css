@@ -1,0 +1,51 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* ViewerPanel.module.css */
+
+.viewerPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.tabsList {
+  align-self: flex-start;
+  margin-bottom: var(--space-4);
+  flex-shrink: 0;
+}
+
+.tab {
+  gap: var(--space-2);
+}
+
+.tabIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panels {
+  flex: 1;
+  min-height: 0;
+}
+
+.panel {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}

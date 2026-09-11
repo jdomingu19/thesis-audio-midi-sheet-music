@@ -1,0 +1,58 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* SheetMusicToolbar.module.css */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.zoomGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.zoomValue {
+  min-width: 3.5ch;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+}
+
+.keyBadge {
+  margin-left: var(--space-2);
+}
+
+.exportButton {
+  margin-left: auto;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile: toolbar colapsa a menú de ícono (placeholder de layout;
+   el comportamiento de colapso real requiere estado/JS y se
+   añadirá en un commit posterior).
+   ============================================================ */
+@media (max-width: 767px) {
+  .toolbar {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .keyBadge {
+    margin-left: 0;
+    order: 3;
+  }
+
+  .exportButton {
+    margin-left: 0;
+  }
+}

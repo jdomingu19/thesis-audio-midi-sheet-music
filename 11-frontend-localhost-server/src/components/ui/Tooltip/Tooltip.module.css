@@ -1,0 +1,71 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Tooltip.module.css */
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1200;
+  max-width: 220px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-elevated);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-glass);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-base);
+  pointer-events: none;
+  white-space: normal;
+  animation: tooltip-fade-in var(--transition-fast) ease-out both;
+}
+
+/* ============================================================
+   PLACEMENT
+   ============================================================ */
+.placement-top {
+  bottom: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.placement-bottom {
+  top: calc(100% + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.placement-left {
+  right: calc(100% + var(--space-2));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.placement-right {
+  left: calc(100% + var(--space-2));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    animation: none;
+  }
+}

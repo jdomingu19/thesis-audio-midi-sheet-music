@@ -1,0 +1,49 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* VolumeControl.module.css */
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.sliderWrapper {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    width var(--transition-base),
+    opacity var(--transition-base);
+}
+
+.sliderWrapper.expanded {
+  width: 96px;
+  opacity: 1;
+}
+
+.slider {
+  width: 96px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   Mobile/tablet: el control de volumen expandible por hover no
+   aplica bien a táctil; se mantiene siempre visible y compacto.
+   ============================================================ */
+@media (max-width: 1199px) {
+  .sliderWrapper {
+    width: 72px;
+    opacity: 1;
+  }
+
+  .slider {
+    width: 72px;
+  }
+}

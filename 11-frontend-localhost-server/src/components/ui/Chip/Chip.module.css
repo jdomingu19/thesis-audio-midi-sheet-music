@@ -1,0 +1,82 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Chip.module.css */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: 28px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-ink-muted);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover:not(.disabled) {
+  background-color: var(--color-elevated);
+  border-color: var(--color-border-strong);
+  color: var(--color-ink);
+}
+
+.selected {
+  background-color: rgba(106, 156, 137, 0.16);
+  border-color: var(--color-sage);
+  color: var(--color-sage-strong);
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.removeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: var(--space-1);
+  border-radius: var(--radius-pill);
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  transition:
+    opacity var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.removeButton:hover {
+  opacity: 1;
+  background-color: rgba(238, 243, 241, 0.12);
+}
+
+.removeButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}

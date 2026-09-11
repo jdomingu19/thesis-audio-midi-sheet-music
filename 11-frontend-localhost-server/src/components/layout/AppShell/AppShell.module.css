@@ -1,0 +1,107 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* AppShell.module.css */
+
+/**
+ * Grid de layout responsive raíz. Decide el modo de layout según
+ * breakpoint vía CSS Grid + media queries (sin JS de detección de
+ * pantalla, tal como indica la sección 8 de la guía de arquitectura).
+ *
+ * Mobile / Tablet (< 1200px): una columna, secciones apiladas.
+ * Desktop (>= 1200px): 2 columnas — entrada/biblioteca fija a la
+ * izquierda, ViewerPanel flexible a la derecha.
+ */
+
+.shell {
+  display: grid;
+  min-height: 100vh;
+  background-color: var(--color-base);
+  grid-template-areas:
+    "topbar"
+    "input"
+    "viewer"
+    "bottom";
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+
+.topbar {
+  grid-area: topbar;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.inputPanel {
+  grid-area: input;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-height: 0;
+  padding: var(--space-4) var(--space-4) 0;
+}
+
+.viewerPanel {
+  grid-area: viewer;
+  min-height: 0;
+  padding: var(--space-4);
+  overflow: hidden;
+}
+
+.bottomBar {
+  grid-area: bottom;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  padding: var(--space-3) var(--space-4);
+}
+
+/* ============================================================
+   TABLET — 768px – 1199px
+   Se mantiene apilado (igual estructura que mobile), solo cambian
+   paddings/proporciones. El acordeón/colapso del panel de entrada
+   se resuelve en JS en un commit posterior; aquí solo se reserva
+   el espacio.
+   ============================================================ */
+@media (min-width: 768px) {
+  .inputPanel {
+    padding: var(--space-5) var(--space-5) 0;
+  }
+
+  .viewerPanel {
+    padding: var(--space-5);
+  }
+
+  .bottomBar {
+    padding: var(--space-3) var(--space-5);
+  }
+}
+
+/* ============================================================
+   DESKTOP — >= 1200px
+   Layout de 2 columnas: columna izquierda fija (entrada +
+   biblioteca), columna derecha flexible (ViewerPanel).
+   ============================================================ */
+@media (min-width: 1200px) {
+  .shell {
+    grid-template-areas:
+      "topbar topbar"
+      "input viewer"
+      "bottom bottom";
+    grid-template-columns: 380px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .inputPanel {
+    border-right: 1px solid var(--color-border);
+    padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+    overflow-y: auto;
+  }
+
+  .viewerPanel {
+    padding: var(--space-5) var(--space-6) var(--space-5) var(--space-5);
+  }
+
+  .bottomBar {
+    padding: var(--space-4) var(--space-6);
+  }
+}

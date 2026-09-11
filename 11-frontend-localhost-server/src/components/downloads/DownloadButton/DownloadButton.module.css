@@ -1,0 +1,23 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* DownloadButton.module.css */
+
+.downloadButton {
+  min-width: 96px;
+  justify-content: center;
+}
+
+/* ============================================================
+   FORMAT ACCENTS
+   Distingue visualmente MIDI (sage) de PDF (amber) sin depender
+   únicamente del ícono, útil en la barra inferior de la demo.
+   ============================================================ */
+.format-midi:not(:disabled):hover {
+  border-color: var(--color-sage);
+  color: var(--color-sage-strong);
+}
+
+.format-pdf:not(:disabled):hover {
+  border-color: var(--color-amber);
+  color: var(--color-amber-strong);
+}

@@ -1,0 +1,85 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* ProgressBar.module.css */
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-sage);
+  transition: width var(--transition-base);
+}
+
+.fillIndeterminate {
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-sage);
+  animation: progress-indeterminate 1.4s ease-in-out infinite;
+}
+
+.label {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink-muted);
+  min-width: 3ch;
+  text-align: right;
+}
+
+/* ============================================================
+   VARIANTS
+   ============================================================ */
+.variant-sage .fill,
+.variant-sage .fillIndeterminate {
+  background-color: var(--color-sage);
+}
+
+.variant-amber .fill,
+.variant-amber .fillIndeterminate {
+  background-color: var(--color-amber);
+}
+
+.variant-danger .fill,
+.variant-danger .fillIndeterminate {
+  background-color: var(--color-danger);
+}
+
+/* ============================================================
+   INDETERMINATE ANIMATION
+   ============================================================ */
+@keyframes progress-indeterminate {
+  0% {
+    left: -40%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fillIndeterminate {
+    animation: none;
+    left: 0;
+    width: 100%;
+    opacity: 0.5;
+  }
+}
