@@ -6,51 +6,62 @@
   composes: rollGrid from "../../../styles/effects.module.css";
 }
 
-.canvas {
+.canvasWrapper {
   position: relative;
   flex: 1;
   min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
+  min-height: 0;
+  overflow: hidden;
 }
 
-.notesLayer {
-  position: relative;
+.canvasScroll {
   width: 100%;
   height: 100%;
-  min-width: 600px;
+  overflow: auto;
+}
+
+.canvas {
+  position: relative;
+}
+
+.keyGridLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(238, 243, 241, 0.04);
 }
 
 .note {
   position: absolute;
-  top: calc((1 - var(--note-vertical-position, 0)) * 100%);
-  left: calc(var(--note-horizontal-start, 0) * 100%);
-  width: calc(var(--note-horizontal-width, 0.05) * 100%);
-  height: 10px;
-  min-width: 4px;
-  transform: translateY(-50%);
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: var(--radius-sm);
   background-color: var(--color-sage);
-  opacity: 0.75;
+  opacity: 0.85;
   transition:
     background-color var(--transition-fast),
     opacity var(--transition-fast);
 }
 
+.noteBlack {
+  opacity: 0.7;
+}
+
 .note.active {
   background-color: var(--color-amber);
   opacity: 1;
-  box-shadow: 0 0 0 1px rgba(217, 161, 91, 0.4);
+  box-shadow: 0 0 8px rgba(217, 161, 91, 0.6);
 }
 
-.playhead {
+.hitLine {
   position: absolute;
-  top: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
-  left: calc(var(--playhead-position, 0) * 100%);
-  width: 2px;
+  height: 2px;
   background-color: var(--color-amber);
-  opacity: 0.6;
+  box-shadow: 0 0 8px rgba(217, 161, 91, 0.7);
   pointer-events: none;
-  transition: left var(--transition-fast) linear;
+  z-index: 5;
 }

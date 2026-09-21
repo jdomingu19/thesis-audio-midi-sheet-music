@@ -2,52 +2,49 @@
 // @jdomingu19
 // PianoRollTimeline.jsx
 
+import { forwardRef } from "react";
 import clsx from "clsx";
 import styles from "./PianoRollTimeline.module.css";
+import { getContentY, getTrackHeight } from "@/utils/pianoRollTiming";
 
 /**
- * PianoRollTimeline — regla superior de tiempo/compases del piano roll.
- * Puramente visual en esta fase; recibe los compases ya calculados (mock)
- * en vez de derivarlos de un motor de audio real.
- *
- * @param {Array<{ id: string, label: string, position: number }>} measures
- *   - position: 0–1, posición relativa dentro del ancho total del timeline
- * @param {number} currentPosition - 0–1, posición del playhead (mock)
- * @param {boolean} isPlaying - aplica énfasis visual al playhead
+ * PianoRollTimeline — gutter vertical de compases, alineado al mismo eje
+ * de tiempo que PianoRollCanvas (misma fórmula getContentY, ahora
+ * centralizada en utils/pianoRollTiming.js para evitar que ambos
+ * componentes se desincronicen si se ajustan las constantes). No tiene
+ * scroll interactivo propio: PianoRollView sincroniza su scrollTop con
+ * el del canvas.
  */
-function PianoRollTimeline({
-  measures = [],
-  currentPosition = 0,
-  isPlaying = false,
-  className,
-  ...rest
-}) {
+const PianoRollTimeline = forwardRef(function PianoRollTimeline(
+  { measures = [], totalDuration = 16, className, ...rest },
+  ref,
+) {
+  const trackHeight = getTrackHeight(totalDuration);
+
   return (
     <div
-      className={clsx(styles.timeline, className)}
+      ref={ref}
+      className={clsx(styles.gutter, className)}
       role="presentation"
-      aria-label="Regla de tiempo del piano roll"
+      aria-label="Regla de compases del piano roll"
       {...rest}
     >
-      <div className={styles.track}>
-        {measures.map((measure) => (
-          <div
-            key={measure.id}
-            className={styles.measureMark}
-            style={{ "--measure-position": measure.position }}
-          >
-            <span className={styles.measureLabel}>{measure.label}</span>
-          </div>
-        ))}
-
-        <div
-          className={clsx(styles.playhead, isPlaying && styles.active)}
-          style={{ "--playhead-position": currentPosition }}
-          aria-hidden="true"
-        />
+      <div className={styles.track} style={{ height: trackHeight }}>
+        {measures.map((measure) => {
+          const measureTime = measure.position * totalDuration;
+          return (
+            <div
+              key={measure.id}
+              className={styles.measureMark}
+              style={{ top: getContentY(measureTime, totalDuration) }}
+            >
+              <span className={styles.measureLabel}>{measure.label}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
-}
+});
 
 export default PianoRollTimeline;

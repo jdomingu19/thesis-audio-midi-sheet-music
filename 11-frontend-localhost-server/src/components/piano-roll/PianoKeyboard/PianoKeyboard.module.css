@@ -2,63 +2,67 @@
 /* @jdomingu19 */
 /* PianoKeyboard.module.css */
 
-.keyboard {
-  display: flex;
-  flex-direction: column;
-  width: var(--piano-keyboard-width, 56px);
+.keyboardScroll {
+  overflow-x: auto;
+  overflow-y: hidden;
   flex-shrink: 0;
-  border-right: 1px solid var(--color-border);
-  overflow: hidden;
+  width: 100%;
+  height: var(--piano-keyboard-height, 90px);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  scrollbar-width: thin;
+}
+
+.keyboard {
+  position: relative;
+  height: 100%;
 }
 
 .key {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 14px;
-  flex-shrink: 0;
-  border-bottom: 1px solid rgba(238, 243, 241, 0.04);
-  padding-right: var(--space-2);
+  position: absolute;
+  top: 0;
+  border: 1px solid rgba(238, 243, 241, 0.06);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   transition: background-color var(--transition-fast);
 }
 
 .whiteKey {
-  background-color: var(--color-surface);
+  height: 100%;
+  background-color: var(--color-ink);
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--space-1);
 }
 
 .blackKey {
+  height: 62%;
   background-color: var(--color-void);
-  width: 68%;
-  border-bottom-color: rgba(0, 0, 0, 0.3);
+  z-index: 2;
 }
 
 .octaveLabel {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: var(--color-ink-faint);
+  color: var(--color-base);
   pointer-events: none;
 }
 
-/* ============================================================
-   ACTIVE — teclas resaltadas sincronizadas con notas sonando
-   ============================================================ */
-.key.active {
+.key.active.whiteKey {
   background-color: var(--color-sage);
 }
 
-.whiteKey.active .octaveLabel,
-.blackKey.active .octaveLabel {
-  color: var(--color-void);
+.key.active.blackKey {
+  background-color: var(--color-amber);
 }
 
 /* ============================================================
-   RESPONSIVE
-   Tablet/mobile: el teclado reduce su ancho (sección 7.6).
+   RESPONSIVE — tablet/mobile: teclado más bajo, sin etiquetas
    ============================================================ */
 @media (max-width: 1199px) {
-  .keyboard {
-    width: 36px;
+  .keyboardScroll {
+    height: var(--piano-keyboard-height, 64px);
   }
 
   .octaveLabel {

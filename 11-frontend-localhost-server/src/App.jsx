@@ -311,7 +311,7 @@ function App() {
         <Topbar
           logo={<Music4 size={18} />}
           title="Armonía"
-          subtitle="Audio a Partitura"
+          subtitle="Audio a MIDI & Partituras"
           actions={
             <Badge
               status={

@@ -2,29 +2,27 @@
 /* @jdomingu19 */
 /* PianoRollTimeline.module.css */
 
-.timeline {
-  position: relative;
-  height: 28px;
+.gutter {
+  width: var(--piano-timeline-width, 44px);
   flex-shrink: 0;
-  padding-left: var(--piano-keyboard-width, 56px);
   overflow: hidden;
+  border-right: 1px solid var(--color-border);
+  background-color: var(--color-surface);
 }
 
 .track {
   position: relative;
-  height: 100%;
-  min-width: 100%;
 }
 
 .measureMark {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--measure-position, 0) * 100%);
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
-  border-left: 1px solid var(--color-border);
-  padding-left: var(--space-2);
+  justify-content: flex-end;
+  border-top: 1px solid var(--color-border);
+  padding-right: var(--space-2);
 }
 
 .measureLabel {
@@ -34,17 +32,15 @@
   white-space: nowrap;
 }
 
-.playhead {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--playhead-position, 0) * 100%);
-  width: 2px;
-  background-color: var(--color-amber);
-  opacity: 0.5;
-  transition: left var(--transition-fast) linear;
-}
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1199px) {
+  .gutter {
+    width: 28px;
+  }
 
-.playhead.active {
-  opacity: 1;
+  .measureLabel {
+    display: none;
+  }
 }

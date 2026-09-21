@@ -3,7 +3,8 @@
 /* PianoRollView.module.css */
 
 .view {
-  --piano-keyboard-width: 56px;
+  --piano-timeline-width: 44px;
+  --piano-keyboard-height: 90px;
 
   display: flex;
   flex-direction: column;
@@ -21,24 +22,32 @@
   justify-content: center;
 }
 
-.timeline {
-  border-bottom: 1px solid var(--color-border);
-  background-color: var(--color-surface);
-}
-
 .body {
   display: flex;
   flex: 1;
   min-height: 0;
 }
 
+.timeline {
+  height: 100%;
+}
+
+.canvas {
+  flex: 1;
+  min-width: 0;
+}
+
+.keyboard {
+  width: 100%;
+}
+
 /* ============================================================
    RESPONSIVE
-   Tablet/mobile: sincroniza el ancho reservado del timeline con el
-   ancho reducido del teclado (sección 7.6).
+   Tablet/mobile: gutter y teclado reducen su tamaño (sección 7.6).
    ============================================================ */
 @media (max-width: 1199px) {
   .view {
-    --piano-keyboard-width: 36px;
+    --piano-timeline-width: 28px;
+    --piano-keyboard-height: 64px;
   }
 }
