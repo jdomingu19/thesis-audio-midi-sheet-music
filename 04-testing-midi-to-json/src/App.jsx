@@ -40,7 +40,7 @@ export default function App() {
     <div className={s.app}>
       <header className={s.header}>
         <span className={s.logo}>♩</span>
-        <h1>MIDI Editor</h1>
+        <h1>MIDI TO JSON</h1>
         <p className={s.sub}>Upload · Parse · Edit · Export</p>
       </header>
 

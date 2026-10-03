@@ -1,36 +1,202 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* index.css */
 
+/* ─── Design Tokens (alineados con 02-testing-audio-cleaning) ───── */
 :root {
-  --bg:       #0d1f1c;
-  --surface:  #16423C;
-  --surface2: #1e5249;
-  --accent:   #6A9C89;
-  --accent2:  #9dc4b5;
-  --text:     #e8f0ee;
-  --muted:    #8aafa6;
-  --border:   #2a6358;
-  --danger:   #c25b5b;
-  --mono:     'JetBrains Mono', monospace;
-  --sans:     'Inter', sans-serif;
-  --radius:   8px;
+  /* Brand */
+  --color-forest: #16423c;
+  --color-sage: #6a9c89;
+
+  /* Backgrounds */
+  --bg-base: #0b1f1c;
+  --bg-surface: #16423c;
+  --bg-elevated: #1c5249;
+  --bg-hover: #1f5b52;
+
+  /* Borders */
+  --border-subtle: rgba(106, 156, 137, 0.18);
+  --border-default: rgba(106, 156, 137, 0.32);
+  --border-focus: #6a9c89;
+
+  /* Text */
+  --text-primary: #e8f5f1;
+  --text-secondary: rgba(232, 245, 241, 0.65);
+  --text-muted: rgba(232, 245, 241, 0.38);
+  --text-accent: #6a9c89;
+  --text-on-accent: #0b1f1c;
+
+  /* Semantic */
+  --color-success: #4fc08b;
+  --color-danger: #e05c5c;
+  --color-warning: #e0a85c;
+
+  /* Typography */
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-ui: "Inter", system-ui, sans-serif;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.9375rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(106, 156, 137, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 240ms ease;
+
+  /* Alias de compatibilidad (nombres antiguos de la app 04) */
+  --bg: var(--bg-base);
+  --surface: var(--bg-surface);
+  --surface2: var(--bg-elevated);
+  --accent: var(--color-sage);
+  --accent2: #9dc4b5;
+  --text: var(--text-primary);
+  --muted: var(--text-secondary);
+  --border: var(--border-default);
+  --danger: var(--color-danger);
+  --mono: var(--font-mono);
+  --sans: var(--font-ui);
+  --radius: var(--radius-md);
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  min-height: 100vh;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  background-color: var(--bg-base);
+  min-height: 100dvh;
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+}
+
+/* ─── Fondo: grid tipo piano roll + resplandor superior ─────────── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      ellipse 60% 40% at 50% 0%,
+      rgba(106, 156, 137, 0.14),
+      transparent 70%
+    ),
+    linear-gradient(rgba(106, 156, 137, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(106, 156, 137, 0.04) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    40px 40px,
+    40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Inputs numéricos ──────────────────────────────────────────── */
 input[type="number"] {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  padding: 2px 6px;
-  width: 70px;
+  background: rgba(11, 31, 28, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  padding: 4px 8px;
+  width: 72px;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-input[type="number"]:focus { outline: 1px solid var(--accent); }
+input[type="number"]:hover {
+  border-color: var(--border-default);
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--color-sage);
+  box-shadow: 0 0 0 3px rgba(106, 156, 137, 0.18);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-accent);
+}
+
+/* ─── Focus / selección ─────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+::selection {
+  background: rgba(106, 156, 137, 0.35);
+  color: var(--text-primary);
+}
+
+/* ─── Movimiento reducido ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
