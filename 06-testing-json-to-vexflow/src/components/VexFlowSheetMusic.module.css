@@ -1,0 +1,156 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* VexFlowSheetMusic.module.css */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: rgba(22, 66, 60, 0.45);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+  animation: fadeIn 0.3s ease;
+  min-width: 0;
+}
+
+/* ── Toolbar ─────────────────────────── */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+  min-width: 0;
+}
+
+.file {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  background: rgba(11, 31, 28, 0.5);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 8px var(--color-success);
+}
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+}
+
+.chips li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chips span {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.chips code {
+  font-family: var(--font-mono);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-sage);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ── Hoja de partitura ───────────────── */
+.paper {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  padding: var(--space-4) 0;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: var(--radius-md);
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.06),
+    var(--shadow-lg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.output {
+  width: max-content;
+  min-width: 100%;
+}
+
+.output svg {
+  display: block;
+  margin: 0 auto;
+  max-width: none;
+}
+
+/* ── Responsive ──────────────────────── */
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-4);
+  }
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .actions > * {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-3);
+  }
+  .chips {
+    gap: var(--space-4);
+  }
+}

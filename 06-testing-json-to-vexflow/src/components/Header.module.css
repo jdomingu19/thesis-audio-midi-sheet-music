@@ -1,0 +1,121 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Header.module.css */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(
+    180deg,
+    rgba(11, 31, 28, 0.96) 0%,
+    rgba(22, 66, 60, 0.6) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
+  color: var(--color-sage);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: rgba(22, 66, 60, 0.6);
+}
+
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.primary {
+  color: var(--text-primary);
+}
+.arrow {
+  color: var(--text-muted);
+}
+.accent {
+  color: var(--color-sage);
+}
+
+.tagline {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8);
+  }
+}
+
+@media (max-width: 768px) {
+  .inner {
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-4);
+    justify-content: space-between;
+  }
+  .tagline {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .wordmark {
+    font-size: var(--text-md);
+  }
+}

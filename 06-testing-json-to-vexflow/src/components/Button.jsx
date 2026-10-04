@@ -1,10 +1,23 @@
-// Thesis Audio to MIDI & Sheet Music
-// Testing VexFlow @jdomingu19
-// src/components/Button.jsx
+// thesis-audio-midi-sheet-music
+// @jdomingu19
+// Button.jsx
 
-export function Button({ className = "", handleFunction, children }) {
+import s from "./Button.module.css";
+
+export function Button({
+  variant = "primary",
+  className = "",
+  handleFunction,
+  disabled = false,
+  children,
+}) {
   return (
-    <button className={className} onClick={handleFunction}>
+    <button
+      type="button"
+      className={`${s.btn} ${s[variant]} ${className}`}
+      onClick={handleFunction}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

@@ -1,8 +1,8 @@
-// Thesis Audio to MIDI & Sheet Music
-// Testing VexFlow @jdomingu19
-// src/components/VexFlowSheetMusic.jsx
+// thesis-audio-midi-sheet-music
+// @jdomingu19
+// VexFlowSheetMusic.jsx
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Renderer,
   Stave,
@@ -16,42 +16,92 @@ import {
 import { Button } from "@/components/Button";
 import { downloadPDF } from "@/utils/handlers";
 
-const STAVE_WIDTH = 260;
-const STAVES_PER_LINE = 4;
+import s from "./VexFlowSheetMusic.module.css";
+
+const MIN_STAVE_WIDTH = 240;
+const MAX_STAVE_WIDTH = 340;
+const MAX_STAVES_PER_LINE = 4;
+const PADDING = 16;
+const ROW_HEIGHT = 150;
+
+function parseTimeSignature(ts) {
+  const [num, den] = String(ts).split("/").map(Number);
+  return { numBeats: num || 4, beatValue: den || 4 };
+}
 
 export function VexFlowSheetMusic({
   measures,
   timeSignature = "4/4",
   keyInfo,
+  fileName,
+  onReset,
 }) {
+  const paperRef = useRef(null);
   const outputRef = useRef(null);
+  const [width, setWidth] = useState(0);
+
+  // Observa el ancho disponible para recalcular el layout
+  useEffect(() => {
+    const el = paperRef.current;
+    if (!el) return;
+
+    let frame;
+    const observer = new ResizeObserver(([entry]) => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        setWidth(Math.floor(entry.contentRect.width));
+      });
+    });
+
+    observer.observe(el);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
-    if (!outputRef.current || !measures?.length) return;
+    if (!outputRef.current || !measures?.length || !width) return;
     outputRef.current.innerHTML = "";
 
-    const lines = Math.ceil(measures.length / STAVES_PER_LINE);
+    const available = width - PADDING * 2;
+    const perLine = Math.max(
+      1,
+      Math.min(MAX_STAVES_PER_LINE, Math.floor(available / MIN_STAVE_WIDTH)),
+    );
+    const staveWidth = Math.max(
+      MIN_STAVE_WIDTH,
+      Math.min(MAX_STAVE_WIDTH, Math.floor(available / perLine)),
+    );
+
+    const lines = Math.ceil(measures.length / perLine);
     const renderer = new Renderer(outputRef.current, Renderer.Backends.SVG);
-    renderer.resize(STAVE_WIDTH * STAVES_PER_LINE + 40, lines * 150 + 40);
+    renderer.resize(
+      staveWidth * perLine + PADDING * 2,
+      lines * ROW_HEIGHT + 40,
+    );
     const context = renderer.getContext();
 
-    measures.forEach((measureEvents, i) => {
-      const col = i % STAVES_PER_LINE;
-      const row = Math.floor(i / STAVES_PER_LINE);
-      const x = 20 + col * STAVE_WIDTH;
-      const y = 20 + row * 150;
+    const { numBeats, beatValue } = parseTimeSignature(timeSignature);
 
-      const stave = new Stave(x, y, STAVE_WIDTH);
-      if (i === 0) {
-        stave.addClef("treble").addTimeSignature(timeSignature);
+    measures.forEach((measureEvents, i) => {
+      const col = i % perLine;
+      const row = Math.floor(i / perLine);
+      const x = PADDING + col * staveWidth;
+      const y = 20 + row * ROW_HEIGHT;
+
+      const stave = new Stave(x, y, staveWidth);
+      if (col === 0) {
+        stave.addClef("treble");
         if (keyInfo?.vexKey) stave.addKeySignature(keyInfo.vexKey);
       }
+      if (i === 0) stave.addTimeSignature(timeSignature);
       stave.setContext(context).draw();
 
       const staveNotes = measureEvents.map((ev) => {
         const note = new StaveNote({ keys: ev.keys, duration: ev.duration });
         if (!ev.isRest) {
-          // FIX: usamos el accidental explícito, no un .includes() ambiguo
+          // Accidental explícito, no un .includes() ambiguo
           ev.accidentals.forEach((acc, idx) => {
             if (acc === "#" || acc === "b") {
               note.addModifier(new Accidental(acc), idx);
@@ -61,26 +111,62 @@ export function VexFlowSheetMusic({
         return note;
       });
 
-      const voice = new Voice({ numBeats: 4, beatValue: 4 });
+      const voice = new Voice({ numBeats, beatValue });
       voice.setStrict(false);
       voice.addTickables(staveNotes);
 
-      new Formatter().joinVoices([voice]).format([voice], STAVE_WIDTH - 40);
+      // Ancho útil real: descuenta clave, armadura y compás
+      const formatWidth = Math.max(
+        60,
+        stave.getNoteEndX() - stave.getNoteStartX() - 10,
+      );
+      new Formatter().joinVoices([voice]).format([voice], formatWidth);
 
       const beams = Beam.generateBeams(staveNotes.filter((n) => !n.isRest));
       voice.draw(context, stave);
       beams.forEach((b) => b.setContext(context).draw());
     });
-  }, [measures, timeSignature, keyInfo]);
+  }, [measures, timeSignature, keyInfo, width]);
 
   return (
-    <>
-      <div className="output-vexflow" ref={outputRef}></div>
-      <Button
-        className="btn-download"
-        handleFunction={() => downloadPDF(outputRef.current, "Sheet Music")}
-        children="Download PDF"
-      />
-    </>
+    <section className={s.card}>
+      <header className={s.toolbar}>
+        <div className={s.meta}>
+          {fileName && <span className={s.file}>{fileName}</span>}
+          <ul className={s.chips}>
+            <li>
+              <span>Compás</span>
+              <code>{timeSignature}</code>
+            </li>
+            {keyInfo?.vexKey && (
+              <li>
+                <span>Tonalidad</span>
+                <code>{keyInfo.vexKey}</code>
+              </li>
+            )}
+            <li>
+              <span>Compases</span>
+              <code>{measures.length}</code>
+            </li>
+          </ul>
+        </div>
+
+        <div className={s.actions}>
+          <Button variant="ghost" handleFunction={onReset}>
+            Nuevo archivo
+          </Button>
+          <Button
+            variant="primary"
+            handleFunction={() => downloadPDF(outputRef.current, "Sheet Music")}
+          >
+            ⬇ Descargar PDF
+          </Button>
+        </div>
+      </header>
+
+      <div className={s.paper} ref={paperRef}>
+        <div className={s.output} ref={outputRef} />
+      </div>
+    </section>
   );
 }
