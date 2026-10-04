@@ -1,6 +1,6 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/utils/jsonToVexflow.js
+// jsonToVexflow.js
 
 const RESOLUTION_DIVISIONS = 16;
 

@@ -1,6 +1,6 @@
 // Thesis Audio to MIDI & Sheet Music
 // Testing VexFlow @jdomingu19
-// src/utils/handlers.js
+// handlers.js
 
 export const uploadJSON = () => {
   console.log("uploadJSON...");
