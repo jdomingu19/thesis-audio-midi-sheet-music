@@ -64,6 +64,7 @@ function App() {
               measures={score.measures}
               timeSignature={score.timeSignature}
               keyInfo={score.keyInfo}
+              tempo={score.tempo}
               fileName={fileName}
               onReset={handleReset}
             />

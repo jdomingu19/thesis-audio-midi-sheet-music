@@ -153,10 +153,17 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   const { header, tracks } = toneJson;
   const ppq = header.ppq;
   const [tsNum, tsDen] = header.timeSignatures?.[0]?.timeSignature ?? [4, 4];
+  const bpm = header.tempos?.[0]?.bpm;
+  const tempo = bpm ? Math.round(bpm) : null;
 
   const track = tracks[trackIndex];
   if (!track || !track.notes?.length) {
-    return { measures: [], timeSignature: `${tsNum}/${tsDen}`, keyInfo: null };
+    return {
+      measures: [],
+      timeSignature: `${tsNum}/${tsDen}`,
+      keyInfo: null,
+      tempo,
+    };
   }
 
   const keyInfo = detectKey(track.notes);
@@ -247,5 +254,5 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
     measures.push(measureEvents);
   }
 
-  return { measures, timeSignature: `${tsNum}/${tsDen}`, keyInfo };
+  return { measures, timeSignature: `${tsNum}/${tsDen}`, keyInfo, tempo };
 }
