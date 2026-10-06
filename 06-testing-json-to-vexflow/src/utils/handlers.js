@@ -3,15 +3,13 @@
 // handlers.js
 
 import { renderScore, ROW_HEIGHT } from "@/utils/renderScore";
+import { AUTHOR, SUBTITLE, formatTitle } from "@/utils/scoreMeta";
 
-const AUTHOR = "Jesús Domínguez @jdomingu19";
-const SUBTITLE = "Transcripción generada con VexFlow";
-
-// Ancho fijo de render para el PDF (A4 horizontal, 4 compases por línea)
-const PRINT_WIDTH = 1000;
+// Ancho fijo de render para el PDF (A4 vertical, 2 compases por línea)
+const PRINT_WIDTH = 700;
 // Líneas de pentagrama por hoja (la primera cede espacio al encabezado)
-const FIRST_PAGE_ROWS = 3;
-const NEXT_PAGE_ROWS = 4;
+const FIRST_PAGE_ROWS = 5;
+const NEXT_PAGE_ROWS = 6;
 
 export const uploadJSON = () => {
   console.log("uploadJSON...");
@@ -25,21 +23,6 @@ const escapeHtml = (value) =>
         c
       ],
   );
-
-/** "mi_cancion-final.json" -> "Mi Cancion Final — Sheet Music" */
-export const formatTitle = (fileName = "") => {
-  const base = fileName
-    .replace(/\.[^/.]+$/, "")
-    .replace(/[_-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  const pretty = base
-    .split(" ")
-    .filter(Boolean)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-  return `${pretty || "Untitled"} — Sheet Music`;
-};
 
 /** Renderiza la partitura a ancho fijo y la divide en hojas por bandas verticales. */
 function buildPageSvgs({ measures, timeSignature, keyInfo }) {
@@ -119,10 +102,21 @@ export const downloadPDF = ({
       </div>
     </header>`;
 
+  const total = pageSvgs.length;
+
+  // Cada hoja es una caja A4 con su propio pie:
+  // título centrado desde la 2ª hoja, número de página a la derecha
   const pagesHtml = pageSvgs
     .map(
-      (svg, i) =>
-        `<section class="page">${i === 0 ? header : ""}${svg}</section>`,
+      (svg, i) => `
+      <section class="sheet">
+        <div class="content">${i === 0 ? header : ""}${svg}</div>
+        <footer class="foot">
+          <span></span>
+          <span class="foot-title">${i > 0 ? escapeHtml(title) : ""}</span>
+          <span class="foot-page">${i + 1}/${total}</span>
+        </footer>
+      </section>`,
     )
     .join("\n");
 
@@ -142,7 +136,9 @@ export const downloadPDF = ({
             src: url("https://cdn.jsdelivr.net/npm/@vexflow-fonts/academico/academico.woff2") format("woff2");
           }
 
-          @page { size: A4 landscape; margin: 12mm; }
+          /* margin: 0 elimina los encabezados y pies del navegador
+             (fecha, título, about:blank y paginación por defecto) */
+          @page { size: A4 portrait; margin: 0; }
 
           * { box-sizing: border-box; }
           html, body {
@@ -150,13 +146,21 @@ export const downloadPDF = ({
             padding: 0;
             background: #ffffff;
             color: #1a1a1a;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
 
-          .page {
+          .sheet {
+            position: relative;
+            width: 210mm;
+            height: 296mm;
+            padding: 14mm 12mm 18mm;
+            overflow: hidden;
+            background: #ffffff;
             break-after: page;
             page-break-after: always;
           }
-          .page:last-child {
+          .sheet:last-child {
             break-after: auto;
             page-break-after: auto;
           }
@@ -196,9 +200,28 @@ export const downloadPDF = ({
             margin: 0 auto;
           }
 
+          .foot {
+            position: absolute;
+            left: 12mm;
+            right: 12mm;
+            bottom: 8mm;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: baseline;
+            font-family: "Academico", Georgia, serif;
+            font-size: 11px;
+            color: #555;
+          }
+          .foot-title { text-align: center; }
+          .foot-page { text-align: right; }
+
           @media screen {
-            body { padding: 24px; }
-            .page { max-width: 1000px; margin: 0 auto 32px; }
+            html, body { background: #d9d9d9; }
+            body { padding: 24px 0; }
+            .sheet {
+              margin: 0 auto 24px;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            }
           }
         </style>
       </head>

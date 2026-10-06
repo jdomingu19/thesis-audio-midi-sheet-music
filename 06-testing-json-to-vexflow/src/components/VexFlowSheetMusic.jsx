@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/Button";
 import { downloadPDF } from "@/utils/handlers";
 import { renderScore } from "@/utils/renderScore";
+import { AUTHOR, SUBTITLE, formatTitle } from "@/utils/scoreMeta";
 
 import s from "./VexFlowSheetMusic.module.css";
 
@@ -21,6 +22,8 @@ export function VexFlowSheetMusic({
   const paperRef = useRef(null);
   const outputRef = useRef(null);
   const [width, setWidth] = useState(0);
+
+  const title = formatTitle(fileName);
 
   // Observa el ancho disponible para recalcular el layout
   useEffect(() => {
@@ -89,8 +92,19 @@ export function VexFlowSheetMusic({
         </div>
       </header>
 
-      <div className={s.paper} ref={paperRef}>
-        <div className={s.output} ref={outputRef} />
+      <div className={s.sheet}>
+        <header className={s.scoreHeader}>
+          <h2 className={s.scoreTitle}>{title}</h2>
+          <p className={s.scoreSubtitle}>{SUBTITLE}</p>
+          <div className={s.scoreMeta}>
+            <span className={s.scoreTempo}>{tempo ? `♩ = ${tempo}` : ""}</span>
+            <span className={s.scoreAuthor}>{AUTHOR}</span>
+          </div>
+        </header>
+
+        <div className={s.paper} ref={paperRef}>
+          <div className={s.output} ref={outputRef} />
+        </div>
       </div>
     </section>
   );
