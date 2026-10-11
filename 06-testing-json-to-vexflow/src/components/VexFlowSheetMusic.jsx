@@ -6,10 +6,13 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/Button";
 import { downloadPDF } from "@/utils/handlers";
-import { renderScore } from "@/utils/renderScore";
-import { AUTHOR, SUBTITLE, formatTitle } from "@/utils/scoreMeta";
+import { buildScoreDocument } from "@/utils/scoreDocument";
 
 import s from "./VexFlowSheetMusic.module.css";
+
+// Ancho de una hoja A4 a 96 dpi y escala mínima antes de activar el scroll horizontal
+const SHEET_WIDTH = 794;
+const MIN_SCALE = 0.5;
 
 export function VexFlowSheetMusic({
   measures,
@@ -19,22 +22,49 @@ export function VexFlowSheetMusic({
   fileName,
   onReset,
 }) {
-  const paperRef = useRef(null);
-  const outputRef = useRef(null);
-  const [width, setWidth] = useState(0);
+  const viewerRef = useRef(null);
+  const frameRef = useRef(null);
+  const [docHtml, setDocHtml] = useState("");
+  const [docHeight, setDocHeight] = useState(0);
+  const [boxWidth, setBoxWidth] = useState(0);
 
-  const title = formatTitle(fileName);
-
-  // Observa el ancho disponible para recalcular el layout
+  // Construye el mismo documento que se imprime, en modo vista previa
   useEffect(() => {
-    const el = paperRef.current;
+    if (!measures?.length) return;
+    let cancelled = false;
+
+    const build = () => {
+      if (cancelled) return;
+      const doc = buildScoreDocument(
+        { measures, timeSignature, keyInfo, tempo, fileName },
+        { preview: true },
+      );
+      setDocHtml(doc?.html ?? "");
+    };
+
+    const fonts = document.fonts
+      ? Promise.all([
+          document.fonts.load("16px Bravura"),
+          document.fonts.load("16px Academico"),
+        ])
+      : Promise.resolve();
+    fonts.catch(() => {}).then(build);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [measures, timeSignature, keyInfo, tempo, fileName]);
+
+  // Observa el ancho disponible para escalar las hojas
+  useEffect(() => {
+    const el = viewerRef.current;
     if (!el) return;
 
     let frame;
     const observer = new ResizeObserver(([entry]) => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
-        setWidth(Math.floor(entry.contentRect.width));
+        setBoxWidth(Math.floor(entry.contentRect.width));
       });
     });
 
@@ -45,13 +75,17 @@ export function VexFlowSheetMusic({
     };
   }, []);
 
-  useEffect(() => {
-    if (!outputRef.current || !measures?.length || !width) return;
-    renderScore(outputRef.current, { measures, timeSignature, keyInfo, width });
-  }, [measures, timeSignature, keyInfo, width]);
+  const handleFrameLoad = () => {
+    const doc = frameRef.current?.contentDocument;
+    if (doc) setDocHeight(doc.documentElement.scrollHeight);
+  };
 
   const handleDownload = () =>
     downloadPDF({ measures, timeSignature, keyInfo, tempo, fileName });
+
+  const scale = boxWidth
+    ? Math.max(MIN_SCALE, Math.min(1, boxWidth / SHEET_WIDTH))
+    : 1;
 
   return (
     <section className={s.card}>
@@ -92,19 +126,30 @@ export function VexFlowSheetMusic({
         </div>
       </header>
 
-      <div className={s.sheet}>
-        <header className={s.scoreHeader}>
-          <h2 className={s.scoreTitle}>{title}</h2>
-          <p className={s.scoreSubtitle}>{SUBTITLE}</p>
-          <div className={s.scoreMeta}>
-            <span className={s.scoreTempo}>{tempo ? `♩ = ${tempo}` : ""}</span>
-            <span className={s.scoreAuthor}>{AUTHOR}</span>
+      <div className={s.viewer} ref={viewerRef}>
+        {docHtml && (
+          <div
+            className={s.sizer}
+            style={{
+              width: SHEET_WIDTH * scale,
+              height: docHeight * scale,
+            }}
+          >
+            <iframe
+              ref={frameRef}
+              className={s.frame}
+              title="Vista previa de la partitura"
+              sandbox="allow-same-origin"
+              srcDoc={docHtml}
+              onLoad={handleFrameLoad}
+              style={{
+                width: SHEET_WIDTH,
+                height: docHeight,
+                transform: `scale(${scale})`,
+              }}
+            />
           </div>
-        </header>
-
-        <div className={s.paper} ref={paperRef}>
-          <div className={s.output} ref={outputRef} />
-        </div>
+        )}
       </div>
     </section>
   );
