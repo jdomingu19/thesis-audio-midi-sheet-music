@@ -4,6 +4,25 @@
 
 const RESOLUTION_DIVISIONS = 16;
 
+// Notas desde A3 (MIDI 57) hacia arriba -> clave de sol; por debajo (G3 y menores) -> clave de fa
+export const SPLIT_MIDI = 57;
+
+// Silencio centrado en cada pentagrama
+const REST_KEY = { treble: "b/4", bass: "d/3" };
+
+// Duraciones representables, en semicorcheas (ascendente). Cada "unidad" es una semicorchea.
+const DURATIONS = [
+  { units: 1, duration: "16" },
+  { units: 2, duration: "8" },
+  { units: 3, duration: "8d" },
+  { units: 4, duration: "q" },
+  { units: 6, duration: "qd" },
+  { units: 8, duration: "h" },
+  { units: 12, duration: "hd" },
+  { units: 16, duration: "w" },
+  { units: 24, duration: "wd" },
+];
+
 // --- Detección de tonalidad (Krumhansl-Kessler) ---
 const KK_MAJOR = [
   6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88,
@@ -126,29 +145,111 @@ function midiToVexKey(midi, useFlats) {
   return { key: `${letter}${accidental}/${octave}`, accidental };
 }
 
-function unitsToDuration(units) {
-  const table = [
-    { units: 32, duration: "w" },
-    { units: 24, duration: "hd" },
-    { units: 16, duration: "h" },
-    { units: 12, duration: "qd" },
-    { units: 8, duration: "q" },
-    { units: 6, duration: "8d" },
-    { units: 4, duration: "8" },
-    { units: 2, duration: "16" },
-  ];
-  let closest = table[table.length - 1];
-  let minDiff = Infinity;
-  for (const entry of table) {
-    const diff = Math.abs(entry.units - units);
-    if (diff < minDiff) {
-      minDiff = diff;
-      closest = entry;
-    }
+/** Duración representable más cercana a `target` sin superar `max` (empate -> la menor). */
+function snapDuration(target, max) {
+  let best = DURATIONS[0];
+  for (const d of DURATIONS) {
+    if (d.units > max) break;
+    if (Math.abs(d.units - target) < Math.abs(best.units - target)) best = d;
   }
-  return closest.duration;
+  return best;
 }
 
+/** Descompone un hueco en silencios representables (voraz, de mayor a menor). */
+function restPieces(length) {
+  const pieces = [];
+  let left = length;
+  while (left > 0) {
+    let pick = DURATIONS[0];
+    for (const d of DURATIONS) {
+      if (d.units <= left) pick = d;
+      else break;
+    }
+    pieces.push(pick);
+    left -= pick.units;
+  }
+  return pieces;
+}
+
+/**
+ * Construye los compases de UNA mano. Cada compás queda llenado exactamente
+ * con notas y silencios, para que ambas claves queden sincronizadas.
+ */
+function buildHandMeasures(
+  notes,
+  { clef, ticksPerUnit, unitsPerMeasure, totalMeasures, useFlats },
+) {
+  const measures = Array.from({ length: totalMeasures }, () => []);
+  const totalUnits = totalMeasures * unitsPerMeasure;
+
+  // Agrupa las notas por instante de inicio (cada grupo es un acorde)
+  const slots = new Map();
+  for (const note of notes) {
+    const start = Math.round(note.ticks / ticksPerUnit);
+    const durUnits = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
+    const { key, accidental } = midiToVexKey(note.midi, useFlats);
+    if (!slots.has(start)) slots.set(start, []);
+    slots.get(start).push({ midi: note.midi, key, accidental, durUnits });
+  }
+  const starts = Array.from(slots.keys()).sort((a, b) => a - b);
+
+  // Añade silencios partiendo el hueco en los límites de compás
+  const pushRests = (from, length) => {
+    let pos = from;
+    let left = length;
+    while (left > 0 && pos < totalUnits) {
+      const m = Math.floor(pos / unitsPerMeasure);
+      const room = (m + 1) * unitsPerMeasure - pos;
+      const chunk = Math.min(left, room);
+      for (const piece of restPieces(chunk)) {
+        measures[m].push({
+          keys: [REST_KEY[clef]],
+          accidentals: [""],
+          duration: `${piece.duration}r`,
+          isRest: true,
+        });
+      }
+      pos += chunk;
+      left -= chunk;
+    }
+  };
+
+  let cursor = 0;
+  starts.forEach((start, idx) => {
+    if (start < cursor || start >= totalUnits) return;
+
+    pushRests(cursor, start - cursor);
+
+    // Acorde ordenado de grave a agudo y sin notas repetidas
+    const chord = slots
+      .get(start)
+      .sort((a, b) => a.midi - b.midi)
+      .filter((n, i, arr) => i === 0 || n.midi !== arr[i - 1].midi);
+
+    const m = Math.floor(start / unitsPerMeasure);
+    const measureEnd = (m + 1) * unitsPerMeasure;
+    const nextStart = idx + 1 < starts.length ? starts[idx + 1] : Infinity;
+    const available = Math.min(measureEnd, nextStart) - start;
+    const target = Math.max(...chord.map((n) => n.durUnits));
+    const snapped = snapDuration(target, available);
+
+    measures[m].push({
+      keys: chord.map((n) => n.key),
+      accidentals: chord.map((n) => n.accidental),
+      duration: snapped.duration,
+      isRest: false,
+    });
+    cursor = start + snapped.units;
+  });
+
+  pushRests(cursor, totalUnits - cursor);
+  return measures;
+}
+
+/**
+ * Devuelve { measures, timeSignature, keyInfo, tempo }
+ * donde measures[i] = { treble: [...eventos], bass: [...eventos] }
+ */
 export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   const { header, tracks } = toneJson;
   const ppq = header.ppq;
@@ -172,87 +273,32 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   const ticksPerMeasure = ppq * tsNum * (4 / tsDen);
   const unitsPerMeasure = Math.round(ticksPerMeasure / ticksPerUnit);
 
-  const slots = new Map();
+  // Reparto por mano según el registro
+  const hands = { treble: [], bass: [] };
+  let lastUnit = 0;
   for (const note of track.notes) {
-    const startUnit = Math.round(note.ticks / ticksPerUnit);
-    const durUnits = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
-    if (!slots.has(startUnit)) slots.set(startUnit, []);
-    const { key, accidental } = midiToVexKey(note.midi, keyInfo.useFlats);
-    slots.get(startUnit).push({ key, accidental, durUnits });
+    hands[note.midi >= SPLIT_MIDI ? "treble" : "bass"].push(note);
+    const start = Math.round(note.ticks / ticksPerUnit);
+    const dur = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
+    lastUnit = Math.max(lastUnit, start + dur);
   }
 
-  const sortedStarts = Array.from(slots.keys()).sort((a, b) => a - b);
-  const lastUnit = sortedStarts.length
-    ? sortedStarts[sortedStarts.length - 1] +
-      Math.max(
-        ...slots
-          .get(sortedStarts[sortedStarts.length - 1])
-          .map((n) => n.durUnits),
-      )
-    : 0;
+  // Ambas manos comparten el mismo número de compases
   const totalMeasures = Math.max(1, Math.ceil(lastUnit / unitsPerMeasure));
+  const ctx = {
+    ticksPerUnit,
+    unitsPerMeasure,
+    totalMeasures,
+    useFlats: keyInfo.useFlats,
+  };
 
-  const timeline = new Array(totalMeasures * unitsPerMeasure).fill(null);
-  for (const start of sortedStarts) {
-    if (timeline[start] !== undefined && timeline[start] !== null) continue;
-    const chordNotes = slots.get(start);
-    const durUnits = Math.min(
-      Math.max(...chordNotes.map((n) => n.durUnits)),
-      unitsPerMeasure,
-    );
-    timeline[start] = {
-      notes: chordNotes.map(({ key, accidental }) => ({ key, accidental })),
-      durUnits,
-    };
-    for (let i = 1; i < durUnits; i++) {
-      if (start + i < timeline.length) timeline[start + i] = "occupied";
-    }
-  }
+  const treble = buildHandMeasures(hands.treble, { ...ctx, clef: "treble" });
+  const bass = buildHandMeasures(hands.bass, { ...ctx, clef: "bass" });
 
-  const measures = [];
-  for (let m = 0; m < totalMeasures; m++) {
-    const measureEvents = [];
-    let unit = 0;
-    while (unit < unitsPerMeasure) {
-      const globalIndex = m * unitsPerMeasure + unit;
-      const cell = timeline[globalIndex];
-
-      if (cell === "occupied") {
-        unit++;
-        continue;
-      }
-      if (cell && typeof cell === "object") {
-        const durUnits = Math.min(cell.durUnits, unitsPerMeasure - unit);
-        measureEvents.push({
-          keys: cell.notes.map((n) => n.key),
-          accidentals: cell.notes.map((n) => n.accidental),
-          // FIX: sin el *8 sobrante
-          duration: unitsToDuration(durUnits * (32 / unitsPerMeasure)),
-          isRest: false,
-        });
-        unit += durUnits;
-      } else {
-        let gap = 0;
-        while (
-          unit + gap < unitsPerMeasure &&
-          !(
-            timeline[m * unitsPerMeasure + unit + gap] &&
-            typeof timeline[m * unitsPerMeasure + unit + gap] === "object"
-          )
-        ) {
-          gap++;
-        }
-        measureEvents.push({
-          keys: ["b/4"],
-          accidentals: [""],
-          duration: unitsToDuration(gap * (32 / unitsPerMeasure)) + "r",
-          isRest: true,
-        });
-        unit += gap;
-      }
-    }
-    measures.push(measureEvents);
-  }
+  const measures = Array.from({ length: totalMeasures }, (_, m) => ({
+    treble: treble[m],
+    bass: bass[m],
+  }));
 
   return { measures, timeSignature: `${tsNum}/${tsDen}`, keyInfo, tempo };
 }

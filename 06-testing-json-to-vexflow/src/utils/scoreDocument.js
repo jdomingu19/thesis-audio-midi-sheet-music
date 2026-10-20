@@ -6,7 +6,7 @@ import { renderScore, ROW_HEIGHT } from "@/utils/renderScore";
 import { AUTHOR, SUBTITLE, formatTitle } from "@/utils/scoreMeta";
 
 // Ancho fijo de render: con él cada línea de pentagrama lleva 4 compases
-export const RENDER_WIDTH = 1000;
+export const RENDER_WIDTH = 1020;
 
 // Geometría de la hoja A4 vertical (px a 96 dpi)
 const MM_TO_PX = 96 / 25.4;

@@ -13,7 +13,7 @@ const STEPS = [
   {
     n: "02",
     title: "Conversión a compases",
-    text: "Las notas se agrupan por compás, se detectan figuras, silencios, alteraciones y la tonalidad de la pieza.",
+    text: "Las notas se reparten entre clave de sol y clave de fa, se agrupan por compás y se detectan figuras, silencios, alteraciones y la tonalidad de la pieza.",
   },
   {
     n: "03",
