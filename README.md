@@ -187,7 +187,7 @@ Krumhansl, C. L., & Kessler, E. J. (1982). Tracing the dynamic changes in percei
 
 ## Academic Context
 
-Thesis project, Universidad de la Costa CUC. Advisor: Mauricio Barrios Barrios.
+Thesis project, Universidad de la Costa CUC. Advisor: Mauricio Barrios Barrios, PhD.
 
 ## License
 
