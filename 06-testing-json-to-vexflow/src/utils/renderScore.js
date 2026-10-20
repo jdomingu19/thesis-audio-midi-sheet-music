@@ -58,9 +58,8 @@ function buildNotes(events, clef) {
     });
 
     if (!ev.isRest) {
-      // Accidental explícito, no un .includes() ambiguo
       ev.accidentals.forEach((acc, idx) => {
-        if (acc === "#" || acc === "b") {
+        if (acc === "#" || acc === "b" || acc === "n") {
           note.addModifier(new Accidental(acc), idx);
         }
       });

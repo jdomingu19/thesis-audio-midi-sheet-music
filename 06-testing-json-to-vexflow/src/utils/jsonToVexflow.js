@@ -130,7 +130,7 @@ export function detectKey(notes) {
     accidentalCount,
     // string usable directamente en stave.addKeySignature()
     vexKey:
-      (accidentalCount < 0 ? PITCH_NAMES_FLAT : PITCH_NAMES_SHARP)[majorTonic] +
+      (accidentalCount < 0 ? PITCH_NAMES_FLAT : PITCH_NAMES_SHARP)[best.tonic] +
       (best.mode === "minor" ? "m" : ""),
   };
 }
@@ -171,13 +171,89 @@ function restPieces(length) {
   return pieces;
 }
 
+const SHARP_ORDER = ["f", "c", "g", "d", "a", "e", "b"];
+const FLAT_ORDER = ["b", "e", "a", "d", "g", "c", "f"];
+
+/** Letra -> alteración que impone la armadura (p. ej. Re mayor: { f: "#", c: "#" }) */
+function keySignatureMap(accidentalCount) {
+  const map = {};
+  const sign = accidentalCount >= 0 ? "#" : "b";
+  const order = accidentalCount >= 0 ? SHARP_ORDER : FLAT_ORDER;
+  order.slice(0, Math.abs(accidentalCount)).forEach((letter) => {
+    map[letter] = sign;
+  });
+  return map;
+}
+
+/** "c#/4" -> { letter: "c", accidental: "#", octave: "4" } */
+function parseKey(key) {
+  const [pitch, octave] = key.split("/");
+  return { letter: pitch[0], accidental: pitch.slice(1), octave };
+}
+
+/**
+ * Reemplaza ev.accidentals por las alteraciones que realmente deben dibujarse:
+ * - se muestran los cromáticos (notas distintas a la armadura)
+ * - dentro de un compás no se repite una alteración ya vigente
+ * - al volver a su estado de la armadura tras haber sido alterada, la primera
+ *   aparición lleva la alteración (o becuadro) de recordatorio; luego se omite
+ * Valores posibles: "" (nada), "#", "b", "n" (becuadro)
+ */
+function applyAccidentalRules(measures, keyAccidentals) {
+  // Alturas (letra+octava) que quedaron alteradas respecto a la armadura
+  const altered = new Set();
+
+  for (const events of measures) {
+    // Alteración vigente por altura dentro del compás actual
+    const state = new Map();
+
+    for (const ev of events) {
+      if (ev.isRest) continue;
+
+      ev.accidentals = ev.keys.map((key) => {
+        const { letter, accidental, octave } = parseKey(key);
+        const id = `${letter}${octave}`;
+        const signature = keyAccidentals[letter] ?? "";
+        const firstInMeasure = !state.has(id);
+        const inForce = firstInMeasure ? signature : state.get(id);
+
+        let show = "";
+        if (accidental !== inForce) {
+          // Cromático, o cambio dentro del mismo compás
+          show = accidental || "n";
+        } else if (firstInMeasure && altered.has(id)) {
+          // Vuelve a su estado original tras una alteración anterior
+          show = accidental || "n";
+        }
+
+        state.set(id, accidental);
+        return show;
+      });
+    }
+
+    // Al cerrar el compás: ¿quedó la altura alterada respecto a la armadura?
+    for (const [id, accidental] of state) {
+      const signature = keyAccidentals[id[0]] ?? "";
+      if (accidental !== signature) altered.add(id);
+      else altered.delete(id);
+    }
+  }
+}
+
 /**
  * Construye los compases de UNA mano. Cada compás queda llenado exactamente
  * con notas y silencios, para que ambas claves queden sincronizadas.
  */
 function buildHandMeasures(
   notes,
-  { clef, ticksPerUnit, unitsPerMeasure, totalMeasures, useFlats },
+  {
+    clef,
+    ticksPerUnit,
+    unitsPerMeasure,
+    totalMeasures,
+    useFlats,
+    keyAccidentals,
+  },
 ) {
   const measures = Array.from({ length: totalMeasures }, () => []);
   const totalUnits = totalMeasures * unitsPerMeasure;
@@ -243,6 +319,7 @@ function buildHandMeasures(
   });
 
   pushRests(cursor, totalUnits - cursor);
+  applyAccidentalRules(measures, keyAccidentals);
   return measures;
 }
 
@@ -290,6 +367,7 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
     unitsPerMeasure,
     totalMeasures,
     useFlats: keyInfo.useFlats,
+    keyAccidentals: keySignatureMap(keyInfo.accidentalCount),
   };
 
   const treble = buildHandMeasures(hands.treble, { ...ctx, clef: "treble" });
