@@ -7,6 +7,7 @@ import {
   Stave,
   StaveNote,
   StaveConnector,
+  GhostNote,
   Voice,
   Formatter,
   Beam,
@@ -23,6 +24,10 @@ export const PADDING_RIGHT = 16;
 export const ROW_HEIGHT = 280;
 // Distancia vertical entre el pentagrama de sol y el de fa
 const BASS_OFFSET = 110;
+
+// Dirección de plica cuando hay dos voces en una misma clave
+const STEM_UP = 1;
+const STEM_DOWN = -1;
 
 // Tipos de conector (compatibles con distintas versiones de VexFlow)
 const CONNECTOR = {
@@ -49,8 +54,11 @@ function getLayout(width) {
   return { perLine, staveWidth };
 }
 
-function buildNotes(events, clef) {
+function buildNotes(events, clef, stemDirection) {
   return events.map((ev) => {
+    // Silencio invisible de las voces secundarias: ocupa tiempo pero no se dibuja
+    if (ev.isGhost) return new GhostNote(ev.duration);
+
     const note = new StaveNote({
       keys: ev.keys,
       duration: ev.duration,
@@ -58,11 +66,13 @@ function buildNotes(events, clef) {
     });
 
     if (!ev.isRest) {
+      // Accidental explícito, no un .includes() ambiguo
       ev.accidentals.forEach((acc, idx) => {
         if (acc === "#" || acc === "b" || acc === "n") {
           note.addModifier(new Accidental(acc), idx);
         }
       });
+      if (stemDirection) note.setStemDirection(stemDirection);
     }
 
     // Puntillo para duraciones con "d" (hd, qd, 8d...), sin duplicarlo
@@ -77,16 +87,39 @@ function buildNotes(events, clef) {
   });
 }
 
-function buildVoice(notes, numBeats, beatValue) {
-  const voice = new Voice({ numBeats, beatValue });
-  voice.setStrict(false);
-  voice.addTickables(notes);
-  return voice;
+/**
+ * Crea las voces de una clave. `voiceEvents` es la lista de voces del compás
+ * (una o dos). Con dos voces, la primera lleva las plicas hacia arriba y la segunda hacia abajo.
+ */
+function buildHandVoices(voiceEvents, clef, numBeats, beatValue) {
+  const multi = voiceEvents.length > 1;
+  const noteGroups = voiceEvents.map((events, v) =>
+    buildNotes(events, clef, multi ? (v === 0 ? STEM_UP : STEM_DOWN) : null),
+  );
+
+  const voices = noteGroups.map((notes) => {
+    const voice = new Voice({ numBeats, beatValue });
+    voice.setStrict(false);
+    voice.addTickables(notes);
+    return voice;
+  });
+
+  // Los silencios cortan las barras; no se unen notas a través de ellos
+  const beams = noteGroups.flatMap((notes) =>
+    Beam.generateBeams(
+      notes,
+      multi
+        ? { maintain_stem_directions: true, maintainStemDirections: true }
+        : undefined,
+    ),
+  );
+
+  return { voices, beams };
 }
 
 /**
  * Dibuja la partitura (clave de sol + clave de fa) como SVG dentro de `container`.
- * Cada elemento de `measures` es { treble, bass }.
+ * Cada elemento de `measures` es { treble, bass }, y cada clave es una lista de voces.
  * Devuelve las dimensiones reales para poder paginar.
  */
 export function renderScore(
@@ -156,10 +189,18 @@ export function renderScore(
       .setContext(context)
       .draw();
 
-    const trebleNotes = buildNotes(measure.treble ?? [], "treble");
-    const bassNotes = buildNotes(measure.bass ?? [], "bass");
-    const trebleVoice = buildVoice(trebleNotes, numBeats, beatValue);
-    const bassVoice = buildVoice(bassNotes, numBeats, beatValue);
+    const treble = buildHandVoices(
+      measure.treble ?? [],
+      "treble",
+      numBeats,
+      beatValue,
+    );
+    const bass = buildHandVoices(
+      measure.bass ?? [],
+      "bass",
+      numBeats,
+      beatValue,
+    );
 
     // Ancho útil real: descuenta clave, armadura y compás
     const formatWidth = Math.max(
@@ -167,19 +208,18 @@ export function renderScore(
       trebleStave.getNoteEndX() - noteStartX - 10,
     );
 
-    // Se formatean juntas para alinear verticalmente las notas de ambas manos
+    // Se formatean juntas para alinear verticalmente las notas de ambas manos;
+    // las voces de una misma clave se unen para evitar choques de alteraciones
     const formatter = new Formatter();
-    formatter.joinVoices([trebleVoice]);
-    formatter.joinVoices([bassVoice]);
-    formatter.format([trebleVoice, bassVoice], formatWidth);
+    formatter.joinVoices(treble.voices);
+    formatter.joinVoices(bass.voices);
+    formatter.format([...treble.voices, ...bass.voices], formatWidth);
 
-    // Los silencios cortan las barras; no se unen notas a través de ellos
-    const trebleBeams = Beam.generateBeams(trebleNotes);
-    const bassBeams = Beam.generateBeams(bassNotes);
-
-    trebleVoice.draw(context, trebleStave);
-    bassVoice.draw(context, bassStave);
-    [...trebleBeams, ...bassBeams].forEach((b) => b.setContext(context).draw());
+    treble.voices.forEach((voice) => voice.draw(context, trebleStave));
+    bass.voices.forEach((voice) => voice.draw(context, bassStave));
+    [...treble.beams, ...bass.beams].forEach((beam) =>
+      beam.setContext(context).draw(),
+    );
   });
 
   return { width: totalWidth, height: totalHeight, rows, perLine };

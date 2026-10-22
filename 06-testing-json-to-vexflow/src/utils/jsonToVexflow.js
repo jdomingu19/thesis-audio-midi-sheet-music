@@ -7,6 +7,14 @@ const RESOLUTION_DIVISIONS = 16;
 // Notas desde A3 (MIDI 57) hacia arriba -> clave de sol; por debajo (G3 y menores) -> clave de fa
 export const SPLIT_MIDI = 57;
 
+// Alcance de una mano: semitonos máximos entre la nota más grave y la más aguda
+// de un acorde (12 = una octava; súbelo a 14-16 para manos grandes)
+export const HAND_SPAN = 12;
+
+// Rango aceptado al pasar notas de una clave a la otra
+const TREBLE_MIN_MIDI = 53; // F3: lo más grave que admite cómodamente la clave de sol
+const BASS_MAX_MIDI = 67; // G4: lo más agudo que admite cómodamente la clave de fa
+
 // Silencio centrado en cada pentagrama
 const REST_KEY = { treble: "b/4", bass: "d/3" };
 
@@ -171,6 +179,7 @@ function restPieces(length) {
   return pieces;
 }
 
+// --- Alteraciones según la armadura ---
 const SHARP_ORDER = ["f", "c", "g", "d", "a", "e", "b"];
 const FLAT_ORDER = ["b", "e", "a", "d", "g", "c", "f"];
 
@@ -198,18 +207,25 @@ function parseKey(key) {
  * - al volver a su estado de la armadura tras haber sido alterada, la primera
  *   aparición lleva la alteración (o becuadro) de recordatorio; luego se omite
  * Valores posibles: "" (nada), "#", "b", "n" (becuadro)
+ *
+ * handMeasures[m] = lista de voces del compás m (cada voz es una lista de eventos).
+ * Todas las voces de una clave comparten el mismo estado de alteraciones.
  */
-function applyAccidentalRules(measures, keyAccidentals) {
+function applyAccidentalRules(handMeasures, keyAccidentals) {
   // Alturas (letra+octava) que quedaron alteradas respecto a la armadura
   const altered = new Set();
 
-  for (const events of measures) {
+  for (const voices of handMeasures) {
     // Alteración vigente por altura dentro del compás actual
     const state = new Map();
 
-    for (const ev of events) {
-      if (ev.isRest) continue;
+    // Todas las voces en orden temporal
+    const events = voices
+      .flat()
+      .filter((ev) => !ev.isRest)
+      .sort((a, b) => a.start - b.start);
 
+    for (const ev of events) {
       ev.accidentals = ev.keys.map((key) => {
         const { letter, accidental, octave } = parseKey(key);
         const id = `${letter}${octave}`;
@@ -240,33 +256,88 @@ function applyAccidentalRules(measures, keyAccidentals) {
   }
 }
 
+// --- Reparto de acordes entre manos y voces ---
+
+/** Semitonos entre la nota más grave y la más aguda (acorde ordenado de grave a agudo) */
+function span(chord) {
+  return chord.length ? chord[chord.length - 1].midi - chord[0].midi : 0;
+}
+
+function mergeSorted(a, b) {
+  return [...a, ...b].sort((x, y) => x.midi - y.midi);
+}
+
 /**
- * Construye los compases de UNA mano. Cada compás queda llenado exactamente
- * con notas y silencios, para que ambas claves queden sincronizadas.
+ * Reparte las notas de un instante entre clave de sol y de fa.
+ * Si un acorde es más ancho que una mano, intenta pasar las notas sobrantes a la otra clave
+ * (solo si están dentro del rango aceptado de esa clave y no desbordan su mano).
  */
-function buildHandMeasures(
-  notes,
-  {
-    clef,
-    ticksPerUnit,
-    unitsPerMeasure,
-    totalMeasures,
-    useFlats,
-    keyAccidentals,
-  },
+function balanceHands(notes) {
+  let treble = notes.filter((n) => n.midi >= SPLIT_MIDI);
+  let bass = notes.filter((n) => n.midi < SPLIT_MIDI);
+
+  // Acorde de sol demasiado ancho: las notas más graves pasan a la clave de fa
+  let k = 0;
+  while (k < treble.length - 1 && span(treble.slice(k)) > HAND_SPAN) k++;
+  if (k > 0) {
+    const moved = treble.slice(0, k);
+    const merged = mergeSorted(bass, moved);
+    if (
+      moved.every((n) => n.midi <= BASS_MAX_MIDI) &&
+      span(merged) <= HAND_SPAN
+    ) {
+      treble = treble.slice(k);
+      bass = merged;
+    }
+  }
+
+  // Acorde de fa demasiado ancho: las notas más agudas pasan a la clave de sol
+  k = 0;
+  while (
+    k < bass.length - 1 &&
+    span(bass.slice(0, bass.length - k)) > HAND_SPAN
+  )
+    k++;
+  if (k > 0) {
+    const moved = bass.slice(bass.length - k);
+    const merged = mergeSorted(treble, moved);
+    if (
+      moved.every((n) => n.midi >= TREBLE_MIN_MIDI) &&
+      span(merged) <= HAND_SPAN
+    ) {
+      bass = bass.slice(0, bass.length - k);
+      treble = merged;
+    }
+  }
+
+  return { treble, bass };
+}
+
+/**
+ * Si un acorde sigue siendo más ancho que una mano, lo divide en dos voces:
+ * la voz superior toma la nota más aguda y todo lo que cae dentro del alcance
+ * de una mano por debajo; el resto forma la voz inferior.
+ */
+function splitVoices(chord) {
+  if (span(chord) <= HAND_SPAN) return [chord];
+  const top = chord[chord.length - 1].midi;
+  return [
+    chord.filter((n) => top - n.midi <= HAND_SPAN),
+    chord.filter((n) => top - n.midi > HAND_SPAN),
+  ];
+}
+
+/**
+ * Construye los compases de UNA voz. Cada compás queda llenado exactamente con
+ * notas y silencios. En voces secundarias (ghost) los silencios no se dibujan.
+ * Devuelve measures[m] = lista de eventos con su posición `start` dentro del compás.
+ */
+function buildVoiceMeasures(
+  slots,
+  { clef, ghost, unitsPerMeasure, totalMeasures },
 ) {
   const measures = Array.from({ length: totalMeasures }, () => []);
   const totalUnits = totalMeasures * unitsPerMeasure;
-
-  // Agrupa las notas por instante de inicio (cada grupo es un acorde)
-  const slots = new Map();
-  for (const note of notes) {
-    const start = Math.round(note.ticks / ticksPerUnit);
-    const durUnits = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
-    const { key, accidental } = midiToVexKey(note.midi, useFlats);
-    if (!slots.has(start)) slots.set(start, []);
-    slots.get(start).push({ midi: note.midi, key, accidental, durUnits });
-  }
   const starts = Array.from(slots.keys()).sort((a, b) => a - b);
 
   // Añade silencios partiendo el hueco en los límites de compás
@@ -277,13 +348,17 @@ function buildHandMeasures(
       const m = Math.floor(pos / unitsPerMeasure);
       const room = (m + 1) * unitsPerMeasure - pos;
       const chunk = Math.min(left, room);
+      let offset = pos - m * unitsPerMeasure;
       for (const piece of restPieces(chunk)) {
         measures[m].push({
           keys: [REST_KEY[clef]],
           accidentals: [""],
-          duration: `${piece.duration}r`,
+          duration: ghost ? piece.duration : `${piece.duration}r`,
           isRest: true,
+          isGhost: ghost,
+          start: offset,
         });
+        offset += piece.units;
       }
       pos += chunk;
       left -= chunk;
@@ -296,12 +371,7 @@ function buildHandMeasures(
 
     pushRests(cursor, start - cursor);
 
-    // Acorde ordenado de grave a agudo y sin notas repetidas
-    const chord = slots
-      .get(start)
-      .sort((a, b) => a.midi - b.midi)
-      .filter((n, i, arr) => i === 0 || n.midi !== arr[i - 1].midi);
-
+    const chord = slots.get(start);
     const m = Math.floor(start / unitsPerMeasure);
     const measureEnd = (m + 1) * unitsPerMeasure;
     const nextStart = idx + 1 < starts.length ? starts[idx + 1] : Infinity;
@@ -314,18 +384,21 @@ function buildHandMeasures(
       accidentals: chord.map((n) => n.accidental),
       duration: snapped.duration,
       isRest: false,
+      isGhost: false,
+      start: start - m * unitsPerMeasure,
     });
     cursor = start + snapped.units;
   });
 
   pushRests(cursor, totalUnits - cursor);
-  applyAccidentalRules(measures, keyAccidentals);
   return measures;
 }
 
 /**
  * Devuelve { measures, timeSignature, keyInfo, tempo }
- * donde measures[i] = { treble: [...eventos], bass: [...eventos] }
+ * donde measures[i] = { treble: [voz1, voz2?], bass: [voz1, voz2?] }
+ * y cada voz es una lista de eventos { keys, accidentals, duration, isRest, ... }.
+ * La voz 2 solo existe en los compases donde un acorde tuvo que dividirse.
  */
 export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   const { header, tracks } = toneJson;
@@ -345,33 +418,72 @@ export function jsonToVexflowMeasures(toneJson, trackIndex = 0) {
   }
 
   const keyInfo = detectKey(track.notes);
+  const keyAccidentals = keySignatureMap(keyInfo.accidentalCount);
 
   const ticksPerUnit = ppq / (RESOLUTION_DIVISIONS / 4);
   const ticksPerMeasure = ppq * tsNum * (4 / tsDen);
   const unitsPerMeasure = Math.round(ticksPerMeasure / ticksPerUnit);
 
-  // Reparto por mano según el registro
-  const hands = { treble: [], bass: [] };
+  // Agrupa todas las notas por instante de inicio
+  const onsets = new Map();
   let lastUnit = 0;
   for (const note of track.notes) {
-    hands[note.midi >= SPLIT_MIDI ? "treble" : "bass"].push(note);
     const start = Math.round(note.ticks / ticksPerUnit);
-    const dur = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
-    lastUnit = Math.max(lastUnit, start + dur);
+    const durUnits = Math.max(1, Math.round(note.durationTicks / ticksPerUnit));
+    lastUnit = Math.max(lastUnit, start + durUnits);
+
+    const { key, accidental } = midiToVexKey(note.midi, keyInfo.useFlats);
+    if (!onsets.has(start)) onsets.set(start, []);
+    onsets.get(start).push({ midi: note.midi, key, accidental, durUnits });
   }
 
   // Ambas manos comparten el mismo número de compases
   const totalMeasures = Math.max(1, Math.ceil(lastUnit / unitsPerMeasure));
-  const ctx = {
-    ticksPerUnit,
-    unitsPerMeasure,
-    totalMeasures,
-    useFlats: keyInfo.useFlats,
-    keyAccidentals: keySignatureMap(keyInfo.accidentalCount),
+
+  // lanes[clave][voz] = Map(inicio -> notas del acorde en esa voz)
+  const lanes = {
+    treble: [new Map(), new Map()],
+    bass: [new Map(), new Map()],
   };
 
-  const treble = buildHandMeasures(hands.treble, { ...ctx, clef: "treble" });
-  const bass = buildHandMeasures(hands.bass, { ...ctx, clef: "bass" });
+  for (const [start, raw] of onsets) {
+    // Acorde ordenado de grave a agudo y sin notas repetidas
+    const sorted = raw
+      .sort((a, b) => a.midi - b.midi)
+      .filter((n, i, arr) => i === 0 || n.midi !== arr[i - 1].midi);
+
+    const hands = balanceHands(sorted);
+    for (const clef of ["treble", "bass"]) {
+      if (!hands[clef].length) continue;
+      splitVoices(hands[clef]).forEach((group, v) => {
+        lanes[clef][v].set(start, group);
+      });
+    }
+  }
+
+  const buildHand = (clef) => {
+    const voices = lanes[clef].map((slots, v) =>
+      buildVoiceMeasures(slots, {
+        clef,
+        ghost: v > 0,
+        unitsPerMeasure,
+        totalMeasures,
+      }),
+    );
+
+    // La voz 1 siempre existe; la voz 2 solo en compases donde tiene notas
+    const handMeasures = Array.from({ length: totalMeasures }, (_, m) =>
+      voices
+        .map((voiceMeasures) => voiceMeasures[m])
+        .filter((events, v) => v === 0 || events.some((ev) => !ev.isRest)),
+    );
+
+    applyAccidentalRules(handMeasures, keyAccidentals);
+    return handMeasures;
+  };
+
+  const treble = buildHand("treble");
+  const bass = buildHand("bass");
 
   const measures = Array.from({ length: totalMeasures }, (_, m) => ({
     treble: treble[m],
