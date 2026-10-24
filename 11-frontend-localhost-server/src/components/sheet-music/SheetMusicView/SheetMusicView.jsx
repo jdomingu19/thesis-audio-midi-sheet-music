@@ -66,10 +66,7 @@ function SheetMusicView({
             className={styles.toolbar}
           />
 
-          <div
-            className={clsx(styles.scoreArea, styles.staffLines)}
-            style={{ "--score-zoom": zoomLevel / 100 }}
-          >
+          <div className={styles.scoreArea}>
             <div className={styles.scoreContent}>{scoreContent}</div>
           </div>
 

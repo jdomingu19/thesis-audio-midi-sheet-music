@@ -2,10 +2,6 @@
 /* @jdomingu19 */
 /* SheetMusicView.module.css */
 
-.staffLines {
-  composes: staffLines from "../../../styles/effects.module.css";
-}
-
 .view {
   display: flex;
   flex-direction: column;
@@ -25,23 +21,19 @@
   flex-shrink: 0;
 }
 
+/* Fondo debe coincidir con PREVIEW_BG en utils/scoreDocument.js */
 .scoreArea {
   flex: 1;
   min-height: 0;
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
+  background-color: #0f2623;
   overflow: auto;
-  padding: var(--space-5);
+  padding: var(--space-4);
 }
 
 .scoreContent {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
   min-height: 100%;
-  transform: scale(var(--score-zoom, 1));
-  transform-origin: top center;
-  transition: transform var(--transition-base);
 }
 
 .pageControls {
@@ -50,12 +42,10 @@
 
 /* ============================================================
    RESPONSIVE
-   Mobile: permite zoom/pan táctil a nivel de contenedor (solo
-   contemplado a nivel de diseño, sin lógica aún — sección 7.7).
    ============================================================ */
 @media (max-width: 767px) {
   .scoreArea {
-    padding: var(--space-3);
+    padding: var(--space-2);
     touch-action: pan-x pan-y pinch-zoom;
   }
 }

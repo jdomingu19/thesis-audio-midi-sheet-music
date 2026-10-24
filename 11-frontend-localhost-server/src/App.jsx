@@ -2,7 +2,7 @@
 // @jdomingu19
 // App.jsx
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AudioWaveform, Music4 } from "lucide-react";
 import * as Tone from "tone";
 
@@ -25,7 +25,7 @@ import DownloadBar from "@/components/downloads/DownloadBar/DownloadBar";
 
 import PianoRollView from "@/components/piano-roll/PianoRollView/PianoRollView";
 import SheetMusicView from "@/components/sheet-music/SheetMusicView/SheetMusicView";
-import VexFlowScore from "@/components/sheet-music/VexFlowScore/VexFlowScore";
+import SheetMusicPreview from "@/components/sheet-music/SheetMusicPreview/SheetMusicPreview";
 
 import Badge from "@/components/ui/Badge/Badge";
 
@@ -276,11 +276,13 @@ function App() {
   // ── Viewer (Piano Roll / Sheet Music) ────────────────────────────────
   const [activeTab, setActiveTab] = useState("piano-roll");
   const [zoomLevel, setZoomLevel] = useState(100);
-  const scoreContainerRef = useRef(null);
 
   const detectedKeyLabel = selectedAudio?.vexScore?.keyInfo
     ? formatKeyLabel(selectedAudio.vexScore.keyInfo)
     : undefined;
+
+  const hasScore =
+    isSelectedReady && Boolean(selectedAudio?.vexScore?.measures?.length);
 
   // ── Downloads reales (MIDI + PDF) ────────────────────────────────────
   const [isDownloadingMidi, setIsDownloadingMidi] = useState(false);
@@ -299,9 +301,16 @@ function App() {
   };
 
   const handleDownloadPdf = () => {
-    if (!scoreContainerRef.current || !selectedAudio) return;
+    if (!hasScore) return;
     setIsDownloadingPdf(true);
-    downloadSheetMusicPdf(scoreContainerRef.current, selectedAudio.name);
+    const { measures, timeSignature, keyInfo, tempo } = selectedAudio.vexScore;
+    downloadSheetMusicPdf({
+      measures,
+      timeSignature,
+      keyInfo,
+      tempo,
+      fileName: selectedAudio.name,
+    });
     setTimeout(() => setIsDownloadingPdf(false), 400);
   };
 
@@ -396,20 +405,22 @@ function App() {
               detectedKey={detectedKeyLabel}
               zoomLevel={zoomLevel}
               onZoomChange={setZoomLevel}
-              isExportDisabled={!isSelectedReady}
+              isExportDisabled={!hasScore}
               isExporting={isDownloadingPdf}
               onExport={handleDownloadPdf}
               currentPage={1}
               totalPages={1}
               onPageChange={() => {}}
-              isEmpty={!isSelectedReady}
+              isEmpty={!hasScore}
               scoreContent={
-                isSelectedReady && selectedAudio?.vexScore ? (
-                  <VexFlowScore
-                    ref={scoreContainerRef}
+                hasScore ? (
+                  <SheetMusicPreview
                     measures={selectedAudio.vexScore.measures}
                     timeSignature={selectedAudio.vexScore.timeSignature}
                     keyInfo={selectedAudio.vexScore.keyInfo}
+                    tempo={selectedAudio.vexScore.tempo}
+                    fileName={selectedAudio.name}
+                    zoomLevel={zoomLevel}
                   />
                 ) : null
               }
@@ -442,7 +453,7 @@ function App() {
 
           <DownloadBar
             isMidiReady={isSelectedReady}
-            isPdfReady={isSelectedReady}
+            isPdfReady={hasScore}
             isMidiDownloading={isDownloadingMidi}
             isPdfDownloading={isDownloadingPdf}
             onDownloadMidi={handleDownloadMidi}
