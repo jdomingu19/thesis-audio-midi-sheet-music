@@ -49,7 +49,6 @@ import {
   flattenTrackNotes,
   getMidiRange,
   getDuration,
-  toPianoRollNotes,
   buildPianoRollMeasures,
   formatKeyLabel,
   formatMidiFilename,
@@ -109,7 +108,6 @@ function App() {
       const notes = flattenTrackNotes(midiJson);
       const { min: lowMidi, max: highMidi } = getMidiRange(notes);
       const totalDuration = getDuration(notes);
-      const pianoRollNotes = toPianoRollNotes(notes);
       const measures = buildPianoRollMeasures(midiJson, totalDuration);
       const vexScore = jsonToVexflowMeasures(midiJson, 0);
       const midiUrl = URL.createObjectURL(midiBlob);
@@ -131,7 +129,6 @@ function App() {
                 lowMidi,
                 highMidi,
                 totalDuration,
-                pianoRollNotes,
                 measures,
                 vexScore,
               }
@@ -271,8 +268,6 @@ function App() {
     return Array.from(active);
   }, [selectedAudio, currentTime]);
 
-  const playheadPosition = duration > 0 ? currentTime / duration : 0;
-
   // ── Viewer (Piano Roll / Sheet Music) ────────────────────────────────
   const [activeTab, setActiveTab] = useState("piano-roll");
   const [zoomLevel, setZoomLevel] = useState(100);
@@ -389,14 +384,14 @@ function App() {
           onTabChange={setActiveTab}
           pianoRollContent={
             <PianoRollView
-              notes={selectedAudio?.pianoRollNotes ?? []}
-              measures={selectedAudio?.measures ?? []}
+              notes={selectedAudio?.notes ?? EMPTY_NOTES}
+              measures={selectedAudio?.measures ?? EMPTY_NOTES}
               lowMidi={selectedAudio?.lowMidi}
               highMidi={selectedAudio?.highMidi}
-              totalDuration={selectedAudio?.totalDuration ?? 16}
-              currentPosition={playheadPosition}
-              isPlaying={isPlaying}
+              totalDuration={duration}
+              currentTime={currentTime}
               activeMidiNotes={activeMidiNotes}
+              onSeek={seek}
               isEmpty={!isSelectedReady}
             />
           }

@@ -21,7 +21,7 @@
     "input"
     "viewer"
     "bottom";
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto auto auto;
 }
 
 .topbar {
@@ -42,11 +42,14 @@
 
 .viewerPanel {
   grid-area: viewer;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
+  /* Altura fija del visor en mobile/tablet: el contenido hace scroll DENTRO */
+  height: clamp(460px, 75dvh, 760px);
   padding: var(--space-4);
   overflow: hidden;
 }
-
 .bottomBar {
   grid-area: bottom;
   position: sticky;
@@ -89,6 +92,8 @@
       "bottom bottom";
     grid-template-columns: 380px minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr) auto;
+    height: 100dvh;
+    min-height: 0;
   }
 
   .inputPanel {
@@ -98,6 +103,7 @@
   }
 
   .viewerPanel {
+    height: auto;
     padding: var(--space-5) var(--space-6) var(--space-5) var(--space-5);
   }
 

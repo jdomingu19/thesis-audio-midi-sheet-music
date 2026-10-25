@@ -2,85 +2,50 @@
 // @jdomingu19
 // pianoKeyLayout.js
 
-const WHITE_KEY_STEPS = [0, 2, 4, 5, 7, 9, 11]; // C D E F G A B
 const BLACK_KEY_STEPS = new Set([1, 3, 6, 8, 10]);
-
-export const DEFAULT_WHITE_KEY_WIDTH = 32;
-export const DEFAULT_BLACK_KEY_WIDTH_RATIO = 0.62;
-
-export const DEFAULT_LOW_MIDI = 21; // A0
-export const DEFAULT_HIGH_MIDI = 108; // C8
-export const CENTER_ANCHOR_MIDI = 60; // Do central — punto de referencia fijo para el centrado horizontal
 
 export function isBlackKey(midiNumber) {
   return BLACK_KEY_STEPS.has(((midiNumber % 12) + 12) % 12);
 }
 
-/**
- * Calcula la posición horizontal (x) y ancho de cada tecla MIDI dentro del
- * rango [lowMidi, highMidi], replicando la geometría de un teclado real.
- * Usado tanto por PianoKeyboard como por PianoRollCanvas para que ambos
- * queden perfectamente alineados.
- */
-export function getKeyLayout(
-  lowMidi,
-  highMidi,
-  whiteKeyWidth = DEFAULT_WHITE_KEY_WIDTH,
-) {
-  const blackKeyWidth = whiteKeyWidth * DEFAULT_BLACK_KEY_WIDTH_RATIO;
-  const layout = new Map();
-
-  let whiteIndex = 0;
-  for (let midi = lowMidi; midi <= highMidi; midi += 1) {
-    if (!isBlackKey(midi)) {
-      layout.set(midi, {
-        midi,
-        isBlack: false,
-        x: whiteIndex * whiteKeyWidth,
-        width: whiteKeyWidth,
-      });
-      whiteIndex += 1;
-    }
+export function getWhiteKeyCount(minMidi, maxMidi) {
+  let count = 0;
+  for (let midi = minMidi; midi <= maxMidi; midi += 1) {
+    if (!isBlackKey(midi)) count += 1;
   }
-
-  for (let midi = lowMidi; midi <= highMidi; midi += 1) {
-    if (isBlackKey(midi)) {
-      const prevWhite = layout.get(midi - 1);
-      if (prevWhite) {
-        layout.set(midi, {
-          midi,
-          isBlack: true,
-          x: prevWhite.x + prevWhite.width - blackKeyWidth / 2,
-          width: blackKeyWidth,
-        });
-      }
-    }
-  }
-
-  const totalWidth = whiteIndex * whiteKeyWidth;
-
-  return {
-    keys: Array.from(layout.values()).sort((a, b) => a.midi - b.midi),
-    totalWidth,
-    whiteKeyWidth,
-    blackKeyWidth,
-  };
+  return count;
 }
 
 /**
- * Calcula el scrollLeft necesario para centrar una tecla ancla (por
- * defecto, Do central) dentro del viewport visible, sin importar si el
- * rango real de notas del audio es muy grave o muy agudo. Usado al cargar
- * cada audio para que el teclado siempre arranque en una posición estable
- * y predecible.
+ * Posición horizontal (en %) de cada tecla dentro del rango. Usado por
+ * PianoRollCanvas y PianoKeyboard para que ambos queden perfectamente
+ * alineados. Map(midi -> { left, width, isBlack }).
  */
-export function getScrollLeftForMidi(layout, midi, viewportWidth) {
-  const keyInfo =
-    layout.keys.find((k) => k.midi === midi) ??
-    layout.keys[Math.floor(layout.keys.length / 2)];
-  if (!keyInfo) return 0;
+export function getKeyLayout(minMidi, maxMidi) {
+  const whiteMidis = [];
+  for (let midi = minMidi; midi <= maxMidi; midi += 1) {
+    if (!isBlackKey(midi)) whiteMidis.push(midi);
+  }
+  const whiteWidth = 100 / Math.max(1, whiteMidis.length);
+  const layout = new Map();
 
-  const keyCenter = keyInfo.x + keyInfo.width / 2;
-  const maxScrollLeft = Math.max(0, layout.totalWidth - viewportWidth);
-  return Math.min(Math.max(0, keyCenter - viewportWidth / 2), maxScrollLeft);
+  whiteMidis.forEach((midi, index) => {
+    layout.set(midi, {
+      left: index * whiteWidth,
+      width: whiteWidth,
+      isBlack: false,
+    });
+  });
+
+  for (let midi = minMidi; midi <= maxMidi; midi += 1) {
+    if (!isBlackKey(midi)) continue;
+    const whiteBefore = whiteMidis.filter((w) => w < midi).length;
+    layout.set(midi, {
+      left: whiteBefore * whiteWidth - whiteWidth * 0.28,
+      width: whiteWidth * 0.56,
+      isBlack: true,
+    });
+  }
+
+  return layout;
 }

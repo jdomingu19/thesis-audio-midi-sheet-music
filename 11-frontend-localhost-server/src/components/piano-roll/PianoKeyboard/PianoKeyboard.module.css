@@ -2,44 +2,66 @@
 /* @jdomingu19 */
 /* PianoKeyboard.module.css */
 
-.keyboardScroll {
-  overflow-x: auto;
-  overflow-y: hidden;
-  flex-shrink: 0;
-  width: 100%;
-  height: var(--piano-keyboard-height, 90px);
-  border-top: 1px solid var(--color-border);
-  background-color: var(--color-surface);
-  scrollbar-width: thin;
-}
-
 .keyboard {
   position: relative;
-  height: 100%;
-}
-
-.key {
-  position: absolute;
-  top: 0;
-  border: 1px solid rgba(238, 243, 241, 0.06);
-  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-  transition: background-color var(--transition-fast);
+  width: 100%;
+  height: clamp(56px, 12vh, 96px);
+  flex-shrink: 0;
+  background-color: var(--color-void);
+  border-top: 2px solid var(--color-border-strong);
+  box-shadow: inset 0 6px 10px -6px rgba(0, 0, 0, 0.6);
 }
 
 .whiteKey {
+  position: absolute;
+  top: 0;
   height: 100%;
-  background-color: var(--color-ink);
-  z-index: 1;
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding-bottom: var(--space-1);
+  background: linear-gradient(180deg, #fbfbf7 0%, #e9e9df 88%, #d8d8cb 100%);
+  border-right: 1px solid #c3c3b6;
+  border-radius: 0 0 4px 4px;
+  box-shadow: inset 0 -3px 3px rgba(0, 0, 0, 0.08);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.whiteKey.active {
+  background: linear-gradient(
+    180deg,
+    var(--color-sage-strong) 0%,
+    var(--color-sage) 100%
+  );
+  box-shadow:
+    0 0 10px rgba(130, 179, 159, 0.5),
+    inset 0 -3px 5px rgba(0, 0, 0, 0.15);
 }
 
 .blackKey {
+  position: absolute;
+  top: 0;
   height: 62%;
-  background-color: var(--color-void);
   z-index: 2;
+  background: linear-gradient(180deg, #2a3a35 0%, var(--color-base) 90%);
+  border: 1px solid #000;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.45);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.blackKey.active {
+  background: linear-gradient(
+    180deg,
+    var(--color-sage) 0%,
+    var(--color-surface) 100%
+  );
+  box-shadow: 0 0 10px rgba(130, 179, 159, 0.5);
 }
 
 .octaveLabel {
@@ -49,22 +71,7 @@
   pointer-events: none;
 }
 
-.key.active.whiteKey {
-  background-color: var(--color-sage);
-}
-
-.key.active.blackKey {
-  background-color: var(--color-amber);
-}
-
-/* ============================================================
-   RESPONSIVE — tablet/mobile: teclado más bajo, sin etiquetas
-   ============================================================ */
-@media (max-width: 1199px) {
-  .keyboardScroll {
-    height: var(--piano-keyboard-height, 64px);
-  }
-
+@media (max-width: 767px) {
   .octaveLabel {
     display: none;
   }

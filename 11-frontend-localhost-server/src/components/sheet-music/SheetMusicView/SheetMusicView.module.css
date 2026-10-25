@@ -5,6 +5,7 @@
 .view {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: var(--space-3);
   height: 100%;
   min-height: 0;

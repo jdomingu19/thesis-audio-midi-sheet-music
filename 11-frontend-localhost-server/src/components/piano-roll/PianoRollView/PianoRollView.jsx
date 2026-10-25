@@ -2,98 +2,48 @@
 // @jdomingu19
 // PianoRollView.jsx
 
-import { useCallback, useLayoutEffect, useRef } from "react";
+import { useMemo } from "react";
+import { Music4 } from "lucide-react";
 import clsx from "clsx";
 import styles from "./PianoRollView.module.css";
-import PianoRollTimeline from "@/components/piano-roll/PianoRollTimeline/PianoRollTimeline";
-import PianoKeyboard from "@/components/piano-roll/PianoKeyboard/PianoKeyboard";
 import PianoRollCanvas from "@/components/piano-roll/PianoRollCanvas/PianoRollCanvas";
+import PianoKeyboard from "@/components/piano-roll/PianoKeyboard/PianoKeyboard";
 import EmptyState from "@/components/ui/EmptyState/EmptyState";
-import { Music4 } from "lucide-react";
-import {
-  getKeyLayout,
-  getScrollLeftForMidi,
-  CENTER_ANCHOR_MIDI,
-  DEFAULT_LOW_MIDI,
-  DEFAULT_HIGH_MIDI,
-} from "@/utils/pianoKeyLayout";
+import { getWhiteKeyCount } from "@/utils/pianoKeyLayout";
+import { formatDuration } from "@/utils/audioUtils";
 
 /**
- * PianoRollView — contenedor de la sección completa de visualización MIDI
- * en orientación cascada: gutter de compases + canvas waterfall arriba,
- * teclado horizontal fijo abajo. Orquesta:
- * - Sincronización de scroll horizontal (canvas ↔ teclado, eje de pitch)
- *   y vertical (canvas → gutter, eje de tiempo).
- * - Centrado horizontal inicial en Do central (MIDI 60) al cargar
- *   cualquier audio, sin importar si el registro real de las notas es
- *   muy grave o muy agudo — el teclado siempre arranca desde un punto de
- *   referencia estable y predecible.
+ * PianoRollView — visor MIDI de altura fija: barra de metadatos + escenario
+ * (cascada <canvas> + teclado) con un único scroll horizontal compartido.
+ * El tiempo se controla desde afuera (currentTime / onSeek), de modo que
+ * mover la cascada mueve la barra de reproducción y viceversa.
+ *
+ * @param {Array} notes - notas planas { midi, time, duration, color }
+ * @param {Array} measures - marcadores { id, label, position }
+ * @param {number} currentTime - segundos
+ * @param {number} totalDuration - segundos
+ * @param {number[]} activeMidiNotes
+ * @param {(seconds:number) => void} onSeek
+ * @param {boolean} isEmpty
  */
 function PianoRollView({
   notes = [],
   measures = [],
-  lowMidi,
-  highMidi,
-  totalDuration = 16,
-  currentPosition = 0,
-  isPlaying = false,
+  lowMidi = 48,
+  highMidi = 72,
+  totalDuration = 0,
+  currentTime = 0,
   activeMidiNotes = [],
+  onSeek,
   isEmpty = false,
   className,
   ...rest
 }) {
   const hasNotes = !isEmpty && notes.length > 0;
-
-  const canvasRef = useRef(null);
-  const keyboardRef = useRef(null);
-  const timelineRef = useRef(null);
-  const isSyncingRef = useRef(false);
-
-  const handleCanvasScroll = useCallback(() => {
-    if (isSyncingRef.current) return;
-    isSyncingRef.current = true;
-    const canvas = canvasRef.current;
-    if (canvas) {
-      if (keyboardRef.current) {
-        keyboardRef.current.scrollLeft = canvas.scrollLeft;
-      }
-      if (timelineRef.current) {
-        timelineRef.current.scrollTop = canvas.scrollTop;
-      }
-    }
-    isSyncingRef.current = false;
-  }, []);
-
-  const handleKeyboardScroll = useCallback(() => {
-    if (isSyncingRef.current) return;
-    isSyncingRef.current = true;
-    if (keyboardRef.current && canvasRef.current) {
-      canvasRef.current.scrollLeft = keyboardRef.current.scrollLeft;
-    }
-    isSyncingRef.current = false;
-  }, []);
-
-  // Centrado horizontal en Do central al montar y cada vez que cambia el
-  // rango de teclado o se carga un audio distinto.
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    const keyboard = keyboardRef.current;
-    if (!hasNotes || !canvas || !keyboard) return;
-
-    const layout = getKeyLayout(
-      lowMidi ?? DEFAULT_LOW_MIDI,
-      highMidi ?? DEFAULT_HIGH_MIDI,
-    );
-    const viewportWidth = keyboard.clientWidth || canvas.clientWidth;
-    const targetScrollLeft = getScrollLeftForMidi(
-      layout,
-      CENTER_ANCHOR_MIDI,
-      viewportWidth,
-    );
-
-    canvas.scrollLeft = targetScrollLeft;
-    keyboard.scrollLeft = targetScrollLeft;
-  }, [lowMidi, highMidi, notes, hasNotes]);
+  const whiteCount = useMemo(
+    () => getWhiteKeyCount(lowMidi, highMidi),
+    [lowMidi, highMidi],
+  );
 
   return (
     <section className={clsx(styles.view, className)} {...rest}>
@@ -108,35 +58,47 @@ function PianoRollView({
 
       {hasNotes && (
         <>
-          <div className={styles.body}>
-            <PianoRollTimeline
-              ref={timelineRef}
-              measures={measures}
-              totalDuration={totalDuration}
-              className={styles.timeline}
-            />
-            <PianoRollCanvas
-              ref={canvasRef}
-              notes={notes}
-              lowMidi={lowMidi}
-              highMidi={highMidi}
-              totalDuration={totalDuration}
-              currentPosition={currentPosition}
-              isPlaying={isPlaying}
-              activeMidiNotes={activeMidiNotes}
-              onScroll={handleCanvasScroll}
-              className={styles.canvas}
-            />
+          <div className={styles.meta}>
+            <span className={styles.metaItem}>
+              Notas <strong>{notes.length}</strong>
+            </span>
+            <span className={styles.metaItem}>
+              Duración <strong>{formatDuration(totalDuration)}</strong>
+            </span>
+            <span className={styles.metaItem}>
+              Rango{" "}
+              <strong>
+                {lowMidi}–{highMidi}
+              </strong>
+            </span>
+            <span className={styles.hint}>
+              Rueda o arrastre: mover reproducción
+            </span>
           </div>
 
-          <PianoKeyboard
-            ref={keyboardRef}
-            lowMidi={lowMidi}
-            highMidi={highMidi}
-            activeMidiNotes={activeMidiNotes}
-            onScroll={handleKeyboardScroll}
-            className={styles.keyboard}
-          />
+          <div className={styles.stageScroll}>
+            <div
+              className={styles.stage}
+              style={{ "--white-count": whiteCount }}
+            >
+              <PianoRollCanvas
+                notes={notes}
+                currentTime={currentTime}
+                duration={totalDuration}
+                lowMidi={lowMidi}
+                highMidi={highMidi}
+                measures={measures}
+                onSeek={onSeek}
+                className={styles.canvas}
+              />
+              <PianoKeyboard
+                lowMidi={lowMidi}
+                highMidi={highMidi}
+                activeMidiNotes={activeMidiNotes}
+                className={styles.keyboard}
+              />
+            </div>
+          </div>
         </>
       )}
     </section>
