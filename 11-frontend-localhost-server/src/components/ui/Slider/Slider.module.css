@@ -106,3 +106,34 @@
   font-size: var(--font-size-xs);
   color: var(--color-ink-muted);
 }
+
+/* Etiqueta accesible pero sin ocupar espacio visual */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Táctil: área de agarre y thumb más grandes */
+@media (pointer: coarse) {
+  .trackWrapper {
+    height: 28px;
+  }
+
+  .input::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    margin-top: -7px;
+  }
+
+  .input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+  }
+}

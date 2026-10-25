@@ -16,55 +16,6 @@
   padding: var(--space-3) 0;
 }
 
-.libraryPanel {
-  flex: 1;
-  min-height: 0;
-}
-
-.bottomBarContent {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
-}
-
-.transport {
-  flex: 1;
-  min-width: 0;
-}
-
-/* ============================================================
-   SCORE PLACEHOLDER — mock visual sin VexFlow real
-   ============================================================ */
-.scorePlaceholder {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  width: 100%;
-}
-
-.measureBlock {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-elevated);
-}
-
-.measureClef {
-  font-size: var(--font-size-lg);
-  color: var(--color-sage);
-  margin-right: var(--space-2);
-}
-
-.notePlaceholder {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-pill);
-  background-color: var(--color-ink-faint);
-}
-
 .recordError {
   margin: 0;
   font-family: var(--font-mono);
@@ -73,17 +24,82 @@
   text-align: center;
 }
 
+/* Biblioteca: desktop llena el alto restante; mobile/tablet con alto máximo */
+.libraryPanel {
+  flex: 1;
+  min-height: 240px;
+}
+
+@media (max-width: 1199px) {
+  .libraryPanel {
+    flex: none;
+    max-height: 340px;
+  }
+}
+
+/* Texto del estado del servidor: en pantallas estrechas queda solo el punto */
+.statusText {
+  display: inline;
+}
+
+@media (max-width: 639px) {
+  .statusText {
+    display: none;
+  }
+}
+
 /* ============================================================
-   RESPONSIVE
+   BARRA INFERIOR (reproducción + volumen + descargas)
+   Desktop / tablet: una fila.
+   Mobile (< 768px): grid de 2 filas.
+     fila 1: barra de progreso (área "seek")
+     fila 2: controles | volumen | descargas
    ============================================================ */
+.bottomBarContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.bottomBarContent > * {
+  min-width: 0;
+}
+
+.transport {
+  flex: 1;
+}
+
+.volume,
+.downloads {
+  flex-shrink: 0;
+}
+
+@media (min-width: 1200px) {
+  .bottomBarContent {
+    gap: var(--space-5);
+  }
+}
+
 @media (max-width: 767px) {
   .bottomBarContent {
-    flex-wrap: wrap;
-    gap: var(--space-2);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "seek seek seek"
+      "controls volume downloads";
+    align-items: center;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
   }
 
-  .transport {
-    order: 1;
-    width: 100%;
+  .volume {
+    grid-area: volume;
+    justify-self: center;
+  }
+
+  .downloads {
+    grid-area: downloads;
+    justify-self: end;
   }
 }

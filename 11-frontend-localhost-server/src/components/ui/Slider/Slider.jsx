@@ -28,6 +28,7 @@ function Slider({
   label,
   formatValue,
   showValue = false,
+  showLabel = false,
   className,
   ...rest
 }) {
@@ -39,7 +40,10 @@ function Slider({
       className={clsx(styles.wrapper, disabled && styles.disabled, className)}
     >
       {label && (
-        <label htmlFor={inputId} className={styles.label}>
+        <label
+          htmlFor={inputId}
+          className={clsx(styles.label, !showLabel && styles.srOnly)}
+        >
           {label}
         </label>
       )}

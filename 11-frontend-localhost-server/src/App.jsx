@@ -10,6 +10,7 @@ import AppShell from "@/components/layout/AppShell/AppShell";
 import Topbar from "@/components/layout/Topbar/Topbar";
 import PanelSection from "@/components/layout/PanelSection/PanelSection";
 import ViewerPanel from "@/components/layout/ViewerPanel/ViewerPanel";
+import Footer from "@/components/layout/Footer/Footer";
 
 import UploadDropzone from "@/components/audio-input/UploadDropzone/UploadDropzone";
 import RecordControl from "@/components/audio-input/RecordControl/RecordControl";
@@ -309,27 +310,39 @@ function App() {
     setTimeout(() => setIsDownloadingPdf(false), 400);
   };
 
+  const serverStatus = backendOnline
+    ? "ready"
+    : backendOnline === false
+      ? "error"
+      : "processing";
+
+  const serverLabel =
+    backendOnline === null
+      ? "Verificando servidor…"
+      : backendOnline
+        ? "Servidor local conectado"
+        : "Servidor local no disponible";
+
   return (
     <AppShell
       topbar={
         <Topbar
-          logo={<Music4 size={18} />}
+          logo={<Music4 size={20} />}
           title="Armonía"
           subtitle="Audio a MIDI & Partituras"
+          projectLabel="MIR Project"
+          projectDetail="Music Information Retrieval · Proyecto de grado"
+          signature="@jdomingu19"
+          signatureHref="https://github.com/jdomingu19"
           actions={
             <Badge
-              status={
-                backendOnline
-                  ? "ready"
-                  : backendOnline === false
-                    ? "error"
-                    : "processing"
-              }
+              status={serverStatus}
               withDot
+              role="status"
+              title={serverLabel}
+              aria-label={serverLabel}
             >
-              {backendOnline === null && "Verificando servidor…"}
-              {backendOnline === true && "Servidor local conectado"}
-              {backendOnline === false && "Servidor local no disponible"}
+              <span className={styles.statusText}>{serverLabel}</span>
             </Badge>
           }
         />
@@ -444,6 +457,7 @@ function App() {
             disabled={!isSelectedReady}
             onChange={setVolume}
             onToggleMute={() => setIsMuted((previous) => !previous)}
+            className={styles.volume}
           />
 
           <DownloadBar
@@ -453,9 +467,11 @@ function App() {
             isPdfDownloading={isDownloadingPdf}
             onDownloadMidi={handleDownloadMidi}
             onDownloadPdf={handleDownloadPdf}
+            className={styles.downloads}
           />
         </div>
       }
+      footer={<Footer />}
     />
   );
 }

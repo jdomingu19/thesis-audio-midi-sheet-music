@@ -62,6 +62,7 @@ function PlaybackTransport({
           variant="ghost"
           disabled={disabled}
           onClick={onSkipBack}
+          className={styles.sideButton}
         />
 
         <IconButton
@@ -81,6 +82,7 @@ function PlaybackTransport({
           variant="ghost"
           disabled={disabled}
           onClick={onSkipForward}
+          className={styles.sideButton}
         />
       </div>
 

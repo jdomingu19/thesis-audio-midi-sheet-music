@@ -6,14 +6,30 @@ import clsx from "clsx";
 import styles from "./Topbar.module.css";
 
 /**
- * Topbar — barra superior con logo/nombre del proyecto y acciones globales.
+ * Topbar — barra superior de identidad del proyecto.
+ *   [ marca: ícono · título · subtítulo ]  [ etiqueta del proyecto ]  [ estado · firma ]
  *
- * @param {React.ReactNode} logo - ícono o marca (opcional)
+ * @param {React.ReactNode} logo - ícono de marca
  * @param {string} title - nombre del proyecto (ej. "Armonía")
- * @param {string} subtitle - texto secundario opcional (ej. "Audio a Partitura")
- * @param {React.ReactNode} actions - slot derecho para botones/íconos globales
+ * @param {string} subtitle - descriptor corto (ej. "Audio a MIDI & Partituras")
+ * @param {string} projectLabel - etiqueta académica (ej. "MIR Project")
+ * @param {string} projectDetail - detalle de la etiqueta (oculto en tablet)
+ * @param {string} signature - firma (ej. "@jdomingu19")
+ * @param {string} signatureHref - enlace de la firma
+ * @param {React.ReactNode} actions - slot derecho (ej. estado del servidor)
  */
-function Topbar({ logo, title, subtitle, actions, className, ...rest }) {
+function Topbar({
+  logo,
+  title,
+  subtitle,
+  projectLabel,
+  projectDetail,
+  signature,
+  signatureHref,
+  actions,
+  className,
+  ...rest
+}) {
   return (
     <div className={clsx(styles.topbar, className)} {...rest}>
       <div className={styles.brand}>
@@ -28,7 +44,39 @@ function Topbar({ logo, title, subtitle, actions, className, ...rest }) {
         </div>
       </div>
 
-      {actions && <div className={styles.actions}>{actions}</div>}
+      {projectLabel && (
+        <div className={styles.project}>
+          <span className={styles.projectDot} aria-hidden="true" />
+          <span className={styles.projectLabel}>{projectLabel}</span>
+          {projectDetail && (
+            <>
+              <span className={styles.projectSeparator} aria-hidden="true">
+                ·
+              </span>
+              <span className={styles.projectDetail}>{projectDetail}</span>
+            </>
+          )}
+        </div>
+      )}
+
+      {(actions || signature) && (
+        <div className={styles.aside}>
+          {actions}
+          {signature &&
+            (signatureHref ? (
+              <a
+                href={signatureHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.signature}
+              >
+                {signature}
+              </a>
+            ) : (
+              <span className={styles.signature}>{signature}</span>
+            ))}
+        </div>
+      )}
     </div>
   );
 }

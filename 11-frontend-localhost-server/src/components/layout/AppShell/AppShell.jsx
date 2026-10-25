@@ -10,18 +10,20 @@ import styles from "./AppShell.module.css";
  * mediante áreas nombradas (CSS Grid + media queries en el .module.css,
  * sin JS de detección de breakpoint).
  *
- * Áreas: topbar | inputPanel (entrada + biblioteca) | viewerPanel | bottomBar
+ * Áreas: topbar | inputPanel | viewerPanel | bottomBar | footer
  *
  * @param {React.ReactNode} topbar - slot para <Topbar />
- * @param {React.ReactNode} inputPanel - slot columna izquierda (UploadDropzone, RecordControl, AudioList)
- * @param {React.ReactNode} viewerPanel - slot columna derecha (<ViewerPanel />)
- * @param {React.ReactNode} bottomBar - slot barra inferior fija (PlaybackTransport + DownloadBar)
+ * @param {React.ReactNode} inputPanel - columna izquierda (entrada + biblioteca)
+ * @param {React.ReactNode} viewerPanel - zona del visor (<ViewerPanel />)
+ * @param {React.ReactNode} bottomBar - barra fija de reproducción + descargas
+ * @param {React.ReactNode} footer - pie informativo al final del scroll
  */
 function AppShell({
   topbar,
   inputPanel,
   viewerPanel,
   bottomBar,
+  footer,
   className,
   ...rest
 }) {
@@ -40,7 +42,15 @@ function AppShell({
         {viewerPanel}
       </main>
 
-      <footer className={styles.bottomBar}>{bottomBar}</footer>
+      <div
+        className={styles.bottomBar}
+        role="region"
+        aria-label="Reproducción y descargas"
+      >
+        {bottomBar}
+      </div>
+
+      {footer && <footer className={styles.footer}>{footer}</footer>}
     </div>
   );
 }

@@ -3,6 +3,7 @@
 /* VolumeControl.module.css */
 
 .wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -14,36 +15,95 @@
   pointer-events: none;
 }
 
-.sliderWrapper {
-  width: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    width var(--transition-base),
-    opacity var(--transition-base);
-}
-
-.sliderWrapper.expanded {
-  width: 96px;
-  opacity: 1;
-}
-
-.slider {
-  width: 96px;
+.sliderBox {
+  width: 100%;
 }
 
 /* ============================================================
-   RESPONSIVE
-   Mobile/tablet: el control de volumen expandible por hover no
-   aplica bien a táctil; se mantiene siempre visible y compacto.
+   DESKTOP >= 1200px — slider horizontal que se expande al hover/foco
    ============================================================ */
-@media (max-width: 1199px) {
+@media (min-width: 1200px) {
   .sliderWrapper {
-    width: 72px;
-    opacity: 1;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      width var(--transition-base),
+      opacity var(--transition-base);
   }
 
-  .slider {
-    width: 72px;
+  .sliderWrapper.expanded,
+  .wrapper:focus-within .sliderWrapper {
+    width: 104px;
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   TABLET 768–1199px — slider horizontal corto, siempre visible
+   ============================================================ */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .sliderWrapper {
+    width: 84px;
+  }
+}
+
+/* ============================================================
+   MOBILE < 768px — barra VERTICAL emergente hacia arriba
+   ============================================================ */
+@media (max-width: 767px) {
+  .sliderWrapper {
+    position: absolute;
+    bottom: calc(100% + var(--space-3));
+    left: 50%;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    width: 48px;
+    height: 176px;
+    padding: var(--space-3) 0 var(--space-2);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-elevated);
+    box-shadow: var(--shadow-elevated);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 6px);
+    transition:
+      opacity var(--transition-base),
+      transform var(--transition-base),
+      visibility var(--transition-base);
+  }
+
+  .sliderWrapper.open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
+  }
+
+  /* Caja de referencia del slider girado: vertical, de abajo (0) a arriba (100) */
+  .sliderBox {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .sliderBox .slider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 104px;
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sliderWrapper {
+    transition: none;
   }
 }

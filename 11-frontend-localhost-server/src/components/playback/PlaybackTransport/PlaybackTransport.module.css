@@ -8,17 +8,19 @@
   gap: var(--space-4);
   width: 100%;
   min-width: 0;
-  transition: opacity var(--transition-base);
 }
 
-.disabled {
+/* El estado deshabilitado se aplica a los hijos (en mobile el contenedor
+   usa display: contents y no admite opacity) */
+.disabled > * {
   opacity: 0.5;
   pointer-events: none;
+  transition: opacity var(--transition-base);
 }
 
 .trackName {
   flex-shrink: 0;
-  max-width: 160px;
+  max-width: 200px;
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   color: var(--color-ink-muted);
@@ -53,11 +55,12 @@
 
 .time {
   flex-shrink: 0;
+  min-width: 5ch;
+  text-align: center;
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   color: var(--color-ink-muted);
   font-variant-numeric: tabular-nums;
-  min-width: 4ch;
 }
 
 .seekSlider {
@@ -67,20 +70,42 @@
 
 /* ============================================================
    RESPONSIVE
-   Mobile: oculta labels de texto, deja solo íconos donde aplique
-   (sección 8 de la guía).
+   Tablet: se oculta el nombre del audio para ganar espacio.
+   Mobile: el contenedor desaparece (display: contents) y el grid del
+   padre (App.module.css) coloca la barra de progreso arriba y los
+   controles abajo a la izquierda.
    ============================================================ */
-@media (max-width: 767px) {
-  .transport {
-    gap: var(--space-2);
-  }
-
+@media (max-width: 1199px) {
   .trackName {
     display: none;
   }
+}
+
+@media (max-width: 767px) {
+  .transport {
+    display: contents;
+  }
+
+  .seekArea {
+    grid-area: seek;
+  }
+
+  .controls {
+    grid-area: controls;
+  }
+
+  .controls .sideButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .controls .playButton {
+    width: 48px;
+    height: 48px;
+  }
 
   .time {
-    min-width: 3ch;
+    min-width: 4.5ch;
     font-size: 0.6875rem;
   }
 }

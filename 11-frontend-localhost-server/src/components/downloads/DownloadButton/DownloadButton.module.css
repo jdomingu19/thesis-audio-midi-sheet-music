@@ -3,14 +3,14 @@
 /* DownloadButton.module.css */
 
 .downloadButton {
-  min-width: 96px;
+  min-width: 92px;
   justify-content: center;
 }
 
 /* ============================================================
    FORMAT ACCENTS
-   Distingue visualmente MIDI (sage) de PDF (amber) sin depender
-   únicamente del ícono, útil en la barra inferior de la demo.
+   Distingue visualmente MIDI (acento) de PDF (ámbar) sin depender
+   únicamente del ícono.
    ============================================================ */
 .format-midi:not(:disabled):hover {
   border-color: var(--color-sage);
@@ -20,4 +20,27 @@
 .format-pdf:not(:disabled):hover {
   border-color: var(--color-amber);
   color: var(--color-amber-strong);
+}
+
+/* ============================================================
+   RESPONSIVE (selector con elemento para ganar a .size-sm de Button)
+   ============================================================ */
+@media (max-width: 767px) {
+  button.downloadButton {
+    min-width: 0;
+    height: 40px;
+  }
+}
+
+/* Solo ícono en pantallas muy estrechas (touch target 44px) */
+@media (max-width: 420px) {
+  .labelText {
+    display: none;
+  }
+
+  button.downloadButton {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+  }
 }

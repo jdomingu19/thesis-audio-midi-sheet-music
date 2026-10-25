@@ -1,0 +1,203 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Footer.module.css */
+
+.root {
+  position: relative;
+  background-color: var(--color-void);
+  border-top: 1px solid var(--color-border-strong);
+}
+
+.root::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-sage-rgb) / 0.45),
+    transparent
+  );
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-5);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-5);
+}
+
+/* ============================================================
+   ACERCA DE
+   ============================================================ */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgb(var(--color-sage-rgb) / 0.4);
+  background-color: var(--color-sage-muted);
+  color: var(--color-sage-strong);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.description {
+  max-width: 46ch;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+  color: var(--color-ink-muted);
+}
+
+/* ============================================================
+   TECNOLOGÍA / REDES
+   ============================================================ */
+.heading {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+.stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stackItem {
+  padding: 2px var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+}
+
+.pipeline {
+  margin-top: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-base);
+  color: var(--color-ink-faint);
+}
+
+.social {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-ink-muted);
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.socialLink:hover {
+  color: var(--color-sage-strong);
+  border-color: var(--color-sage);
+  background-color: var(--color-sage-faint);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   FILA LEGAL
+   ============================================================ */
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-faint);
+}
+
+.handle {
+  color: var(--color-ink-muted);
+  transition: color var(--transition-fast);
+}
+
+.handle:hover {
+  color: var(--color-sage-strong);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (min-width: 768px) {
+  .inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-6);
+    padding: var(--space-6) var(--space-5) var(--space-5);
+  }
+
+  .about {
+    grid-column: 1 / -1;
+  }
+
+  .socialLink {
+    width: 40px;
+    height: 40px;
+  }
+
+  .legal {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-5);
+  }
+}
+
+@media (min-width: 1200px) {
+  .inner {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) auto;
+    gap: var(--space-7);
+    padding: var(--space-6);
+  }
+
+  .about {
+    grid-column: auto;
+  }
+
+  .legal {
+    padding: var(--space-4) var(--space-6);
+  }
+}
