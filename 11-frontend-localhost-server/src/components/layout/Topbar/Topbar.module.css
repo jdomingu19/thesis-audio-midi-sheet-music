@@ -30,7 +30,7 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-md);
-  background-color: rgba(106, 156, 137, 0.14);
+  background-color: var(--color-sage-muted);
   color: var(--color-sage);
 }
 

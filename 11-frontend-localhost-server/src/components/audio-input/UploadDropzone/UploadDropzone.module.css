@@ -69,11 +69,11 @@
    ============================================================ */
 .dragover {
   border-color: var(--color-sage);
-  background-color: rgba(106, 156, 137, 0.08);
+  background-color: var(--color-sage-faint);
 }
 
 .dragover .icon {
-  background-color: rgba(106, 156, 137, 0.16);
+  background-color: var(--color-sage-muted);
   color: var(--color-sage);
 }
 

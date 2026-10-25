@@ -5,6 +5,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./PianoRollCanvas.module.css";
+import { readThemeColor, themeRgba } from "@/utils/themeColors";
 import { getKeyLayout } from "@/utils/pianoKeyLayout";
 
 // Segundos de futuro visibles sobre la línea de impacto (alto del canvas = LOOKAHEAD)
@@ -60,6 +61,16 @@ function PianoRollCanvas({
     [lowMidi, highMidi],
   );
 
+  // Colores del canvas leídos de los tokens CSS (un canvas no entiende var())
+  const palette = useMemo(
+    () => ({
+      guide: themeRgba("--color-ink-rgb", 0.04, "232 238 248"),
+      measureLine: themeRgba("--color-sage-rgb", 0.28, "91 156 245"),
+      measureLabel: readThemeColor("--color-ink-muted", "#9fb0c9"),
+    }),
+    [],
+  );
+
   useEffect(() => {
     timeRef.current = currentTime;
   }, [currentTime]);
@@ -97,7 +108,7 @@ function PianoRollCanvas({
     const timeToY = (t) => height * (1 - (t - currentTime) / LOOKAHEAD_SECONDS);
 
     // Líneas guía sutiles cada segundo
-    ctx.strokeStyle = "rgba(238,243,241,0.04)";
+    ctx.strokeStyle = palette.guide;
     ctx.lineWidth = 1;
     for (
       let s = Math.ceil(currentTime);
@@ -118,12 +129,12 @@ function PianoRollCanvas({
       const t = measure.position * duration;
       if (t < currentTime || t > currentTime + LOOKAHEAD_SECONDS) return;
       const y = timeToY(t);
-      ctx.strokeStyle = "rgba(106,156,137,0.28)";
+      ctx.strokeStyle = palette.measureLine;
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(width, y);
       ctx.stroke();
-      ctx.fillStyle = "rgba(155,176,170,0.75)";
+      ctx.fillStyle = palette.measureLabel;
       ctx.fillText(measure.label, 6, y - 3);
     });
 
@@ -159,7 +170,7 @@ function PianoRollCanvas({
       }
     });
     ctx.globalAlpha = 1;
-  }, [notes, currentTime, duration, measures, layout, size]);
+  }, [notes, currentTime, duration, measures, layout, size, palette]);
 
   // Interacción: rueda, arrastre y teclado → onSeek (sincroniza barra de reproducción)
   useEffect(() => {

@@ -14,7 +14,7 @@
   background:
     radial-gradient(
       ellipse 700px 260px at 50% 100%,
-      rgba(106, 156, 137, 0.1),
+      var(--color-sage-muted),
       transparent 70%
     ),
     linear-gradient(180deg, var(--color-base) 0%, var(--color-void) 100%);
@@ -42,6 +42,6 @@
   bottom: 0;
   height: 2px;
   background-color: var(--color-sage-strong);
-  box-shadow: 0 0 10px 1px rgba(130, 179, 159, 0.45);
+  box-shadow: 0 0 10px 1px var(--color-sage-glow);
   pointer-events: none;
 }

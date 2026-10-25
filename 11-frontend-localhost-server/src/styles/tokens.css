@@ -7,62 +7,60 @@
  * sombras. Única fuente de verdad para valores de diseño — ningún
  * componente debe usar valores hardcodeados.
  *
- * Paleta: verde-bosque oscuro (único modo, no se contempla light mode).
+ * Paleta: azul oscuro (único modo, no se contempla light mode).
+ * `--color-sage*` es el acento primario (nombre histórico, ahora azul).
+ * Los tokens `*-rgb` son canales "R G B" para componer transparencias:
+ *   rgb(var(--color-sage-rgb) / 0.14)
  */
 
 :root {
   /* ============================================================
      COLOR — superficies
      ============================================================ */
-  --color-void: #070f0d; /* fondo más profundo, detrás de todo */
-  --color-base: #0e1a17; /* fondo base de la app */
-  --color-surface: #142722; /* superficie de tarjetas/paneles */
-  --color-elevated: #1b322b; /* modales, dropdowns, toolbars flotantes */
+  --color-void: #060b14; /* fondo más profundo, detrás de todo */
+  --color-void-rgb: 6 11 20;
+  --color-base: #0b1220; /* fondo base de la app */
+  --color-surface: #111b2e; /* superficie de tarjetas/paneles */
+  --color-surface-rgb: 17 27 46;
+  --color-elevated: #172540; /* modales, dropdowns, toolbars flotantes */
+
+  /* Escenario del visor de partitura (preview y documento impreso) */
+  --color-sheet-stage: #0a1424;
 
   /* ============================================================
-     COLOR — acentos
+     COLOR — acento primario (azul)
      ============================================================ */
-  --color-sage: #6a9c89; /* acento primario: acciones principales, estados activos */
-  --color-sage-strong: #82b39f; /* variante hover/focus del acento primario */
-  --color-amber: #d9a15b; /* acento secundario: grabación activa, "processing", alertas suaves */
-  --color-amber-strong: #e6b378; /* variante hover/focus del acento secundario */
+  --color-sage: #5b9cf5; /* acciones principales, estados activos */
+  --color-sage-rgb: 91 156 245;
+  --color-sage-strong: #7bb2ff; /* variante hover/focus */
+  --color-sage-strong-rgb: 123 178 255;
+  --color-sage-muted: rgb(var(--color-sage-rgb) / 0.14); /* fondos suaves activos */
+  --color-sage-faint: rgb(var(--color-sage-rgb) / 0.08); /* fondos muy sutiles */
+  --color-sage-glow: rgb(var(--color-sage-strong-rgb) / 0.5); /* resplandores */
+
+  /* ============================================================
+     COLOR — acento secundario (cálido, semántico)
+     ============================================================ */
+  --color-amber: #d9a15b; /* grabación activa, "processing", alertas suaves */
+  --color-amber-strong: #e6b378;
 
   /* ============================================================
      COLOR — texto
      ============================================================ */
-  --color-ink: #eef3f1; /* texto principal sobre fondo oscuro */
-  --color-ink-muted: #9bb0aa; /* texto secundario */
-  --color-ink-faint: #6c8079; /* texto terciario / placeholder */
+  --color-ink: #e8eef8; /* texto principal sobre fondo oscuro */
+  --color-ink-rgb: 232 238 248;
+  --color-ink-muted: #9fb0c9; /* texto secundario */
+  --color-ink-faint: #6b7d99; /* texto terciario / placeholder */
 
   /* ============================================================
      COLOR — bordes y estado
      ============================================================ */
-  --color-border: rgba(
-    238,
-    243,
-    241,
-    0.08
-  ); /* bordes sutiles sobre superficies */
-  --color-border-strong: rgba(
-    238,
-    243,
-    241,
-    0.16
-  ); /* bordes más marcados (focus, hover) */
+  --color-border: rgb(var(--color-ink-rgb) / 0.08); /* bordes sutiles */
+  --color-border-strong: rgb(var(--color-ink-rgb) / 0.16); /* focus, hover */
   --color-danger: #e0685c; /* estado error */
-  --color-danger-muted: rgba(
-    224,
-    104,
-    92,
-    0.16
-  ); /* fondo suave para badges de error */
+  --color-danger-muted: rgba(224, 104, 92, 0.16);
   --color-success: #6fbf8b; /* estado ready/completado */
-  --color-success-muted: rgba(
-    111,
-    191,
-    139,
-    0.16
-  ); /* fondo suave para badges ready */
+  --color-success-muted: rgba(111, 191, 139, 0.16);
 
   /* ============================================================
      TIPOGRAFÍA
@@ -108,8 +106,8 @@
   /* ============================================================
      SOMBRAS
      ============================================================ */
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.28);
-  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.4);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.32);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.45);
 
   /* ============================================================
      BREAKPOINTS

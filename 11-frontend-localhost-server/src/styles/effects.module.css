@@ -21,7 +21,7 @@
    PanelSection, DownloadBar, Modal y cualquier superficie flotante.
    ============================================================ */
 .glass {
-  background-color: rgba(20, 39, 34, 0.72);
+  background-color: rgb(var(--color-surface-rgb) / 0.72);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--color-border);
@@ -31,8 +31,8 @@
 /* ============================================================
    STAFF LINES
    Textura de fondo tipo pentagrama, para zonas relacionadas con
-   partitura (SheetMusicView). Uso moderado: opacidad baja para no
-   competir con el contenido.
+   partitura. Uso moderado: opacidad baja para no competir con el
+   contenido.
    ============================================================ */
 .staffLines {
   position: relative;
@@ -46,8 +46,8 @@
   pointer-events: none;
   background-image: repeating-linear-gradient(
     to bottom,
-    rgba(238, 243, 241, 0.05) 0px,
-    rgba(238, 243, 241, 0.05) 1px,
+    rgb(var(--color-ink-rgb) / 0.05) 0px,
+    rgb(var(--color-ink-rgb) / 0.05) 1px,
     transparent 1px,
     transparent 12px
   );
@@ -57,7 +57,7 @@
 /* ============================================================
    ROLL GRID
    Textura de fondo tipo grid de piano roll, para zonas relacionadas
-   con MIDI (PianoRollCanvas).
+   con MIDI.
    ============================================================ */
 .rollGrid {
   position: relative;
@@ -72,15 +72,15 @@
   background-image:
     repeating-linear-gradient(
       to right,
-      rgba(238, 243, 241, 0.05) 0px,
-      rgba(238, 243, 241, 0.05) 1px,
+      rgb(var(--color-ink-rgb) / 0.05) 0px,
+      rgb(var(--color-ink-rgb) / 0.05) 1px,
       transparent 1px,
       transparent 24px
     ),
     repeating-linear-gradient(
       to bottom,
-      rgba(238, 243, 241, 0.04) 0px,
-      rgba(238, 243, 241, 0.04) 1px,
+      rgb(var(--color-ink-rgb) / 0.04) 0px,
+      rgb(var(--color-ink-rgb) / 0.04) 1px,
       transparent 1px,
       transparent 16px
     );

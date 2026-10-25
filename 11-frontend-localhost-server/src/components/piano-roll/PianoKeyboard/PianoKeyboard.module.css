@@ -36,7 +36,7 @@
     var(--color-sage) 100%
   );
   box-shadow:
-    0 0 10px rgba(130, 179, 159, 0.5),
+    0 0 10px var(--color-sage-glow),
     inset 0 -3px 5px rgba(0, 0, 0, 0.15);
 }
 
@@ -45,7 +45,11 @@
   top: 0;
   height: 62%;
   z-index: 2;
-  background: linear-gradient(180deg, #2a3a35 0%, var(--color-base) 90%);
+  background: linear-gradient(
+    180deg,
+    var(--color-elevated) 0%,
+    var(--color-base) 90%
+  );
   border: 1px solid #000;
   border-top: none;
   border-radius: 0 0 4px 4px;
@@ -61,7 +65,7 @@
     var(--color-sage) 0%,
     var(--color-surface) 100%
   );
-  box-shadow: 0 0 10px rgba(130, 179, 159, 0.5);
+  box-shadow: 0 0 10px var(--color-sage-glow);
 }
 
 .octaveLabel {

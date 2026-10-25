@@ -90,12 +90,12 @@
    SELECTED STATE
    ============================================================ */
 .selected .itemButton {
-  background-color: rgba(106, 156, 137, 0.1);
+  background-color: var(--color-sage-faint);
   border-color: var(--color-sage);
 }
 
 .selected .sourceIcon {
-  background-color: rgba(106, 156, 137, 0.18);
+  background-color: var(--color-sage-muted);
   color: var(--color-sage);
 }
 

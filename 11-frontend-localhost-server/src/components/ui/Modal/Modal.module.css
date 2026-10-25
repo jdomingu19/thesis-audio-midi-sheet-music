@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-5);
-  background-color: rgba(7, 15, 13, 0.72);
+  background-color: rgb(var(--color-void-rgb) / 0.72);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   animation: overlay-fade-in var(--transition-base) ease-out both;

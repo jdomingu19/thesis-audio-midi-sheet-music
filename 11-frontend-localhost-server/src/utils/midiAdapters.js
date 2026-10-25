@@ -3,14 +3,15 @@
 // midiAdapters.js
 
 import { Midi } from "@tonejs/midi";
+import { readThemeColor } from "@/utils/themeColors";
 
-const TRACK_COLORS = [
-  "#6A9C89",
-  "#c9a15a",
-  "#5a8fc9",
-  "#c96a8f",
-  "#8f6ac9",
-  "#c9c15a",
+const TRACK_ACCENT_FALLBACK = "#5b9cf5";
+const EXTRA_TRACK_COLORS = [
+  "#d9a15b",
+  "#b58cf0",
+  "#e07a9c",
+  "#7dd3fc",
+  "#f0c75e",
 ];
 
 /** Convierte el Blob MIDI (respuesta del backend) en el JSON de @tonejs/midi. */
@@ -21,8 +22,13 @@ export async function parseMidiBlob(midiBlob) {
 }
 
 /** Aplana todas las notas de todos los tracks en un solo arreglo, con color por track. */
+/** Aplana todas las notas de todos los tracks en un solo arreglo, con color por track. */
 export function flattenTrackNotes(midiJson) {
   if (!midiJson?.tracks) return [];
+  const trackColors = [
+    readThemeColor("--color-sage", TRACK_ACCENT_FALLBACK),
+    ...EXTRA_TRACK_COLORS,
+  ];
   const notes = [];
   midiJson.tracks.forEach((track, trackIndex) => {
     if (!track.notes) return;
@@ -30,7 +36,7 @@ export function flattenTrackNotes(midiJson) {
       notes.push({
         ...note,
         trackIndex,
-        color: TRACK_COLORS[trackIndex % TRACK_COLORS.length],
+        color: trackColors[trackIndex % trackColors.length],
       });
     });
   });

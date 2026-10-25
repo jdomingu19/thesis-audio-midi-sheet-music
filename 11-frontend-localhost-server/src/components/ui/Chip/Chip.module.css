@@ -45,7 +45,7 @@
 }
 
 .selected {
-  background-color: rgba(106, 156, 137, 0.16);
+  background-color: var(--color-sage-muted);
   border-color: var(--color-sage);
   color: var(--color-sage-strong);
 }
@@ -73,7 +73,7 @@
 
 .removeButton:hover {
   opacity: 1;
-  background-color: rgba(238, 243, 241, 0.12);
+  background-color: rgb(var(--color-ink-rgb) / 0.12);
 }
 
 .removeButton:disabled {

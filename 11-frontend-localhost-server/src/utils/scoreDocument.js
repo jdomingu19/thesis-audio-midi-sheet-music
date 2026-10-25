@@ -14,8 +14,16 @@ const CONTENT_WIDTH_PX = (210 - 2 * 12) * MM_TO_PX; // ancho útil (márgenes la
 const CONTENT_HEIGHT_PX = (296 - 14 - 18) * MM_TO_PX; // alto útil (padding 14mm arriba, 18mm abajo)
 const HEADER_HEIGHT_PX = 110; // espacio estimado del encabezado en la 1ª hoja
 
-// Fondo del visor de la home (debe coincidir con .viewer / .scoreArea en el CSS Module)
-const PREVIEW_BG = "#0f2623";
+// Fondo del visor de la home: se lee del token --color-sheet-stage para que
+// la vista previa (iframe) y el contenedor .scoreArea siempre coincidan.
+const PREVIEW_BG_FALLBACK = "#0a1424";
+
+function getPreviewBackground() {
+  const value = getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-sheet-stage")
+    .trim();
+  return value || PREVIEW_BG_FALLBACK;
+}
 
 const escapeHtml = (value) =>
   String(value).replace(
@@ -126,7 +134,7 @@ export function buildScoreDocument(
   const screenCss = preview
     ? `
           @media screen {
-            html, body { background: ${PREVIEW_BG}; }
+            html, body { background: ${getPreviewBackground()}; }
             body { padding: 0; }
             .sheet {
               margin: 0 auto 16px;
