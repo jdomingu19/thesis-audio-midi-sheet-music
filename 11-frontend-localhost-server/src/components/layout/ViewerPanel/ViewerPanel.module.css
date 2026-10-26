@@ -24,10 +24,26 @@
   min-height: 0;
 }
 
-.tabsList {
-  align-self: flex-start;
+/* Cabecera: pestañas a la izquierda, acciones (instrumento) a la derecha */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   margin-bottom: var(--space-4);
   flex-shrink: 0;
+}
+
+.tabsList {
+  align-self: flex-start;
+}
+
+.headerActions {
+  display: flex;
+  justify-content: flex-end;
+  flex: 1 1 160px;
+  min-width: 0;
 }
 
 .tab {

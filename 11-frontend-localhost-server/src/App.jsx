@@ -21,6 +21,12 @@ import AudioList from "@/components/audio-library/AudioList/AudioList";
 
 import PlaybackTransport from "@/components/playback/PlaybackTransport/PlaybackTransport";
 import VolumeControl from "@/components/playback/VolumeControl/VolumeControl";
+import InstrumentSelector from "@/components/playback/InstrumentSelector/InstrumentSelector";
+import {
+  INSTRUMENTS,
+  DEFAULT_INSTRUMENT_ID,
+  isValidInstrumentId,
+} from "@/data/instruments";
 
 import DownloadBar from "@/components/downloads/DownloadBar/DownloadBar";
 
@@ -63,6 +69,16 @@ import styles from "./App.module.css";
 const ACCEPTED_EXTENSIONS = ["wav", "mp3", "m4a", "flac", "ogg", "webm"];
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 const EMPTY_NOTES = [];
+const INSTRUMENT_STORAGE_KEY = "armonia:instrument";
+
+function readStoredInstrument() {
+  try {
+    const stored = window.localStorage.getItem(INSTRUMENT_STORAGE_KEY);
+    return isValidInstrumentId(stored) ? stored : DEFAULT_INSTRUMENT_ID;
+  } catch {
+    return DEFAULT_INSTRUMENT_ID;
+  }
+}
 
 /**
  * App — composición raíz de Armonía conectada al backend local
@@ -236,9 +252,18 @@ function App() {
   };
 
   // ── Reproducción real (Tone.js) ──────────────────────────────────────
-  const { isPlaying, currentTime, duration, play, pause, seek } = useTonePlayer(
-    selectedAudio?.notes ?? EMPTY_NOTES,
-  );
+  const [instrumentId, setInstrumentId] = useState(readStoredInstrument);
+  const { isPlaying, currentTime, duration, play, pause, seek, instrument } =
+    useTonePlayer(selectedAudio?.notes ?? EMPTY_NOTES, instrumentId);
+
+  const handleInstrumentChange = (nextId) => {
+    setInstrumentId(nextId);
+    try {
+      window.localStorage.setItem(INSTRUMENT_STORAGE_KEY, nextId);
+    } catch {
+      // almacenamiento no disponible: la elección vale solo para esta sesión
+    }
+  };
 
   const [volume, setVolume] = useState(75);
   const [isMuted, setIsMuted] = useState(false);
@@ -252,7 +277,7 @@ function App() {
   const handlePlayPause = () => {
     if (!isSelectedReady) return;
     if (isPlaying) pause();
-    else play();
+    else if (!instrument.isLoading) play();
   };
 
   const activeMidiNotes = useMemo(() => {
@@ -395,6 +420,15 @@ function App() {
           hasSelection={Boolean(selectedAudio)}
           activeTab={activeTab}
           onTabChange={setActiveTab}
+          headerActions={
+            <InstrumentSelector
+              instruments={INSTRUMENTS}
+              value={instrumentId}
+              onChange={handleInstrumentChange}
+              isLoading={instrument.isLoading}
+              hasError={instrument.usedFallback}
+            />
+          }
           pianoRollContent={
             <PianoRollView
               notes={selectedAudio?.notes ?? EMPTY_NOTES}

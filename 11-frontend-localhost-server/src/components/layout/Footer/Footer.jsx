@@ -42,6 +42,12 @@ function Footer({ className, ...rest }) {
               </li>
             ))}
           </ul>
+          <p className={styles.credits}>
+            Salamander Grand Piano (Alexander Holm);
+          </p>
+          <p className={styles.credits}>
+            tonejs-instruments (N. P. Brosowsky).
+          </p>
         </section>
 
         <section className={styles.connect} aria-label="Redes del autor">

@@ -2,6 +2,7 @@
 **/audio-samples/
 **.mp3
 **.wav
+public/samples
 
 # JSON Samples
 **/json-samples/

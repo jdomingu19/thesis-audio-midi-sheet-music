@@ -20,6 +20,7 @@ const VIEWER_TABS = [
  * @param {boolean} hasSelection - si hay un audio activo seleccionado en la biblioteca
  * @param {'piano-roll'|'sheet-music'} activeTab
  * @param {(value: string) => void} onTabChange
+ * @param {React.ReactNode} headerActions - slot a la derecha de las pestañas (ej. selector de instrumento)
  * @param {React.ReactNode} pianoRollContent - contenido de <PianoRollView />
  * @param {React.ReactNode} sheetMusicContent - contenido de <SheetMusicView />
  */
@@ -27,6 +28,7 @@ function ViewerPanel({
   hasSelection = false,
   activeTab = "piano-roll",
   onTabChange,
+  headerActions,
   pianoRollContent,
   sheetMusicContent,
   className,
@@ -45,20 +47,26 @@ function ViewerPanel({
 
       {hasSelection && (
         <Tabs value={activeTab} onChange={onTabChange} className={styles.tabs}>
-          <Tabs.List className={styles.tabsList}>
-            {VIEWER_TABS.map((tab) => (
-              <Tabs.Tab
-                key={tab.value}
-                value={tab.value}
-                className={styles.tab}
-              >
-                <span className={styles.tabIcon} aria-hidden="true">
-                  {tab.icon}
-                </span>
-                {tab.label}
-              </Tabs.Tab>
-            ))}
-          </Tabs.List>
+          <div className={styles.header}>
+            <Tabs.List className={styles.tabsList}>
+              {VIEWER_TABS.map((tab) => (
+                <Tabs.Tab
+                  key={tab.value}
+                  value={tab.value}
+                  className={styles.tab}
+                >
+                  <span className={styles.tabIcon} aria-hidden="true">
+                    {tab.icon}
+                  </span>
+                  {tab.label}
+                </Tabs.Tab>
+              ))}
+            </Tabs.List>
+
+            {headerActions && (
+              <div className={styles.headerActions}>{headerActions}</div>
+            )}
+          </div>
 
           <Tabs.Panels className={styles.panels}>
             <Tabs.Panel value="piano-roll" className={styles.panel}>

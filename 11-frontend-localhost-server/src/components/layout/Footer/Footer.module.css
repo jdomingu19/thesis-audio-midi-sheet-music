@@ -201,3 +201,11 @@
     padding: var(--space-4) var(--space-6);
   }
 }
+
+.credits {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-base);
+  color: var(--color-ink-faint);
+}
