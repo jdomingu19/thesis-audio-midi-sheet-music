@@ -1,0 +1,97 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* RecordControl.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    transform var(--transition-fast);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statusLabel {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+}
+
+/* ============================================================
+   STATES
+   ============================================================ */
+.state-idle {
+  background-color: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-ink);
+}
+
+.state-idle:hover:not(:disabled) {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+}
+
+.state-recording {
+  background-color: var(--color-amber);
+  border-color: var(--color-amber);
+  color: var(--color-void);
+}
+
+.state-stopped {
+  background-color: var(--color-surface);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+/* ============================================================
+   PULSE-REC ANIMATION
+   ============================================================ */
+@keyframes record-pulse-rec {
+  0% {
+    box-shadow: 0 0 0 0 rgba(217, 161, 91, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(217, 161, 91, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 161, 91, 0);
+  }
+}
+
+.pulseRec {
+  animation: record-pulse-rec 1.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulseRec {
+    animation: none;
+  }
+}

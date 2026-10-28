@@ -1,0 +1,35 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* DownloadBar.module.css */
+
+.glass {
+  composes: glass from "../../../styles/effects.module.css";
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1199px) {
+  .bar {
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* Mobile: sin panel de vidrio, solo los botones (la barra ya tiene fondo) */
+@media (max-width: 767px) {
+  .bar {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

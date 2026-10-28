@@ -1,0 +1,105 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* App.module.css */
+
+.inputStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.recordStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.recordError {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  text-align: center;
+}
+
+/* Biblioteca: desktop llena el alto restante; mobile/tablet con alto máximo */
+.libraryPanel {
+  flex: 1;
+  min-height: 240px;
+}
+
+@media (max-width: 1199px) {
+  .libraryPanel {
+    flex: none;
+    max-height: 340px;
+  }
+}
+
+/* Texto del estado del servidor: en pantallas estrechas queda solo el punto */
+.statusText {
+  display: inline;
+}
+
+@media (max-width: 639px) {
+  .statusText {
+    display: none;
+  }
+}
+
+/* ============================================================
+   BARRA INFERIOR (reproducción + volumen + descargas)
+   Desktop / tablet: una fila.
+   Mobile (< 768px): grid de 2 filas.
+     fila 1: barra de progreso (área "seek")
+     fila 2: controles | volumen | descargas
+   ============================================================ */
+.bottomBarContent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.bottomBarContent > * {
+  min-width: 0;
+}
+
+.transport {
+  flex: 1;
+}
+
+.volume,
+.downloads {
+  flex-shrink: 0;
+}
+
+@media (min-width: 1200px) {
+  .bottomBarContent {
+    gap: var(--space-5);
+  }
+}
+
+@media (max-width: 767px) {
+  .bottomBarContent {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "seek seek seek"
+      "controls volume downloads";
+    align-items: center;
+    column-gap: var(--space-3);
+    row-gap: var(--space-2);
+  }
+
+  .volume {
+    grid-area: volume;
+    justify-self: center;
+  }
+
+  .downloads {
+    grid-area: downloads;
+    justify-self: end;
+  }
+}

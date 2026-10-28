@@ -1,0 +1,205 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* Topbar.module.css */
+
+.topbar {
+  composes: glass from "../../../styles/effects.module.css";
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-4);
+  height: var(--topbar-height, 64px);
+  padding: 0 var(--space-4);
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  background-image: linear-gradient(
+    90deg,
+    var(--color-sage-faint),
+    transparent 35%,
+    transparent 65%,
+    var(--color-sage-faint)
+  );
+}
+
+/* Filo de acento inferior */
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-sage-rgb) / 0.55),
+    transparent
+  );
+}
+
+/* ============================================================
+   MARCA
+   ============================================================ */
+.brand {
+  grid-column: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgb(var(--color-sage-rgb) / 0.4);
+  background-color: var(--color-sage-muted);
+  color: var(--color-sage-strong);
+  box-shadow: 0 0 22px var(--color-sage-faint);
+}
+
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  line-height: var(--line-height-tight);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   ETIQUETA DEL PROYECTO (centro)
+   ============================================================ */
+.project {
+  display: none;
+  grid-column: 2;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgb(var(--color-sage-rgb) / 0.28);
+  background-color: var(--color-sage-faint);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+}
+
+.projectDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-sage-strong);
+  box-shadow: 0 0 8px var(--color-sage-glow);
+}
+
+.projectLabel {
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  color: var(--color-sage-strong);
+}
+
+.projectSeparator,
+.projectDetail {
+  display: none;
+  color: var(--color-ink-muted);
+}
+
+/* ============================================================
+   LADO DERECHO: estado + firma
+   ============================================================ */
+.aside {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.signature {
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+a.signature:hover {
+  color: var(--color-sage-strong);
+}
+
+/* ============================================================
+   TABLET >= 768px
+   ============================================================ */
+@media (min-width: 768px) {
+  .topbar {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    padding: 0 var(--space-5);
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .project {
+    display: inline-flex;
+  }
+
+  .aside {
+    grid-column: 3;
+  }
+
+  .signature {
+    display: inline;
+    padding-left: var(--space-4);
+    border-left: 1px solid var(--color-border-strong);
+  }
+}
+
+/* ============================================================
+   DESKTOP >= 1200px
+   ============================================================ */
+@media (min-width: 1200px) {
+  .topbar {
+    padding: 0 var(--space-6);
+  }
+
+  .projectSeparator,
+  .projectDetail {
+    display: inline;
+  }
+}

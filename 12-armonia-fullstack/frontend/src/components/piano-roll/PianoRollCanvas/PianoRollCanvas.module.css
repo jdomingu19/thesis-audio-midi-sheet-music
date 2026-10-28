@@ -1,0 +1,47 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* PianoRollCanvas.module.css */
+
+.canvasWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-x;
+  background:
+    radial-gradient(
+      ellipse 700px 260px at 50% 100%,
+      var(--color-sage-muted),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--color-base) 0%, var(--color-void) 100%);
+}
+
+.canvasWrapper:focus-visible {
+  outline-offset: -2px;
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hitLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--color-sage-strong);
+  box-shadow: 0 0 10px 1px var(--color-sage-glow);
+  pointer-events: none;
+}

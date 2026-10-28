@@ -1,0 +1,17 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* RecordingTimer.module.css */
+
+.timer {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.active {
+  color: var(--color-amber);
+}

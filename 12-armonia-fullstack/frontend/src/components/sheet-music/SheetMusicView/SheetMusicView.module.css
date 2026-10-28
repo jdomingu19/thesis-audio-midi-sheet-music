@@ -1,0 +1,52 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* SheetMusicView.module.css */
+
+.view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-3);
+  height: 100%;
+  min-height: 0;
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar {
+  flex-shrink: 0;
+}
+
+/* Fondo debe coincidir con PREVIEW_BG en utils/scoreDocument.js */
+.scoreArea {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-sheet-stage);
+  overflow: auto;
+  padding: var(--space-4);
+}
+
+.scoreContent {
+  min-height: 100%;
+}
+
+.pageControls {
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 767px) {
+  .scoreArea {
+    padding: var(--space-2);
+    touch-action: pan-x pan-y pinch-zoom;
+  }
+}

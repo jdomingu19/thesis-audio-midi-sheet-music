@@ -1,0 +1,32 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* SheetMusicPreview.module.css */
+
+.viewer {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-7) 0;
+}
+
+.sizer {
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  transform-origin: top left;
+  pointer-events: none;
+}

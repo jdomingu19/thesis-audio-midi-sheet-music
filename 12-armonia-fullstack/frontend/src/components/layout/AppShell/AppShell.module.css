@@ -1,0 +1,143 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* AppShell.module.css */
+
+/**
+ * Grid de layout responsive raíz (sin JS de detección de pantalla).
+ *
+ * Mobile / Tablet (< 1200px): una columna apilada. El visor tiene altura
+ * fija y la página hace scroll hasta el footer.
+ * Desktop (>= 1200px): 2 columnas. La zona de trabajo ocupa la altura de
+ * la pantalla menos topbar y barra inferior; el footer queda debajo, al
+ * final del scroll de la página.
+ *
+ * La barra de reproducción es sticky: queda fija abajo mientras se
+ * navega y se asienta sobre el footer al final de la página.
+ */
+
+.shell {
+  --topbar-height: 64px;
+
+  display: grid;
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-x: clip; /* nunca scroll horizontal de página; no rompe el sticky */
+  background-color: var(--color-base);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "topbar"
+    "input"
+    "viewer"
+    "bottom"
+    "footer";
+  grid-template-rows: auto auto auto auto auto;
+}
+
+.topbar {
+  grid-area: topbar;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.inputPanel {
+  grid-area: input;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  min-height: 0;
+  padding: var(--space-4) var(--space-4) 0;
+}
+
+.viewerPanel {
+  grid-area: viewer;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  /* Altura fija del visor en mobile/tablet: el contenido hace scroll DENTRO */
+  height: clamp(460px, 75dvh, 760px);
+  padding: var(--space-4);
+  overflow: hidden;
+}
+
+/* Barra fija de reproducción: fondo oscuro para no mezclarse con el contenido */
+.bottomBar {
+  grid-area: bottom;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  min-width: 0;
+  padding: var(--space-3) var(--space-4)
+    calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  background-color: rgb(var(--color-void-rgb) / 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--color-border-strong);
+  box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.4);
+}
+
+.footer {
+  grid-area: footer;
+  min-width: 0;
+}
+
+/* ============================================================
+   TABLET — 768px – 1199px
+   ============================================================ */
+@media (min-width: 768px) {
+  .shell {
+    --topbar-height: 68px;
+  }
+
+  .inputPanel {
+    padding: var(--space-5) var(--space-5) 0;
+  }
+
+  .viewerPanel {
+    padding: var(--space-5);
+  }
+
+  .bottomBar {
+    padding: var(--space-3) var(--space-5)
+      calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ============================================================
+   DESKTOP — >= 1200px
+   ============================================================ */
+@media (min-width: 1200px) {
+  .shell {
+    --topbar-height: 72px;
+    --bottombar-height: 92px;
+    --workspace-height: max(
+      560px,
+      calc(100dvh - var(--topbar-height) - var(--bottombar-height))
+    );
+
+    grid-template-areas:
+      "topbar topbar"
+      "input viewer"
+      "bottom bottom"
+      "footer footer";
+    grid-template-columns: 380px minmax(0, 1fr);
+    grid-template-rows: auto var(--workspace-height) auto auto;
+  }
+
+  .inputPanel {
+    border-right: 1px solid var(--color-border);
+    padding: var(--space-5) var(--space-5) var(--space-5) var(--space-6);
+    overflow-y: auto;
+  }
+
+  .viewerPanel {
+    height: auto;
+    padding: var(--space-5) var(--space-6) var(--space-5) var(--space-5);
+  }
+
+  .bottomBar {
+    padding: var(--space-4) var(--space-6);
+  }
+}

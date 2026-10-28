@@ -1,0 +1,126 @@
+/* thesis-audio-midi-sheet-music */
+/* @jdomingu19 */
+/* tokens.css */
+
+/**
+ * Variables globales de diseño: color, tipografía, espaciado, radios y
+ * sombras. Única fuente de verdad para valores de diseño — ningún
+ * componente debe usar valores hardcodeados.
+ *
+ * Paleta: azul oscuro (único modo, no se contempla light mode).
+ * `--color-sage*` es el acento primario (nombre histórico, ahora azul).
+ * Los tokens `*-rgb` son canales "R G B" para componer transparencias:
+ *   rgb(var(--color-sage-rgb) / 0.14)
+ */
+
+:root {
+  /* ============================================================
+     COLOR — superficies
+     ============================================================ */
+  --color-void: #060b14; /* fondo más profundo, detrás de todo */
+  --color-void-rgb: 6 11 20;
+  --color-base: #0b1220; /* fondo base de la app */
+  --color-surface: #111b2e; /* superficie de tarjetas/paneles */
+  --color-surface-rgb: 17 27 46;
+  --color-elevated: #172540; /* modales, dropdowns, toolbars flotantes */
+
+  /* Escenario del visor de partitura (preview y documento impreso) */
+  --color-sheet-stage: #0a1424;
+
+  /* ============================================================
+     COLOR — acento primario (azul)
+     ============================================================ */
+  --color-sage: #5b9cf5; /* acciones principales, estados activos */
+  --color-sage-rgb: 91 156 245;
+  --color-sage-strong: #7bb2ff; /* variante hover/focus */
+  --color-sage-strong-rgb: 123 178 255;
+  --color-sage-muted: rgb(var(--color-sage-rgb) / 0.14); /* fondos suaves activos */
+  --color-sage-faint: rgb(var(--color-sage-rgb) / 0.08); /* fondos muy sutiles */
+  --color-sage-glow: rgb(var(--color-sage-strong-rgb) / 0.5); /* resplandores */
+
+  /* ============================================================
+     COLOR — acento secundario (cálido, semántico)
+     ============================================================ */
+  --color-amber: #d9a15b; /* grabación activa, "processing", alertas suaves */
+  --color-amber-strong: #e6b378;
+
+  /* ============================================================
+     COLOR — texto
+     ============================================================ */
+  --color-ink: #e8eef8; /* texto principal sobre fondo oscuro */
+  --color-ink-rgb: 232 238 248;
+  --color-ink-muted: #9fb0c9; /* texto secundario */
+  --color-ink-faint: #6b7d99; /* texto terciario / placeholder */
+
+  /* ============================================================
+     COLOR — bordes y estado
+     ============================================================ */
+  --color-border: rgb(var(--color-ink-rgb) / 0.08); /* bordes sutiles */
+  --color-border-strong: rgb(var(--color-ink-rgb) / 0.16); /* focus, hover */
+  --color-danger: #e0685c; /* estado error */
+  --color-danger-muted: rgba(224, 104, 92, 0.16);
+  --color-success: #6fbf8b; /* estado ready/completado */
+  --color-success-muted: rgba(111, 191, 139, 0.16);
+
+  /* ============================================================
+     TIPOGRAFÍA
+     ============================================================ */
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.8125rem; /* 13px */
+  --font-size-base: 0.9375rem; /* 15px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.25rem; /* 20px */
+  --font-size-xl: 1.75rem; /* 28px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --line-height-tight: 1.2;
+  --line-height-base: 1.5;
+
+  /* ============================================================
+     ESPACIADO — escala base 4/8px
+     ============================================================ */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
+  --space-7: 3rem; /* 48px */
+  --space-8: 4rem; /* 64px */
+
+  /* ============================================================
+     RADIOS
+     ============================================================ */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ============================================================
+     SOMBRAS
+     ============================================================ */
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.32);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.45);
+
+  /* ============================================================
+     BREAKPOINTS
+     Nota: las CSS custom properties no son válidas dentro de una
+     condición @media; estos tokens documentan los valores oficiales,
+     pero cada media query debe repetir el valor literal.
+     ============================================================ */
+  --bp-tablet: 768px;
+  --bp-desktop: 1200px;
+
+  /* ============================================================
+     TRANSICIONES
+     ============================================================ */
+  --transition-fast: 120ms ease;
+  --transition-base: 200ms ease;
+}
