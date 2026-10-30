@@ -81,7 +81,7 @@ function readStoredInstrument() {
 }
 
 /**
- * App — composición raíz de Armonía conectada al backend local
+ * App — composición raíz de Armonía conectada al backend
  * (07-basic-pitch-server) y a las librerías reales de reproducción
  * (Tone.js) y notación (VexFlow).
  */
@@ -96,7 +96,7 @@ function App() {
   );
   const isSelectedReady = selectedAudio?.status === "ready";
 
-  // ── Estado del servidor local (health check) ────────────────────────
+  // ── Estado del servidor (health check) ────────────────────────
   const [backendOnline, setBackendOnline] = useState(null); // null = verificando
   useEffect(() => {
     let cancelled = false;
@@ -108,7 +108,7 @@ function App() {
     };
   }, []);
 
-  // ── Conversión audio → MIDI vía localhost:8000 ──────────────────────
+  // ── Conversión audio → MIDI vía VITE_BACKEND_URL ──────────────────────
   const convertItem = useCallback(async (id, blob, filename) => {
     setAudioItems((previous) =>
       previous.map((item) =>
@@ -345,8 +345,8 @@ function App() {
     backendOnline === null
       ? "Verificando servidor…"
       : backendOnline
-        ? "Servidor local conectado"
-        : "Servidor local no disponible";
+        ? "Servidor conectado"
+        : "Servidor no disponible";
 
   return (
     <AppShell

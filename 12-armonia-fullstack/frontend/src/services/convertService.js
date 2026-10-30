@@ -7,7 +7,7 @@
  * Aísla el fetch para que los componentes no conozcan detalles de la API.
  */
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL ?? "";
 
 export class ConvertServiceError extends Error {
   constructor(message, status) {
@@ -35,7 +35,7 @@ export async function convertAudioToMidi(audioBlob, filename) {
     });
   } catch (networkError) {
     throw new ConvertServiceError(
-      `No se pudo conectar con el servidor backend local. Verifica que esté corriendo en ${BACKEND_URL} (${networkError.message}).`,
+      `No se pudo conectar con el servidor (${networkError.message}). Verifica que el backend esté en ejecución.`,
       0,
     );
   }
