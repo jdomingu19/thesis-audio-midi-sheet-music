@@ -55,7 +55,7 @@ MAX_FILE_SIZE_BYTES = _env_int("MAX_FILE_SIZE_MB", 25) * 1024 * 1024
 
 # Duración máxima del audio ya normalizado (segundos). Acota el tiempo de CPU
 # por conversión. Ajusta según lo que midas en local.
-MAX_AUDIO_SECONDS = _env_int("MAX_AUDIO_SECONDS", 360)
+MAX_AUDIO_SECONDS = _env_int("MAX_AUDIO_SECONDS", 300)
 
 # --- Rendimiento ------------------------------------------------------------
 # Conversiones de Basic Pitch simultáneas dentro de una misma instancia.
