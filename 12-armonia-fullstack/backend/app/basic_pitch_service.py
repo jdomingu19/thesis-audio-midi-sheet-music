@@ -13,6 +13,8 @@ import os
 import subprocess
 import tempfile
 import wave
+import math
+import struct
 from functools import lru_cache
 from pathlib import Path
 
@@ -52,9 +54,31 @@ def get_model():
     return Model(ICASSP_2022_MODEL_PATH)
 
 
+def _write_probe_wav(path: str, seconds: int = 1, rate: int = 22050) -> None:
+    """Genera un tono de 1 s para calentar el pipeline completo."""
+    total = seconds * rate
+    frames = b"".join(
+        struct.pack("<h", int(8000 * math.sin(2 * math.pi * 440 * i / rate)))
+        for i in range(total)
+    )
+    with wave.open(path, "wb") as wav_file:
+        wav_file.setnchannels(1)
+        wav_file.setsampwidth(2)
+        wav_file.setframerate(rate)
+        wav_file.writeframes(frames)
+
+
 def warm_up_model() -> None:
-    """Precarga el modelo (se llama al arrancar para evitar latencia en la 1ª petición)."""
-    get_model()
+    """
+    Carga el modelo y ejecuta una inferencia de 1 s al arrancar, para que la
+    compilación JIT (numba) y la carga de ONNX ocurran antes de la primera
+    petición real. Cualquier fallo se registra en main.py (lifespan).
+    """
+    model = get_model()
+    with tempfile.TemporaryDirectory(prefix="armonia_warmup_") as tmp_dir:
+        probe_path = os.path.join(tmp_dir, "probe.wav")
+        _write_probe_wav(probe_path)
+        predict(probe_path, model)
 
 
 def _convert_to_wav(input_path: str, output_path: str) -> str:

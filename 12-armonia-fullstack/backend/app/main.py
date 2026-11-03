@@ -200,12 +200,26 @@ async def convert_audio(file: UploadFile = File(...)):
         },
     )
 
+class CachedStaticFiles(StaticFiles):
+    """
+    index.html y archivos sin hash: siempre se revalidan (así una versión nueva
+    llega a los usuarios). Los archivos en /assets llevan hash de contenido
+    (Vite), por lo que se pueden cachear un año.
+    """
+
+    async def get_response(self, path: str, scope):
+        response = await super().get_response(path, scope)
+        if response.status_code in (200, 304):
+            if path.startswith("assets/"):
+                response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+            else:
+                response.headers["Cache-Control"] = "no-cache"
+        return response
+
 
 # --- Frontend compilado (SIEMPRE al final) ---------------------------------
-# El mount en "/" captura cualquier ruta no definida antes, por eso va último.
-# Sin backend/static (desarrollo) se expone solo un endpoint raíz informativo.
 if STATIC_DIR.is_dir():
-    app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="frontend")
+    app.mount("/", CachedStaticFiles(directory=STATIC_DIR, html=True), name="frontend")
     logger.info(f"Sirviendo frontend desde: {STATIC_DIR}")
 else:
 

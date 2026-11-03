@@ -1,0 +1,46 @@
+# Thesis Audio to MIDI and Sheet Music
+# @jdomingu19
+# cloudbuild.yaml
+
+substitutions:
+  _REGION: us-central1
+  _SERVICE: armonia
+  _AR_REPO: armonia
+
+steps:
+  - id: build-image
+    name: gcr.io/cloud-builders/docker
+    dir: 12-armonia-fullstack
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/${_SERVICE}:${BUILD_ID}
+      - .
+
+  - id: push-image
+    name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/${_SERVICE}:${BUILD_ID}
+
+  - id: deploy
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO}/${_SERVICE}:${BUILD_ID}
+      - --region=${_REGION}
+      - --allow-unauthenticated
+      - --cpu=1
+      - --memory=2Gi
+      - --concurrency=4
+      - --min-instances=0
+      - --max-instances=2
+      - --timeout=600
+      - --set-env-vars=MAX_CONCURRENT_CONVERSIONS=1,MAX_AUDIO_SECONDS=300
+
+timeout: 1800s
+options:
+  logging: CLOUD_LOGGING_ONLY

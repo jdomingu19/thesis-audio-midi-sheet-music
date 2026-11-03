@@ -1,3 +1,7 @@
+# Thesis Audio to MIDI and Sheet Music
+# @jdomingu19
+# .dockerignore
+
 **/node_modules
 **/dist
 **/.venv
@@ -8,3 +12,4 @@
 **/*.mid
 .git
 backend/static
+frontend/public/samples
