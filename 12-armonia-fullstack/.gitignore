@@ -40,3 +40,4 @@ __pycache__/
 # Generated artifacts
 *.mid
 backend/static/
+stats.csv
